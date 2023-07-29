@@ -1,0 +1,21 @@
+# Editors
+.vscode/
+
+# Environments
+.env
+.env.*
+!.env.template
+
+# Certificates
+*.crt
+*.key
+
+# Logs
+logs/
+*.log
+
+# Packages
+node_modules/
+
+# Builds
+dist/
