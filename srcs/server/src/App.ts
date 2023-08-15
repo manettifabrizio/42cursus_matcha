@@ -21,13 +21,18 @@ app.use(cookieParser(Config.COOKIE_SECRET));
 
 // Routes ----------------------------------------------------------------------
 import { controller as AppController }   from '@/module/app/controller';
+import { controller as AuthController }  from '@/module/auth/controller';
 import { controller as ErrorController } from '@/module/error/controller';
 
 app.use('/', AppController);
+app.use('/auth', AuthController);
 
 app.use('*', ErrorController); // Note: Must be last
 
 // Middlewares (Late) ----------------------------------------------------------
+import { middleware as ErrorMiddleware } from './module/error/middleware';
+
+app.use(ErrorMiddleware); // Note: Must be last
 
 // Export ----------------------------------------------------------------------
 export { server };

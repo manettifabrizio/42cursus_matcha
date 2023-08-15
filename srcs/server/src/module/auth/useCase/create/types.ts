@@ -22,7 +22,7 @@ export type QueryInput =
 ;
 
 export type QueryOutput =
-	Pick<Account, 'id'|'secret'>
+	Pick<Account, 'id'|'email'|'secret'>
 ;
 
 export type ActionOutput =

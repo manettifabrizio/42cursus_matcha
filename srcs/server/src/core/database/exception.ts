@@ -1,16 +1,18 @@
 export class DatabaseException
 	extends Error
 {
-	private _cause: Record<string, string|string[]>;
+	private _data: any;
 
-	constructor(cause: Record<string, string|string[]>)
+	constructor(data: any)
 	{
 		super();
-		this._cause = cause;
+
+		this._data = data;
 	}
 
-	public get cause()
+	public get data()
 	{
-		return this._cause;
+		return this._data;
 	}
+
 };

@@ -1,16 +1,16 @@
 export class ValidationException
 	extends Error
 {
-	private _errors: Record<string, string[]>;
+	private _data: Record<string, string[]>;
 
-	constructor(errors: Record<string, string[]>)
+	constructor(data: Record<string, string[]>)
 	{
 		super();
-		this._errors = errors;
+		this._data = data;
 	}
 
-	public get errors()
+	public get data()
 	{
-		return this._errors;
+		return this._data;
 	}
 };

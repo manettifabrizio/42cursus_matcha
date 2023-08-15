@@ -26,6 +26,7 @@ export const query = async (
 			($1, $2, $3, $4)
 		RETURNING
 			id,
+			email,
 			secret
 	`;
 
@@ -37,7 +38,7 @@ export const query = async (
 		await crypto_svc.generateSecret(),
 	];
 
-	const result = await database_svc.query<Pick<Account, 'id'|'secret'>>(query, params);
+	const result = await database_svc.query<Pick<Account, 'id'|'email'|'secret'>>(query, params);
 
 	return result.rows[0];
 };
