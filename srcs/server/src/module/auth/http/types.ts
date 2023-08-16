@@ -1,4 +1,4 @@
-import { Account } from './entity';
+import { Account } from '../entity';
 
 
 export type RegisterResponse =

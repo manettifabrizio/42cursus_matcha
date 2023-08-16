@@ -4,7 +4,7 @@ import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as mail_svc }       from '@/core/mail/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { action as create }          from './useCase/create/action';
+import { action as create }          from '../useCase/create/action';
 import { RegisterResponse }          from './types';
 
 

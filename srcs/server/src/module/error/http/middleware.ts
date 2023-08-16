@@ -6,9 +6,6 @@ import { ValidationException } from '@/core/validation/exception';
 
 export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 {
-	console.log("Error::Middleware\n")
-	console.log(err);
-
 	if (err instanceof DatabaseException)
 	{
 		// Todo: Better handling of cases

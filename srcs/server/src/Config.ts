@@ -26,13 +26,10 @@ export const
 	MAILER_PASS = "",
 
 	// Uploader
-	UPLOADER_DEST = `${PUBLIC_PATH}/upload`,
+	PICTURES_DEST = path.join(PUBLIC_PATH, "pictures"),
 
 	// Cookie
 	COOKIE_SECRET = "",
-
-	// Csrf
-	CSRF_SECRET = "",
 
 	// Json Web Token
 	JWT_ACCESS_SECRET = "",
