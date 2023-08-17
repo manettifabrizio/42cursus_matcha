@@ -28,6 +28,9 @@ export const
 	// Uploader
 	PICTURES_DEST = path.join(PUBLIC_PATH, "pictures"),
 
+	// Csrf
+	CSRF_LIFETIME = "86400",
+
 	// Cookie
 	COOKIE_SECRET = "",
 
