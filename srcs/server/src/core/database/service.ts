@@ -28,17 +28,11 @@ export const service: DatabaseService = ((pool: Pool) =>
 {
 	let client: PoolClient | null = null;
 
-	const query = async <
-		R extends QueryResultRow = any
-	>(
-		sql: string,
-		values?: any[],
-	)
-		: Promise<QueryResult<R>> =>
+	const query: DatabaseService['query'] = async (sql, values) =>
 	{
 		try
 		{
-			return await (client ?? pool).query<R>(sql, values);
+			return await (client ?? pool).query(sql, values);
 		}
 		catch (err: unknown)
 		{
@@ -51,13 +45,17 @@ export const service: DatabaseService = ((pool: Pool) =>
 			// https://www.postgresql.org/docs/current/errcodes-appendix.html
 
 			throw new DatabaseException({
-				type: err.code === '23505' ? 'UniqueConstraintViolation' : (err.code === '23503') ? 'ForeignKeyConstraintViolation' : 'Unsupported',
+				type: err.code === '23505'
+					? 'UniqueConstraintViolation'
+					: (err.code === '23503')
+						? 'ForeignKeyConstraintViolation'
+						: 'Unsupported',
 				column: err.detail?.substring(err.detail.indexOf('(') + 1, err.detail.indexOf(')'))
 			});
 		}
 	}
 
-	const startTransaction = async () : Promise<void> =>
+	const startTransaction: DatabaseService['startTransaction'] = async () =>
 	{
 		if (!client)
 		{
@@ -67,17 +65,17 @@ export const service: DatabaseService = ((pool: Pool) =>
 		await query(`BEGIN`);
 	};
 
-	const commitTransaction = async () : Promise<void> =>
+	const commitTransaction: DatabaseService['commitTransaction'] = async () =>
 	{
 		await query(`COMMIT`);
 	};
 
-	const cancelTransaction = async () : Promise<void> =>
+	const cancelTransaction: DatabaseService['cancelTransaction'] = async () =>
 	{
 		await query(`ROLLBACK`);
 	};
 
-	const releaseClient = () : void =>
+	const releaseClient: DatabaseService['releaseClient'] = () =>
 	{
 		client?.release();
 	};

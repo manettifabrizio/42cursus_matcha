@@ -4,13 +4,13 @@ import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as mail_svc }       from '@/core/mail/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { action as create }          from '../../useCase/create/action';
+import { action as register }        from '../../useCase/register/action';
 import { RegisterResponse }          from '../types';
 
 
 export const route: RequestHandler<{}, RegisterResponse> = async (req, res) =>
 {
-	const account = await create(validation_svc, database_svc, crypto_svc, req.body);
+	const account = await register(validation_svc, database_svc, crypto_svc, req.body);
 
 	// Todo: Match link with frontend routing
 	// mail_svc.send({

@@ -1,5 +1,5 @@
+import { matchedData }      from 'express-validator';
 import { ValidationChain }  from "express-validator";
-import { matchedData }      from "express-validator";
 import { validationResult } from 'express-validator';
 
 import { ValidationException } from './exception';
@@ -8,7 +8,9 @@ import { ValidationFields }    from './types';
 import { ValidationService }   from './types';
 
 
-const validate = async <T extends Record<string, any>>(
+const validate = async <
+	T extends Record<string, any>
+>(
 	fields: ValidationFields,
 	rules: ValidationChain[],
 )

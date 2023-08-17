@@ -17,7 +17,7 @@ export type ValidationErrors =
 export interface ValidationService
 {
 	validate: <T extends Record<string, any>>(
-		fiels: ValidationFields,
+		fields: ValidationFields,
 		rules: ValidationChain[]
 	) => Promise<T>;
 };

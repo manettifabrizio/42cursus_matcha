@@ -4,27 +4,17 @@ import * as crypto from "crypto";
 import { CryptoService } from './types';
 
 
-const hashPassword = async (
-	password: string
-)
-	: Promise<string> =>
+const hashPassword: CryptoService['hashPassword'] = async (password) =>
 {
-	return bcrypt.hash(password, 10);
+	return await bcrypt.hash(password, 10);
 };
 
-const verifyPassword = async (
-	password: string,
-	hash: string,
-)
-	: Promise<boolean> =>
+const verifyPassword: CryptoService['verifyPassword'] = async (password, hash) =>
 {
-	return bcrypt.compare(password, hash);
+	return await bcrypt.compare(password, hash);
 };
 
-const generateSecret = async (
-	size: number = 32,
-)
-	: Promise<string> =>
+const generateSecret: CryptoService['generateSecret'] = async (size = 32) =>
 {
 	return crypto.randomBytes(size).toString('base64url');
 };
