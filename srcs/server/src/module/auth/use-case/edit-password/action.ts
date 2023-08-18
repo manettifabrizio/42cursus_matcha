@@ -1,11 +1,10 @@
 import { CryptoService }     from '@/core/cryto/types';
 import { DatabaseService }   from '@/core/database/types';
 import { ValidationService } from '@/core/validation/types';
-
-import { query }        from './query';
-import { ActionInput }  from './types';
-import { ActionOutput } from './types';
-import { validate }     from './validate';
+import { query }             from './query';
+import { ActionInput }       from './types';
+import { ActionOutput }      from './types';
+import { validate }          from './validate';
 
 
 export const action = async (
@@ -17,7 +16,7 @@ export const action = async (
 	: Promise<ActionOutput> =>
 {
 	const fields = await validate(validation_svc, dto);
-	const account = await query(database_svc, crypto_svc, fields);
+	const confirmed = await query(database_svc, crypto_svc, fields);
 
-	return account;
+	return confirmed;
 };

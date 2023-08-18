@@ -1,7 +1,6 @@
-import { matchedData }      from 'express-validator';
-import { ValidationChain }  from "express-validator";
-import { validationResult } from 'express-validator';
-
+import { matchedData }         from 'express-validator';
+import { ValidationChain }     from "express-validator";
+import { validationResult }    from 'express-validator';
 import { ValidationException } from './exception';
 import { ValidationErrors }    from './types';
 import { ValidationFields }    from './types';

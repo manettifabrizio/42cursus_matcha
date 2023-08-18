@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
-
-import { HomeResponse } from '../types';
+import { HomeResponse }   from '../types';
 
 
 export const route: RequestHandler<{}, HomeResponse> = async (req, res) =>

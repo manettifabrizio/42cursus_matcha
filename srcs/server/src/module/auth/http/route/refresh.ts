@@ -1,5 +1,4 @@
-import { RequestHandler } from 'express';
-
+import { RequestHandler }     from 'express';
 import * as Config            from '@/Config';
 import { service as jwt_svc } from '@/core/jwt/service';
 import { RefreshResponse }    from '../types';

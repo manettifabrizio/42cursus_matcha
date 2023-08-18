@@ -1,6 +1,5 @@
-import * as bcrypt from "bcrypt";
-import * as crypto from "crypto";
-
+import * as bcrypt       from "bcrypt";
+import * as crypto       from "crypto";
 import { CryptoService } from './types';
 
 

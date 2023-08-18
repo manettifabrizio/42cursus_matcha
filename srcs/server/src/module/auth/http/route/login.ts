@@ -1,12 +1,11 @@
-import { RequestHandler } from 'express';
-
+import { RequestHandler }            from 'express';
 import * as Config                   from '@/Config';
 import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as jwt_svc }        from '@/core/jwt/service';
 import { service as validation_svc } from '@/core/validation/service';
 import { ValidationException }       from '@/core/validation/exception';
-import { action as login }           from '../../useCase/login/action';
+import { action as login }           from '../../use-case/login/action';
 import { LoginResponse }             from '../types';
 
 

@@ -1,9 +1,8 @@
 import { CryptoService }   from '@/core/cryto/types';
 import { DatabaseService } from '@/core/database/types';
-
-import { Account }     from '../../entity';
-import { QueryInput }  from './types';
-import { QueryOutput } from './types';
+import { Account }         from '../../entity';
+import { QueryInput }      from './types';
+import { QueryOutput }     from './types';
 
 
 export const query = async (

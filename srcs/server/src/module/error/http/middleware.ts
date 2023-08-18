@@ -1,7 +1,7 @@
 import { ErrorRequestHandler } from 'express';
-
 import { DatabaseException }   from '@/core/database/exception';
 import { ValidationException } from '@/core/validation/exception';
+import { JwtException } from '@/core/jwt/exception';
 
 
 export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
@@ -18,7 +18,7 @@ export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 				break;
 			case 'ForeignKeyConstraintViolation':
 				err = new ValidationException({
-					[err.data.column]: [ 'Does not exists.' ]
+					[err.data.column]: [ `Does not exists.` ]
 				});
 				break;
 			default:
@@ -32,10 +32,28 @@ export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 			status:
 			{
 				code: 422,
-				status: "Unprocessable Content",
+				status: 'Unprocessable Content',
 			},
 			data: err.data,
 		});
+
+		return;
+	}
+
+	if (err instanceof JwtException)
+	{
+		res.status(401).json({
+			status:
+			{
+				code: 401,
+				status: 'Unauthorized',
+			},
+			data:
+			{
+				token: `Invalid Access Token`
+			}
+		});
+
 		return;
 	}
 
@@ -45,6 +63,6 @@ export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 			code: 500,
 			text: 'Internal Server Error',
 		},
-		data: err
+		data: err // Todo: Set custom errors
 	});
 };

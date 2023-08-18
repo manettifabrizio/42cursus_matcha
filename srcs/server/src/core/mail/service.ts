@@ -1,7 +1,6 @@
 import { createTransport } from 'nodemailer';
-
-import * as Config     from '@/Config';
-import { MailService } from './types';
+import * as Config         from '@/Config';
+import { MailService }     from './types';
 
 
 const SECURE_PORT = 465;
@@ -19,5 +18,5 @@ const mailer = createTransport(
 
 export const service: MailService =
 {
-	send: mailer.sendMail
+	send: mailer.sendMail.bind(mailer)
 };

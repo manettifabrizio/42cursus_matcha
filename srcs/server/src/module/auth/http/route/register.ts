@@ -1,10 +1,9 @@
-import { RequestHandler } from 'express';
-
+import { RequestHandler }            from 'express';
 import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as mail_svc }       from '@/core/mail/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { action as register }        from '../../useCase/register/action';
+import { action as register }        from '../../use-case/register/action';
 import { RegisterResponse }          from '../types';
 
 
@@ -13,17 +12,22 @@ export const route: RequestHandler<{}, RegisterResponse> = async (req, res) =>
 	const account = await register(validation_svc, database_svc, crypto_svc, req.body);
 
 	// Todo: Match link with frontend routing
-	// mail_svc.send({
-	// 	from: '"Matcha" <noreply@matcha.com>',
-	// 	to: account.email,
-	// 	subject: "Account Registration",
-	// 	html: `
-	// 		Please, click on the following link to validate your registration on matcha.com: <br>
-	// 		<a href="${req.protocol}://${req.get('host')}/auth/register-confirm?id=${account.id}&secret=${account.secret}">
-	// 			Confirm my email
-	// 		</a>
-	// 	`
-	// });
+	mail_svc.send(
+	{
+		from: '"Matcha" <noreply@matcha.com>',
+		to: account.email,
+		subject: "Account Registration",
+		html: `
+			Please, click on the following link to validate your registration on matcha.com: <br>
+			<a href="${req.protocol}://${req.get('host')}/auth/register-confirm?id=${account.id}&secret=${account.secret}">
+				Confirm my email
+			</a>
+		`
+	}).catch((err) =>
+	{
+		console.log(`MailService::Send: Failed.`);
+		console.log(err);
+	});
 
 	res.status(200).json({
 		id: account.id,

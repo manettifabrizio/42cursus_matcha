@@ -1,5 +1,4 @@
-import * as jwt from 'jsonwebtoken';
-
+import * as jwt         from 'jsonwebtoken';
 import { JwtException } from './exception';
 import { JwtPayload }   from './types';
 import { JwtService }   from './types';

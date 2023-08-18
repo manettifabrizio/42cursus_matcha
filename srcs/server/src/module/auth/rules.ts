@@ -28,6 +28,13 @@ export const checkEmail = () =>
 ;
 
 // Not Empty -------------------------------------------------------------------
+export const checkIdNotEmpty = () =>
+	body('id')
+	.trim()
+	.isInt()
+	.withMessage(`Id is required.`)
+;
+
 export const checkUsernameNotEmpty = () =>
 	body('username')
 	.trim()
@@ -42,6 +49,14 @@ export const checkPasswordNotEmpty = () =>
 	.not()
 	.isEmpty()
 	.withMessage(`Password is required.`)
+;
+
+export const checkSecretNotEmpty = () =>
+	body('secret')
+	.trim()
+	.not()
+	.isEmpty()
+	.withMessage(`Secret is required.`)
 ;
 
 // Special ---------------------------------------------------------------------

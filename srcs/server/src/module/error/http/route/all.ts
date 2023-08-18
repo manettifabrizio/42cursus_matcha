@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
-
-import { AllResponse } from '../types';
+import { AllResponse }    from '../types';
 
 
 export const route: RequestHandler<{}, AllResponse> = async (req, res) =>

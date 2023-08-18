@@ -32,12 +32,14 @@ app.use(cookieParser(Config.COOKIE_SECRET));
 app.use(CsrfMiddleware);
 
 // Routes ----------------------------------------------------------------------
-import { controller as AppController }   from '@/module/app/http/controller';
-import { controller as AuthController }  from '@/module/auth/http/controller';
-import { controller as ErrorController } from '@/module/error/http/controller';
+import { controller as AppController }      from '@/module/app/http/controller';
+import { controller as AuthController }     from '@/module/auth/http/controller';
+import { controller as ErrorController }    from '@/module/error/http/controller';
+import { controller as SecurityController } from '@/module/security/http/controller';
 
 app.use('/', AppController);
 app.use('/auth', AuthController);
+app.use('/security', SecurityController);
 
 app.use('*', ErrorController); // Note: Must be last
 

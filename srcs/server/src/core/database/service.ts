@@ -1,8 +1,6 @@
-import { DatabaseError, Pool }           from 'pg';
-import { PoolClient }     from 'pg';
-import { QueryResult }    from 'pg';
-import { QueryResultRow } from 'pg';
-
+import { DatabaseError }     from 'pg';
+import { Pool }              from 'pg';
+import { PoolClient }        from 'pg';
 import * as Config           from '@/Config';
 import { DatabaseException } from './exception';
 import { DatabaseService }   from './types';

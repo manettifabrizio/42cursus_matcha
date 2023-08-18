@@ -1,9 +1,8 @@
 import { CryptoService }   from '@/core/cryto/types';
 import { DatabaseService } from '@/core/database/types';
-
-import { Account }     from '../../entity';
-import { QueryInput }  from './types';
-import { QueryOutput } from './types';
+import { Account }         from '../../entity';
+import { QueryInput }      from './types';
+import { QueryOutput }     from './types';
 
 
 export const query = async (
@@ -20,7 +19,7 @@ export const query = async (
 		FROM
 			accounts
 		WHERE
-			username = $1
+			username = $1 AND secret IS NULL
 	`;
 
 	const params =
@@ -30,7 +29,7 @@ export const query = async (
 
 	const result = await database_svc.query<Pick<Account, 'id'|'password'>>(query, params);
 
-	if (!result.rowCount || await crypto_svc.verifyPassword(dto.password, result.rows[0].password))
+	if (!result.rowCount || !await crypto_svc.verifyPassword(dto.password, result.rows[0].password))
 	{
 		return null;
 	}

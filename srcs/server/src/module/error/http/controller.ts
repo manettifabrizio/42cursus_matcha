@@ -1,5 +1,4 @@
-import { Router } from 'express';
-
+import { Router }       from 'express';
 import { route as All } from './route/all';
 
 
