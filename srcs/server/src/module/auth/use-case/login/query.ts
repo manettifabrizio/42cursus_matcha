@@ -1,9 +1,15 @@
 import { CryptoService }   from '@/core/cryto/types';
 import { DatabaseService } from '@/core/database/types';
 import { Account }         from '../../entity';
-import { QueryInput }      from './types';
-import { QueryOutput }     from './types';
 
+
+type QueryInput =
+	Pick<Account, 'username'|'password'>
+;
+
+type QueryOutput =
+	Pick<Account, 'id'> | null
+;
 
 export const query = async (
 	database_svc: DatabaseService,

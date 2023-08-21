@@ -9,6 +9,9 @@ export const
 	SERVER_PORT: PORT = "3000",
 	PUBLIC_PATH = path.join(path.dirname(__dirname), "public"),
 
+	// Frontend
+	FRONTEND_HOST = "localhost",
+
 	// Database
 	DB_HOST = "",
 	DB_PORT = "",

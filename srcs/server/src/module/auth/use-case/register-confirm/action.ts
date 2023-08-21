@@ -1,10 +1,20 @@
 import { DatabaseService }   from '@/core/database/types';
 import { ValidationService } from '@/core/validation/types';
+import { Account }           from '../../entity';
+import { AuthException }     from '../../exception';
 import { query }             from './query';
-import { ActionInput }       from './types';
-import { ActionOutput }      from './types';
 import { validate }          from './validate';
 
+
+type ActionInput =
+{
+	id: string;
+	secret: string;
+};
+
+type ActionOutput =
+	Pick<Account, 'id'>
+;
 
 export const action = async (
 	validation_svc: ValidationService,
@@ -14,7 +24,14 @@ export const action = async (
 	: Promise<ActionOutput> =>
 {
 	const fields = await validate(validation_svc, dto);
-	const confirmed = await query(database_svc, fields);
+	const account = await query(database_svc, fields);
 
-	return confirmed;
+	if (account === null)
+	{
+		throw new AuthException({
+			cause: `Invalid credentials.`
+		});
+	}
+
+	return account;
 };

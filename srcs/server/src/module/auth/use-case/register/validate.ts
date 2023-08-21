@@ -1,8 +1,18 @@
 import { ValidationService } from '@/core/validation/types';
 import * as Rules            from '../../rules';
-import { ValidationInput }   from './types';
-import { ValidationOuput }   from './types';
 
+
+type ValidationInput =
+{
+	username: string;
+	password: string;
+	password_confirm: string;
+	email: string;
+};
+
+type ValidationOuput =
+	Omit<ValidationInput, 'password_confirm'>
+;
 
 export const validate = async (
 	validation_svc: ValidationService,

@@ -1,8 +1,14 @@
 import { DatabaseService } from '@/core/database/types';
 import { Account }         from '../../entity';
-import { QueryInput }      from './types';
-import { QueryOutput }     from './types';
 
+
+type QueryInput =
+	Pick<Account, 'id'|'secret'>
+;
+
+type QueryOutput =
+	Pick<Account, 'id'> | null
+;
 
 export const query = async (
 	database_svc: DatabaseService,
@@ -18,6 +24,8 @@ export const query = async (
 			secret = NULL
 		WHERE
 			id = $1 AND secret = $2
+		RETURNING
+			id
 	`;
 
 	const params =
@@ -28,5 +36,5 @@ export const query = async (
 
 	const result = await database_svc.query<Pick<Account, 'id'>>(query, params);
 
-	return !!result.rowCount;
+	return result.rows?.[0] ?? null;
 };

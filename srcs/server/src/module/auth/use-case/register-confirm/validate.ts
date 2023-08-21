@@ -1,8 +1,17 @@
+import { Override }          from '@/core/typing';
 import { ValidationService } from '@/core/validation/types';
 import * as Rules            from '../../rules';
-import { ValidationInput }   from './types';
-import { ValidationOuput }   from './types';
 
+
+type ValidationInput =
+{
+	id: string;
+	secret: string;
+};
+
+type ValidationOuput =
+	Override<ValidationInput, { id: number }>
+;
 
 export const validate = async (
 	validation_svc: ValidationService,

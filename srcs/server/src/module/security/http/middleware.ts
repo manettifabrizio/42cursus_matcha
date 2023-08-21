@@ -1,4 +1,5 @@
-import { RequestHandler } from 'express';
+import { RequestHandler }    from 'express';
+import { SecurityException } from '../exception';
 
 
 export const middleware : RequestHandler =  async (req, res, next) =>
@@ -13,18 +14,12 @@ export const middleware : RequestHandler =  async (req, res, next) =>
 	const valid_token = req.cookies['csrf-token'];
 	const received_token = req.headers['csrf-token'];
 
-	if (valid_token && received_token === valid_token)
+	if (!valid_token || received_token !== valid_token)
 	{
-		return next();
+		throw new SecurityException({
+			cause: 'InvalidCsrfToken',
+		});
 	}
 
-	res.status(401).json({
-		status: {
-			code: 401,
-			text: "Unauthorized",
-		},
-		data: {
-			message: "Invalid Csrf Token.",
-		},
-	});
+	return next();
 };

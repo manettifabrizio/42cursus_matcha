@@ -1,16 +1,16 @@
-export class ValidationException
-	extends Error
+import { Exception } from '../exception';
+
+
+type Data =
 {
-	private _data: Record<string, string[]>;
+	[field: string]: string[];
+};
 
-	constructor(data: Record<string, string[]>)
+export class ValidationException
+	extends Exception<Data>
+{
+	constructor(data: Data)
 	{
-		super();
-		this._data = data;
-	}
-
-	public get data()
-	{
-		return this._data;
+		super(data);
 	}
 };

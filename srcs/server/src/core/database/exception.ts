@@ -1,18 +1,24 @@
-export class DatabaseException
-	extends Error
+import { Exception } from '../exception';
+
+
+export type Cause =
+	  'Query:ConstraintsViolation:Unique'
+	| 'Query:ConstraintsViolation:ForeignKey'
+	| 'Pool:Initialization'
+	| 'Unknown'
+;
+
+type Data =
 {
-	private _data: any;
+	cause: Cause;
+	details?: string|string[];
+};
 
-	constructor(data: any)
+export class DatabaseException
+	extends Exception<Data>
+{
+	constructor(data: Data)
 	{
-		super();
-
-		this._data = data;
+		super(data);
 	}
-
-	public get data()
-	{
-		return this._data;
-	}
-
 };

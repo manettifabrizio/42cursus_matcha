@@ -4,11 +4,11 @@ import { Account }         from '../../entity';
 
 
 type QueryInput =
-	Pick<Account, 'username'|'password'|'email'>
+	Pick<Account, 'id'|'email'>
 ;
 
 type QueryOutput =
-	Pick<Account, 'id'|'email'|'secret'>
+	Pick<Account, 'id'|'email'|'secret'> | null
 ;
 
 export const query = async (
@@ -20,30 +20,25 @@ export const query = async (
 {
 	const query =
 	`
-		INSERT INTO accounts
-		(
-			username,
-			password,
-			email,
-			secret
-		)
-		VALUES
-			($1, $2, $3, $4)
+		UPDATE
+			accounts
+		SET
+			email = $2,
+			secret = $3
+		WHERE
+			id = $1
 		RETURNING
-			id,
-			email,
-			secret
+			id, email, secret
 	`;
 
 	const params =
 	[
-		dto.username,
-		await crypto_svc.hashPassword(dto.password),
+		dto.id,
 		dto.email,
-		await crypto_svc.generateSecret(),
+		await crypto_svc.generateSecret()
 	];
 
 	const result = await database_svc.query<Pick<Account, 'id'|'email'|'secret'>>(query, params);
 
-	return result.rows[0];
+	return result.rows[0] ?? null;
 };

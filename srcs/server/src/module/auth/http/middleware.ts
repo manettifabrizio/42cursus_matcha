@@ -7,12 +7,7 @@ export const middleware : RequestHandler =  async (req, res, next) =>
 {
 	const header = req.headers['authorization'];
 
-	let token = "";
-
-	if (typeof header === 'string')
-	{
-		token = header.split(' ')[1]; // Remove 'Bearer ' prefix
-	}
+	const token = (header?.substring(0, 6) === 'Bearer') ? header.slice(7) : '';
 
 	req.user = jwt_svc.verifyToken(token, Config.JWT_ACCESS_SECRET);
 

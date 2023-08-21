@@ -1,8 +1,11 @@
 import { RequestHandler } from 'express';
-import { LogoutResponse } from '../types';
 
 
-export const route: RequestHandler<{}, LogoutResponse> = async (req, res) =>
+type ResponseBody =
+	void
+;
+
+export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
 	res.clearCookie('access-token');
 	res.clearCookie('refresh-token');

@@ -4,24 +4,25 @@ import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as jwt_svc }        from '@/core/jwt/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { ValidationException }       from '@/core/validation/exception';
+import { Account }                   from '../../entity';
 import { action as login }           from '../../use-case/login/action';
-import { LoginResponse }             from '../types';
 
 
-export const route: RequestHandler<{}, LoginResponse> = async (req, res) =>
+type ResponseBody =
 {
-	const account = await login(validation_svc, database_svc, crypto_svc, req.body);
+	id: Account['id'];
+};
 
-	if (!account)
+export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+{
+	const account = await login(validation_svc, database_svc, crypto_svc,
 	{
-		throw new ValidationException({
-			'username': [ `Invalid crendentials.` ]
-		});
-	}
+		username: req.body.username,
+		password: req.body.password,
+	});
 
 	const refresh_token = jwt_svc.createToken(
-		{ id: account.id },
+		account,
 		Config.JWT_REFRESH_SECRET,
 		Number.parseInt(Config.JWT_REFRESH_LIFETIME)
 	);

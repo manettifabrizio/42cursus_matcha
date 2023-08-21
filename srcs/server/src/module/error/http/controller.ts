@@ -1,7 +1,7 @@
-import { Router }       from 'express';
-import { route as All } from './route/all';
+import { Router }            from 'express';
+import { route as NotFound } from './route/not-found';
 
 
 export const controller = Router();
 
-controller.get('/', All);
+controller.get('/', NotFound);

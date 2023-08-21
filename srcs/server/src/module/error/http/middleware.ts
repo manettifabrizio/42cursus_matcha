@@ -1,24 +1,25 @@
 import { ErrorRequestHandler } from 'express';
 import { DatabaseException }   from '@/core/database/exception';
 import { ValidationException } from '@/core/validation/exception';
-import { JwtException } from '@/core/jwt/exception';
+import { JwtException }        from '@/core/jwt/exception';
+import { AuthException }       from '@/module/auth/exception';
+import { NotFoundException }   from '@/module/error/exception';
 
 
 export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 {
 	if (err instanceof DatabaseException)
 	{
-		// Todo: Better handling of cases
-		switch (err.data.type)
+		switch (err.data.cause)
 		{
-			case 'UniqueConstraintViolation':
+			case 'Query:ConstraintsViolation:Unique':
 				err = new ValidationException({
-					[err.data.column]: [ `Already in use.` ],
+					[err.data.details as string]: [ `Already in use.` ],
 				});
 				break;
-			case 'ForeignKeyConstraintViolation':
+			case 'Query:ConstraintsViolation:ForeignKey':
 				err = new ValidationException({
-					[err.data.column]: [ `Does not exists.` ]
+					[err.data.details as string]: [ `Does not exist.` ]
 				});
 				break;
 			default:
@@ -26,43 +27,34 @@ export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 		}
 	}
 
-	if (err instanceof ValidationException)
+	const response =
 	{
-		res.status(422).json({
-			status:
-			{
-				code: 422,
-				status: 'Unprocessable Content',
-			},
-			data: err.data,
-		});
-
-		return;
-	}
-
-	if (err instanceof JwtException)
-	{
-		res.status(401).json({
-			status:
-			{
-				code: 401,
-				status: 'Unauthorized',
-			},
-			data:
-			{
-				token: `Invalid Access Token`
-			}
-		});
-
-		return;
-	}
-
-	res.status(500).json({
-		status:
-		{
+		status: {
 			code: 500,
 			text: 'Internal Server Error',
 		},
-		data: err // Todo: Set custom errors
-	});
+		error: err
+	};
+
+	if (err instanceof ValidationException)
+	{
+		response.status.code = 422;
+		response.status.text = 'Unprocessable Content';
+		response.error = err.data;
+	}
+	else if (err instanceof AuthException || err instanceof JwtException)
+	{
+
+		response.status.code = 401;
+		response.status.text = 'Unauthorized';
+		response.error = err.data;
+	}
+	else if (err instanceof NotFoundException)
+	{
+		response.status.code = 404;
+		response.status.text = 'Not Found';
+		response.error = err.data;
+	}
+
+	res.status(response.status.code).json(response);
 };

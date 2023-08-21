@@ -1,8 +1,15 @@
 import { CryptoService }   from '@/core/cryto/types';
 import { DatabaseService } from '@/core/database/types';
-import { QueryInput }      from './types';
-import { QueryOutput }     from './types';
+import { Account }         from '../../entity';
 
+
+type QueryInput =
+	Pick<Account, 'id'|'password'>
+;
+
+type QueryOutput =
+	Pick<Account, 'id'> | null
+;
 
 export const query = async (
 	database_svc: DatabaseService,
@@ -19,6 +26,8 @@ export const query = async (
 			password = $1
 		WHERE
 			id = $2
+		RETURNING
+			id
 	`;
 
 	const params =
@@ -27,7 +36,7 @@ export const query = async (
 		dto.id,
 	];
 
-	const result = await database_svc.query<{}>(query, params);
+	const result = await database_svc.query<Pick<Account, 'id'>>(query, params);
 
-	return !!result.rowCount;
+	return result.rows[0] ?? null;
 };

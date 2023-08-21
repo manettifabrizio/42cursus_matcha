@@ -2,7 +2,7 @@ import { DatabaseError }     from 'pg';
 import { Pool }              from 'pg';
 import { PoolClient }        from 'pg';
 import * as Config           from '@/Config';
-import { DatabaseException } from './exception';
+import { Cause, DatabaseException } from './exception';
 import { DatabaseService }   from './types';
 
 
@@ -17,8 +17,8 @@ const pool = new Pool({
 pool.on('error', (err, client) =>
 {
 	throw new DatabaseException({
-		type: 'PoolInitFailed',
-		message: err.message,
+		cause: 'Pool:Initialization',
+		details: err.message,
 	});
 });
 
@@ -41,14 +41,20 @@ export const service: DatabaseService = ((pool: Pool) =>
 
 			// Todo: Better handling of errors
 			// https://www.postgresql.org/docs/current/errcodes-appendix.html
+			const causes: Record<string, Cause> =
+			{
+				'23505': 'Query:ConstraintsViolation:Unique',
+				'23503': 'Query:ConstraintsViolation:ForeignKey',
+			};
+
+			const column = err.detail?.substring(
+				err.detail.indexOf('(') + 1,
+				err.detail.indexOf(')')
+			);
 
 			throw new DatabaseException({
-				type: err.code === '23505'
-					? 'UniqueConstraintViolation'
-					: (err.code === '23503')
-						? 'ForeignKeyConstraintViolation'
-						: 'Unsupported',
-				column: err.detail?.substring(err.detail.indexOf('(') + 1, err.detail.indexOf(')'))
+				cause: causes[err.code ?? ''] ?? 'Unknown',
+				details: column,
 			});
 		}
 	}

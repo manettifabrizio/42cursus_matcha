@@ -1,18 +1,17 @@
-import { Exception } from '../exception';
+import { Exception } from '@/core/exception';
 
 
 export type Cause =
-	  'TokenExpired'
-	| 'TokenNotBefore'
-	| 'TokenInvalid'
+	'NotFound'
 ;
 
 type Data =
 {
 	cause: Cause;
+	details?: string|string[];
 };
 
-export class JwtException
+export class NotFoundException
 	extends Exception<Data>
 {
 	constructor(data: Data)

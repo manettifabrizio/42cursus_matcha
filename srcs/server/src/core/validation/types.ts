@@ -3,16 +3,12 @@ import { ValidationChain } from 'express-validator';
 
 export type ValidationFields =
 {
-	body?: any;
-	cookie?: any;
-	param?: any;
-	header?: any;
-	query?: any
+	body?: Record<string, any>;
+	cookie?: Record<string, any>;
+	param?: Record<string, any>;
+	header?: Record<string, any>;
+	query?: Record<string, any>;
 };
-
-export type ValidationErrors =
-	Record<string, string[]>
-;
 
 export interface ValidationService
 {

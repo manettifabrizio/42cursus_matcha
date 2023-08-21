@@ -1,21 +1,22 @@
 import { RequestHandler }            from 'express';
 import { service as database_svc }   from '@/core/database/service';
-import { ValidationException }       from '@/core/validation/exception';
 import { service as validation_svc } from '@/core/validation/service';
+import { Account }                   from '../../entity';
 import { action as registerConfirm } from '../../use-case/register-confirm/action';
-import { RegisterConfirmResponse }   from '../types';
 
 
-export const route: RequestHandler<{}, RegisterConfirmResponse> = async (req, res) =>
+type ResponseBody =
 {
-	const account = await registerConfirm(validation_svc, database_svc, req.body);
+	id: Account['id']
+};
 
-	if (!account)
+export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+{
+	await registerConfirm(validation_svc, database_svc,
 	{
-		throw new ValidationException({
-			'secret': [ `Invalid crendentials.` ]
-		});
-	}
+		id: req.body.id,
+		secret: req.body.secret,
+	});
 
 	res.status(204).send();
 };

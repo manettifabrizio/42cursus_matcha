@@ -1,10 +1,13 @@
 import { RequestHandler }        from 'express';
 import * as Config               from '@/Config';
 import { service as crypto_svc } from '@/core/cryto/service';
-import { CsrfResponse }          from '../types';
 
 
-export const route: RequestHandler<{}, CsrfResponse> = async (req, res) =>
+type ResponseBody =
+	void
+;
+
+export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
 	res.cookie('csrf-token', await crypto_svc.generateSecret(),
 	{
