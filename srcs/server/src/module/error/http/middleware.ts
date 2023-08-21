@@ -4,6 +4,7 @@ import { ValidationException } from '@/core/validation/exception';
 import { JwtException }        from '@/core/jwt/exception';
 import { AuthException }       from '@/module/auth/exception';
 import { NotFoundException }   from '@/module/error/exception';
+import { SecurityException }   from '@/module/security/exception';
 
 
 export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
@@ -42,7 +43,7 @@ export const middleware : ErrorRequestHandler =  async (err, req, res, next) =>
 		response.status.text = 'Unprocessable Content';
 		response.error = err.data;
 	}
-	else if (err instanceof AuthException || err instanceof JwtException)
+	else if (err instanceof AuthException || err instanceof JwtException || err instanceof SecurityException)
 	{
 
 		response.status.code = 401;

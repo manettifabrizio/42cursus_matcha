@@ -1,16 +1,17 @@
-import { Override }          from '@/core/typing';
 import { ValidationService } from '@/core/validation/types';
-import * as Rules            from '../../rules';
+import * as Rules            from '@/module/auth/rules';
 
 
 type ValidationInput =
 {
-	id: string;
-	secret: string;
+	username: string;
+	password: string;
+	password_confirm: string;
+	email: string;
 };
 
 type ValidationOuput =
-	Override<ValidationInput, { id: number }>
+	Omit<ValidationInput, 'password_confirm'>
 ;
 
 export const validate = async (
@@ -21,8 +22,10 @@ export const validate = async (
 {
 	const rules =
 	[
-		Rules.checkIdNotEmpty(),
-		Rules.checkSecretNotEmpty(),
+		Rules.checkUsername(),
+		Rules.checkPassword(),
+		Rules.checkPasswordConfirm(),
+		Rules.checkEmail(),
 	];
 
 	return validation_svc.validate<ValidationOuput>({ body: dto }, rules);

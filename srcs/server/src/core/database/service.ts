@@ -2,7 +2,8 @@ import { DatabaseError }     from 'pg';
 import { Pool }              from 'pg';
 import { PoolClient }        from 'pg';
 import * as Config           from '@/Config';
-import { Cause, DatabaseException } from './exception';
+import { Cause }             from './exception';
+import { DatabaseException } from './exception';
 import { DatabaseService }   from './types';
 
 
@@ -82,6 +83,7 @@ export const service: DatabaseService = ((pool: Pool) =>
 	const releaseClient: DatabaseService['releaseClient'] = () =>
 	{
 		client?.release();
+		client = null;
 	};
 
 	return {

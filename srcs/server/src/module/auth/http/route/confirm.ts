@@ -1,8 +1,8 @@
 import { RequestHandler }            from 'express';
 import { service as database_svc }   from '@/core/database/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { Account }                   from '../../entity';
-import { action as registerConfirm } from '../../use-case/register-confirm/action';
+import { Account }                   from '@/module/auth/entity';
+import { action as confirm }         from '@/module/auth/use-case/confirm/action';
 
 
 type ResponseBody =
@@ -12,11 +12,11 @@ type ResponseBody =
 
 export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
-	await registerConfirm(validation_svc, database_svc,
+	const account = await confirm(validation_svc, database_svc,
 	{
 		id: req.body.id,
 		secret: req.body.secret,
 	});
 
-	res.status(204).send();
+	return res.status(204).send();
 };

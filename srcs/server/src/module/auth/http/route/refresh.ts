@@ -27,5 +27,5 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 		expires: new Date(Date.now() + Number.parseInt(Config.JWT_ACCESS_LIFETIME) * 1000),
 	});
 
-	res.status(204).send();
+	return res.status(204).send();
 };

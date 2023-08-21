@@ -1,10 +1,10 @@
-import { Exception } from '../exception';
+import { Exception } from '@/core/exception';
 
 
 export type Cause =
-	  'TokenExpired'
-	| 'TokenNotBefore'
-	| 'TokenInvalid'
+	  'ExpiredJwt'
+	| 'NotBeforeJwt'
+	| 'InvalidJwt'
 ;
 
 type Data =

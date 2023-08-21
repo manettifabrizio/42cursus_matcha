@@ -1,6 +1,6 @@
 import { CryptoService }   from '@/core/cryto/types';
 import { DatabaseService } from '@/core/database/types';
-import { Account }         from '../../entity';
+import { Account }         from '@/module/auth/entity';
 
 
 type QueryInput =

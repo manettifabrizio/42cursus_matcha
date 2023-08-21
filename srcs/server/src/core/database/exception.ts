@@ -1,4 +1,4 @@
-import { Exception } from '../exception';
+import { Exception } from '@/core/exception';
 
 
 export type Cause =

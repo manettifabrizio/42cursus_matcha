@@ -1,5 +1,5 @@
 import { RequestHandler }    from 'express';
-import { SecurityException } from '../exception';
+import { SecurityException } from '@/module/security/exception';
 
 
 export const middleware : RequestHandler =  async (req, res, next) =>

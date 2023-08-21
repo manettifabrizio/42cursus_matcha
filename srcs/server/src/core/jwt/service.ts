@@ -24,9 +24,9 @@ const verifyToken: JwtService['verifyToken'] = (token, secret) =>
 	{
 		throw new JwtException({
 			cause:
-				(err instanceof jwt.TokenExpiredError) ? 'TokenExpired' :
-				(err instanceof jwt.NotBeforeError)    ? 'TokenNotBefore' :
-				                                         'TokenInvalid',
+				(err instanceof jwt.TokenExpiredError) ? 'ExpiredJwt' :
+				(err instanceof jwt.NotBeforeError)    ? 'NotBeforeJwt' :
+				                                         'InvalidJwt',
 		});
 	}
 };

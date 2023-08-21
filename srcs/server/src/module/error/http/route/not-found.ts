@@ -1,5 +1,5 @@
 import { RequestHandler }    from 'express';
-import { NotFoundException } from '../../exception';
+import { NotFoundException } from '@/module/error/exception';
 
 
 type ResponseBody =

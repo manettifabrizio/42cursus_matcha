@@ -1,5 +1,5 @@
 import { ValidationService } from '@/core/validation/types';
-import * as Rules            from '../../rules';
+import * as Rules            from '@/module/auth/rules';
 
 
 type ValidationInput =

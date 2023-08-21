@@ -1,16 +1,16 @@
 import { ValidationService } from '@/core/validation/types';
-import * as Rules            from '@/module/auth/rules';
+import * as Rules            from '@/module/user/rules';
 
 
-export type ValidationInput =
+type ValidationInput =
 {
 	id: number;
-	password: string;
-	password_confirm: string;
+	firstname: string;
+	lastname: string;
 };
 
-export type ValidationOuput =
-	Omit<ValidationInput, 'password_confirm'>
+type ValidationOuput =
+	ValidationInput
 ;
 
 export const validate = async (
@@ -21,9 +21,9 @@ export const validate = async (
 {
 	const rules =
 	[
-		Rules.checkIdNotEmpty(),
-		Rules.checkPassword(),
-		Rules.checkPasswordConfirm(),
+		Rules.checkId(),
+		Rules.checkFirstname(),
+		Rules.checkLastname(),
 	];
 
 	return validation_svc.validate<ValidationOuput>({ body: dto }, rules);

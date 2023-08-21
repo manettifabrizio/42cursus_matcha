@@ -4,8 +4,8 @@ import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as jwt_svc }        from '@/core/jwt/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { Account }                   from '../../entity';
-import { action as login }           from '../../use-case/login/action';
+import { Account }                   from '@/module/auth/entity';
+import { action as login }           from '@/module/auth/use-case/login/action';
 
 
 type ResponseBody =
@@ -36,7 +36,5 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 		expires: new Date(Date.now() + Number.parseInt(Config.JWT_REFRESH_LIFETIME) * 1000),
 	});
 
-	res.status(200).json({
-		id: account.id,
-	});
+	return res.status(200).json(account);
 };
