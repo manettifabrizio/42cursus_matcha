@@ -1,12 +1,12 @@
-import { DatabaseError }     from 'pg';
-import { Pool }              from 'pg';
-import { PoolClient }        from 'pg';
-import * as Config           from '@/Config';
-import { Cause }             from './exception';
-import { DatabaseException } from './exception';
-import { DatabaseService }   from './types';
+import type { PoolClient }      from 'pg';
+import type { Cause }           from './exception';
+import type { DatabaseService } from './types';
+import { DatabaseError }        from 'pg';
+import { Pool }                 from 'pg';
+import * as Config              from '@/Config';
+import { DatabaseException }    from './exception';
 
-
+// Variable --------------------------------------------------------------------
 const pool = new Pool({
 	host:     Config.DB_HOST,
 	port:     Number.parseInt(Config.DB_PORT),
@@ -23,6 +23,7 @@ pool.on('error', (err, client) =>
 	});
 });
 
+// Service ---------------------------------------------------------------------
 export const service: DatabaseService = ((pool: Pool) =>
 {
 	let client: PoolClient | null = null;

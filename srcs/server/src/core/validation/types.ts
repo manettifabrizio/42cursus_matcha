@@ -1,6 +1,6 @@
-import { ValidationChain } from 'express-validator';
+import type { ValidationChain } from 'express-validator';
 
-
+// Type ------------------------------------------------------------------------
 export type ValidationFields =
 {
 	body?: Record<string, any>;

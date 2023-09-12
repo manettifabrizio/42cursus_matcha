@@ -1,3 +1,4 @@
+// Type ------------------------------------------------------------------------
 export interface CryptoService
 {
 	hashPassword: (password: string) => Promise<string>;

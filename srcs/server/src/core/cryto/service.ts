@@ -1,8 +1,8 @@
-import * as bcrypt       from "bcrypt";
-import * as crypto       from "crypto";
-import { CryptoService } from './types';
+import type { CryptoService } from './types';
+import * as bcrypt            from "bcrypt";
+import * as crypto            from "crypto";
 
-
+// Function ------------------------------------------------------------------------
 const hashPassword: CryptoService['hashPassword'] = async (password) =>
 {
 	return await bcrypt.hash(password, 10);
@@ -18,6 +18,7 @@ const generateSecret: CryptoService['generateSecret'] = async (size = 32) =>
 	return crypto.randomBytes(size).toString('base64url');
 };
 
+// Service ---------------------------------------------------------------------
 export const service: CryptoService =
 {
 	hashPassword,

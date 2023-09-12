@@ -1,11 +1,11 @@
-import { matchedData }         from 'express-validator';
-import { ValidationChain }     from "express-validator";
-import { validationResult }    from 'express-validator';
-import { ValidationException } from './exception';
-import { ValidationFields }    from './types';
-import { ValidationService }   from './types';
+import type { ValidationChain }     from "express-validator";
+import type { ValidationFields }    from './types';
+import type { ValidationService }   from './types';
+import { matchedData }              from 'express-validator';
+import { validationResult }         from 'express-validator';
+import { ValidationException }      from './exception';
 
-
+// Function --------------------------------------------------------------------
 const validate = async <
 	T extends Record<string, any>
 >(
@@ -59,6 +59,7 @@ const validate = async <
 	throw new ValidationException(errors);
 }
 
+// Service ---------------------------------------------------------------------
 export const service: ValidationService =
 {
 	validate,
