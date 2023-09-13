@@ -6,8 +6,11 @@ export function Component()
 	return (
 		<>
 			<h1>Page::Home</h1>
-			<Link to="/user/profile">Profile</Link>
-			<Link to="/auth/logout">Logout</Link>
+
+			<ul>
+				<li><Link to="/user/profile">Profile</Link></li>
+				<li><Link to="/auth/logout">Logout</Link></li>
+			</ul>
 		</>
 	);
 }

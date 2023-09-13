@@ -20,18 +20,18 @@ const slice = createSlice(
 	initialState,
 	reducers:
 	{
-		setAccessToken: (state, action: PayloadAction<State['accessToken']>) =>
+		setAuthAccessToken: (state, action: PayloadAction<State['accessToken']>) =>
 		{
 			state.accessToken = action.payload;
 		},
-		reset: () => initialState,
+		clearAuth: () => initialState, // Todo: Verify if it works
 	},
 });
 
 // Action ----------------------------------------------------------------------
 export const {
-	setAccessToken,
-	reset,
+	setAuthAccessToken,
+	clearAuth,
 } = slice.actions;
 
 // Selector --------------------------------------------------------------------

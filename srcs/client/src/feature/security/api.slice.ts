@@ -10,7 +10,7 @@ export const securityApi = api
 	{
 		endpoints: (build) => (
 		{
-			csrf: build.mutation<CsrfRes, CsrfReq>(
+			getCsrfToken: build.mutation<CsrfRes, CsrfReq>(
 			{
 				query: () => ({
 					url: `security/csrf`,
@@ -22,4 +22,6 @@ export const securityApi = api
 ;
 
 // Hook ------------------------------------------------------------------------
-export const { useCsrfMutation } = securityApi;
+export const {
+	useGetCsrfTokenMutation,
+} = securityApi;

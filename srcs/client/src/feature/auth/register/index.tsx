@@ -9,7 +9,7 @@ export default function RegisterForm()
 {
 	const id = useId();
 	const navigation = useNavigation();
-	const data = useActionData() as RegisterError;
+	const data = useActionData() as RegisterError|null;
 
 	return (
 		<>

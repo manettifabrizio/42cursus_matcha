@@ -10,7 +10,7 @@ type ProfileResponse =
 };
 
 // Api -------------------------------------------------------------------------
-export const authApi = api
+export const userApi = api
 	.injectEndpoints(
 	{
 		endpoints: (builder) => (
@@ -30,4 +30,4 @@ export const authApi = api
 // Hook ------------------------------------------------------------------------
 export const {
 	useGetProfileQuery,
-} = authApi;
+} = userApi;

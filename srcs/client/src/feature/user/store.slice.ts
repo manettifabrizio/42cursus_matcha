@@ -1,7 +1,7 @@
 import type { StoreState }    from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice }        from '@reduxjs/toolkit';
-import { reset as authReset } from '@/feature/auth/store.slice';
+import { clearAuth }          from '@/feature/auth/store.slice';
 
 // State -----------------------------------------------------------------------
 type State =
@@ -32,13 +32,15 @@ const slice = createSlice(
 			state.lastname = payload.lastname;
 		},
 	},
-	extraReducers: {
-		[authReset.type]: (state) =>
+	extraReducers: (builder) =>
+	{
+		builder.addCase(clearAuth, (state) =>
 		{
+			// Todo: Avoid duplicate with initialState
 			state.id = null;
 			state.firstname = null;
 			state.lastname = null;
-		},
+		});
 	},
 });
 

@@ -4,7 +4,8 @@ import { redirect }                  from 'react-router-dom';
 import { store }                     from '@/core/store';
 import { isRTKQFetchBaseQueryError } from '@/tool/isRTKQError';
 import { authApi }                   from '../api.slice';
-import { setAccessToken }            from '../store.slice';
+import { setAuthAccessToken }        from '../store.slice';
+import { cookie }                    from '@/tool/cookie';
 
 // Type ------------------------------------------------------------------------
 export type LoginError =
@@ -14,7 +15,7 @@ export type LoginError =
 };
 
 // Action ----------------------------------------------------------------------
-export const action: ActionFunction = async ({ request, params }) =>
+export const action: ActionFunction = async ({ request }) =>
 {
 	const form = await request.formData();
 
@@ -25,29 +26,31 @@ export const action: ActionFunction = async ({ request, params }) =>
 		password: form.get('password') as string,
 	};
 
-	const response = await store.dispatch(authApi.endpoints.login.initiate(fields));
+	const req = store.dispatch(authApi.endpoints.login.initiate(fields));
 
-	if ('error' in response)
+	try
 	{
-		const error = response.error;
+		await req.unwrap();
 
-		if (error && !isRTKQFetchBaseQueryError(error))
-		{
-			return null; // Todo: Handle error ?
-		}
+		store.dispatch(setAuthAccessToken(cookie('access-token')));
 
-		const loginError = error.data as ApiErrorResponse<LoginError>;
-
-		if ('cause' in loginError.error)
-		{
-			return { username: [ loginError.error.cause ] };
-		}
-
-		return loginError.error;
+		// Note: Doesn't work unless removed ProtectedLayout for the route (/auth/login)
+		return redirect(new URL(request.url).searchParams.get('redirect') ?? `/`);
 	}
+	catch (error: unknown)
+	{
+		if (isRTKQFetchBaseQueryError(error))
+		{
+			const loginError = error.data as ApiErrorResponse<LoginError>;
 
-	// Note: Set to anything but null, so access-token will be automatically refresh
-	store.dispatch(setAccessToken('1'));
+			if ('cause' in loginError.error)
+			{
+				return { username: [ loginError.error.cause ] };
+			}
 
-	return redirect(params.redirect ?? `/`);
+			return loginError.error;
+		}
+
+		return null; // Todo: Handle error ?
+	}
 };

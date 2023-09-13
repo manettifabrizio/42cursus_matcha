@@ -32,26 +32,28 @@ export const action: ActionFunction = async ({ request }) =>
 		lastname: form.get('lastname') as string,
 	};
 
-	const response = await store.dispatch(authApi.endpoints.register.initiate(fields));
+	const req = store.dispatch(authApi.endpoints.register.initiate(fields));
 
-	if ('error' in response)
+	try
 	{
-		const error = response.error;
+		const res = await req.unwrap();
 
-		if (error && !isRTKQFetchBaseQueryError(error))
-		{
-			return null; // Todo: Handle error ?
-		}
-
-		const registerError = error.data as ApiErrorResponse<RegisterError>;
-
-		if ('cause' in registerError.error)
-		{
-			return { username: [ registerError.error.cause ] };
-		}
-
-		return registerError.error;
+		return redirect(`/auth/login?id=${res.id}`);
 	}
+	catch (error: unknown)
+	{
+		if (isRTKQFetchBaseQueryError(error))
+		{
+			const registerError = error.data as ApiErrorResponse<RegisterError>;
 
-	return redirect(`/auth/login?id=${response.data.id}`);
+			if ('cause' in registerError.error)
+			{
+				return { username: [ registerError.error.cause ] };
+			}
+
+			return registerError.error;
+		}
+
+		return null;
+	}
 };

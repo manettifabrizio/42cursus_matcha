@@ -9,7 +9,7 @@ export default function LoginForm()
 {
 	const id = useId();
 	const navigation = useNavigation();
-	const data = useActionData() as LoginError;
+	const data = useActionData() as LoginError|null;
 
 	return (
 		<>

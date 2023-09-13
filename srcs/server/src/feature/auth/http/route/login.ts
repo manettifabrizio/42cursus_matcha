@@ -37,5 +37,18 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 		expires: new Date(Date.now() + Number.parseInt(Config.JWT_REFRESH_LIFETIME) * 1000),
 	});
 
+	const access_token = jwt_svc.createToken(
+		account,
+		Config.JWT_ACCESS_SECRET,
+		Number.parseInt(Config.JWT_ACCESS_LIFETIME)
+	);
+
+	res.cookie('access-token', access_token,
+	{
+		secure: true,
+		sameSite: 'strict',
+		expires: new Date(Date.now() + Number.parseInt(Config.JWT_ACCESS_LIFETIME) * 1000),
+	});
+
 	return res.status(200).json(account);
 };

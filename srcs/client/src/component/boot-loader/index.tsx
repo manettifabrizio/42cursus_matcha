@@ -1,25 +1,28 @@
-import { useEffect }        from 'react';
-import { useState }         from 'react';
-import { useCsrfMutation }  from '@/feature/security/api.slice';
-import { setCsrfToken }     from '@/feature/security/store.slice';
-import { useStoreDispatch } from '@/hook/useStore';
-import { cookie }           from '@/tool/cookie';
-import style                from './style.module.scss';
+import { useEffect }               from 'react';
+import { useState }                from 'react';
+import { useRefreshMutation }      from '@/feature/auth/api.slice';
+import { setAuthAccessToken }      from '@/feature/auth/store.slice';
+import { useGetCsrfTokenMutation } from '@/feature/security/api.slice';
+import { setCsrfToken }            from '@/feature/security/store.slice';
+import { useStoreDispatch }        from '@/hook/useStore';
+import { cookie }                  from '@/tool/cookie';
+import style                       from './style.module.scss';
 
 // Type ------------------------------------------------------------------------
-type Props =
+interface Props
 {
 	setBooting: (b: boolean) => void;
-};
+}
 
-type BootStep = 'START' | 'CSRF' | 'LOGIN' | 'DONE';
+type BootStep = 'START' | 'CSRF' | 'RELOG' | 'DONE';
 
 // Component -------------------------------------------------------------------
 export default function BootLoader({ setBooting }: Props)
 {
-	const [ step, setStep ] = useState<BootStep>('START');
-	const [ fetchCsrfToken ] = useCsrfMutation();
 	const dispatch = useStoreDispatch();
+	const [ step, setStep ] = useState<BootStep>('START');
+	const [ getCsrfToken ] = useGetCsrfTokenMutation();
+	const [ relog ] = useRefreshMutation();
 
 	useEffect(() =>
 	{
@@ -34,35 +37,49 @@ export default function BootLoader({ setBooting }: Props)
 				{
 					try
 					{
-						await fetchCsrfToken().unwrap();
+						await getCsrfToken().unwrap();
 						dispatch(setCsrfToken(cookie('csrf-token')));
 					}
 					catch (err: unknown)
 					{
 						// Todo: Handle error
-						console.log(`Component::Layout::Root`, err)
+						console.log(`Component::BootLoader::CSRF: Failed.`)
 					}
 					finally
 					{
-						setTimeout(() => setStep('LOGIN'), 500);
+						setTimeout(() => setStep('RELOG'), 500);
 					}
 				})();
 				break;
-			case 'LOGIN':
-				// Todo: Handle relog if already authenticated from previous visit
-				setTimeout(() => setStep('DONE'), 500);
+			case 'RELOG':
+				(async () =>
+				{
+					try
+					{
+						await relog().unwrap();
+						dispatch(setAuthAccessToken(cookie('access-token')));
+					}
+					catch (err: unknown)
+					{
+						console.log(`Component::BootLoader::RELOG: Failed.`);
+					}
+					finally
+					{
+						setTimeout(() => setStep('DONE'), 500);
+					}
+				})();
 				break;
 			default:
 				setBooting(false);
 				break;
 		}
-	}, [ dispatch, fetchCsrfToken, step, setBooting ]);
+	}, [ setBooting, step, dispatch, getCsrfToken, relog ]);
 
 	const bootStepMessage: Readonly<Record<BootStep, string>> =
 	{
 		'START': `Starting application`,
 		'CSRF':  `Fetching CSRF Token`,
-		'LOGIN': `Authenticating`,
+		'RELOG': `Authenticating`,
 		'DONE':  ``,
 	};
 

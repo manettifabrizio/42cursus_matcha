@@ -5,7 +5,8 @@ import type { StoreState }          from './store';
 import { createApi }                from '@reduxjs/toolkit/query/react';
 import { fetchBaseQuery }           from '@reduxjs/toolkit/query/react';
 import { Mutex }                    from 'async-mutex';
-import { setAccessToken }           from '@/feature/auth/store.slice';
+import { clearAuth }                from '@/feature/auth/store.slice';
+import { setAuthAccessToken }       from '@/feature/auth/store.slice';
 import { cookie }                   from '@/tool/cookie';
 
 // Type ------------------------------------------------------------------------
@@ -47,7 +48,7 @@ const fetchBase = fetchBaseQuery(
 			headers.set('authorization', `Bearer ${accessToken}`);
 		}
 
-		return headers
+		return (headers);
 	},
 });
 
@@ -57,11 +58,9 @@ const fetchAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
 
 	let response = await fetchBase(args, api, extraOptions);
 
-	const isExpiredJwtError = (response.error?.data
-		&& (response.error.data as ApiErrorResponse)?.error?.cause === 'ExpiredJwt'
-	);
+	const isJwtError = ['ExpiredJwt'].includes((response.error?.data as ApiErrorResponse)?.error?.cause);
 
-	if (response.error?.status === 401 && isExpiredJwtError)
+	if (response.error?.status === 401 && isJwtError)
 	{
 		if (!mutex.isLocked())
 		{
@@ -69,14 +68,16 @@ const fetchAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
 
 			try
 			{
-				const refreshResult = await fetchBase({
-					url: 'auth/refresh',
-					method: 'POST'
-				}, api, extraOptions);
+				const res = await fetchBase({ url: 'auth/refresh', method: 'POST' }, api, extraOptions);
 
-				if (refreshResult.data)
+				if (res.error)
 				{
-					api.dispatch(setAccessToken(cookie('access-token')));
+					api.dispatch(clearAuth());
+				}
+				else
+				{
+					api.dispatch(setAuthAccessToken(cookie('access-token')));
+
 					response = await fetchBase(args, api, extraOptions);
 				}
 			}
