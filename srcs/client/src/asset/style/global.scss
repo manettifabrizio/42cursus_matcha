@@ -62,3 +62,9 @@ h5 {
 h6 {
   font-size: 1rem;
 }
+
+.ellipse {
+  width: 50rem;
+  height: 50rem;
+  filter: blur(80px);
+}
