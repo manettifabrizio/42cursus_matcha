@@ -1,5 +1,5 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { User }            from '@/feature/user/entity';
+import type { User }            from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
@@ -20,13 +20,9 @@ export const query = async (
 	const query =
 	`
 		INSERT INTO users
-		(
-			id,
-			firstname,
-			lastname
-		)
+			( id,  firstname, lastname )
 		VALUES
-			($1, $2, $3)
+			( $1, $2, $3 )
 		RETURNING
 			id
 	`;

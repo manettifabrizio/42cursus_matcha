@@ -42,6 +42,7 @@ import { middleware as AuthMiddleware }     from '@/feature/auth/http/middleware
 app.use('/', AppController);
 app.use('/auth', AuthController);
 app.use('/security', SecurityController);
+
 app.use('/user', AuthMiddleware, UserController);
 
 app.use('*', ErrorController); // Note: Must be last

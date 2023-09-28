@@ -1,5 +1,6 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { User }            from '@/feature/user/entity';
+import type { User }            from '../../entity';
+import type { Position }        from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
@@ -7,7 +8,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	Omit<User, 'created_at'|'updated_at'> | null
+	User | null
 ;
 
 // Function --------------------------------------------------------------------
@@ -20,13 +21,9 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id,
-			firstname,
-			lastname,
-			birthdate,
-			gender,
-			orientation,
-			biography
+			id, firstname, lastname, birthdate,
+			gender, orientation, biography,
+			ST_X(location::geometry) as longitude, ST_Y(location::geometry) as latitude
 		FROM
 			users
 		WHERE
@@ -38,7 +35,21 @@ export const query = async (
 		dto.id,
 	];
 
-	const result = await database_svc.query<User>(query, params);
+	const result = await database_svc.query<Omit<User, 'location'> & Position>(query, params);
 
-	return result.rows[0] ?? null;
+	if (!result.rows[0])
+	{
+		return null;
+	}
+
+	const { latitude, longitude, ...partial_user } = result.rows[0];
+
+	return {
+		...partial_user,
+		location:
+		{
+			latitude,
+			longitude,
+		},
+	};
 };
