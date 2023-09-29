@@ -1,7 +1,7 @@
 import LabelInput from "@/component/ui/labelInput";
 import type { LoginError } from "./action";
 import { useId } from "react";
-import { Form } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { useNavigation } from "react-router-dom";
 import { useActionData } from "react-router-dom";
 
@@ -13,7 +13,7 @@ export default function LoginForm() {
 
   return (
     <>
-      <Form method="post" className="w-full">
+      <Form method="post" className="w-full my-8">
         <LabelInput
           input_props={{
             required: true,
@@ -38,7 +38,7 @@ export default function LoginForm() {
           type="submit"
           id={`${id}-auth-login`}
           disabled={navigation.state === "submitting"}
-          className="group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 "
+          className="group relative w-full text-white font-semibold py-2 mt-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 "
         >
           Log In
         </button>
