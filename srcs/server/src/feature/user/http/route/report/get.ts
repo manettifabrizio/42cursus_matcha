@@ -7,7 +7,7 @@ import { action as findReportsFrom } from '@/feature/report/use-case/find-by-fro
 // Type ------------------------------------------------------------------------
 type ResponseBody =
 {
-	to: Report['id_user_to'][];
+	reports: Report['id_user_to'][];
 };
 
 // Function --------------------------------------------------------------------
@@ -20,6 +20,6 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 
 	return res.status(200).json(
 	{
-		to: likes_from_me.map(like => like.id_user_to),
+		reports: likes_from_me.map(like => like.id_user_to),
 	});
 };

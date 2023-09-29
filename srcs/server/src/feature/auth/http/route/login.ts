@@ -1,12 +1,12 @@
-import type { RequestHandler }                from 'express';
-import type { Account }                       from '../../entity';
-import * as Config                            from '@/Config';
-import { service as crypto_svc }              from '@/core/cryto/service';
-import { service as database_svc }            from '@/core/database/service';
-import { service as jwt_svc }                 from '@/core/jwt/service';
-import { service as validation_svc }          from '@/core/validation/service';
-import { AuthException }                      from '../../exception';
-import { action as findAccountByCredentials } from '../../use-case/find-by-credentials/action';
+import type { RequestHandler }         from 'express';
+import type { Account }                from '../../entity';
+import * as Config                     from '@/Config';
+import { service as crypto_svc }       from '@/core/cryto/service';
+import { service as database_svc }     from '@/core/database/service';
+import { service as jwt_svc }          from '@/core/jwt/service';
+import { service as validation_svc }   from '@/core/validation/service';
+import { AuthException }               from '../../exception';
+import { action as findByCredentials } from '../../use-case/find-by-credentials/action';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -16,7 +16,7 @@ type ResponseBody =
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
-	const account = await findAccountByCredentials(validation_svc, database_svc, crypto_svc,
+	const account = await findByCredentials(validation_svc, database_svc, crypto_svc,
 	{
 		username: req.body.username,
 		password: req.body.password,

@@ -9,8 +9,5 @@ type ResponseBody =
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
-	throw new NotFoundException({
-		cause: 'NotFound',
-		details: req.url
-	});
+	throw new NotFoundException(`Resource "${req.url}" does not exists.`);
 };

@@ -1,5 +1,5 @@
-import type { Tag }  from '../tag/entity';
-import type { User } from '../user/entity';
+import type { Tag }  from '@/feature/tag/entity';
+import type { User } from '@/feature/user/entity';
 
 // Type ------------------------------------------------------------------------
 export type UserTag =

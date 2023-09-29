@@ -1,5 +1,6 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
+import type { Account }           from '@/feature/auth/entity';
 import type { User }              from '../../entity';
 import { query }                  from './query';
 import { validate }               from './validate';
@@ -11,7 +12,7 @@ export type ActionInput =
 };
 
 export type ActionOutput =
-	User | null
+	User & Pick<Account, 'username'> | null
 ;
 
 // Function --------------------------------------------------------------------

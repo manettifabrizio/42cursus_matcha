@@ -31,7 +31,6 @@ app.use(cookieParser(Config.COOKIE_SECRET));
 app.use(CsrfMiddleware);
 
 // Routes ----------------------------------------------------------------------
-import { controller as AppController }      from '@/feature/app/http/controller';
 import { controller as AuthController }     from '@/feature/auth/http/controller';
 import { controller as ErrorController }    from '@/feature/error/http/controller';
 import { controller as SecurityController } from '@/feature/security/http/controller';
@@ -39,7 +38,6 @@ import { controller as UserController }     from '@/feature/user/http/controller
 
 import { middleware as AuthMiddleware }     from '@/feature/auth/http/middleware';
 
-app.use('/', AppController);
 app.use('/auth', AuthController);
 app.use('/security', SecurityController);
 

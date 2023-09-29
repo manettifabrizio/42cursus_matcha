@@ -1,4 +1,5 @@
 import type { Account } from '@/feature/auth/entity';
+import type { Picture } from '@/feature/picture/entity';
 
 // Type ------------------------------------------------------------------------
 export type Gender =
@@ -27,12 +28,12 @@ export type Location =
 export type User =
 {
 	id: Account['id'];
-	// id_picture: Picture['id']|null; // Todo: Implement
+	id_picture: Picture['id']|null;
 	firstname: string;
 	lastname: string;
 	birthdate: Date|null;
-	gender: Gender|null;
-	orientation: Orientation|null;
+	gender: Gender;
+	orientation: Orientation;
+	biography: string;
 	location: Location|null;
-	biography: string|null;
 };

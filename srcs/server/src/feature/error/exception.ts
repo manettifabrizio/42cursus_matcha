@@ -2,7 +2,7 @@ import { Exception } from '@/core/exception';
 
 // Type ------------------------------------------------------------------------
 export type Cause =
-	'NotFound'
+	'NotFound'|'Forbidden'
 ;
 
 type Data =
@@ -15,8 +15,23 @@ type Data =
 export class NotFoundException
 	extends Exception<Data>
 {
-	constructor(data: Data)
+	constructor(details?: Data['details'])
 	{
-		super(data);
+		super({
+			cause: 'NotFound',
+			details,
+		});
+	}
+};
+
+export class ForbiddenException
+	extends Exception<Data>
+{
+	constructor(details?: Data['details'])
+	{
+		super({
+			cause: 'Forbidden',
+			details,
+		});
 	}
 };

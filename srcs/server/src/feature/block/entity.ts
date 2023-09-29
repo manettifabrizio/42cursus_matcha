@@ -1,4 +1,4 @@
-import { User } from '../user/entity';
+import { User } from '@/feature/user/entity';
 
 // Type ------------------------------------------------------------------------
 export type Block =

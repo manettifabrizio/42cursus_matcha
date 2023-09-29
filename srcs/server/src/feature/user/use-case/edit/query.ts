@@ -23,11 +23,11 @@ export const query = async (
 	const fields_return: string[] = [];
 	const params: any[] = [ dto.id ];
 
-	Object.entries(dto).forEach(([key, value]) =>
+	for (const [key, value] of Object.entries(dto))
 	{
 		if (value === undefined)
 		{
-			return;
+			continue;
 		}
 
 		switch (key)
@@ -47,7 +47,7 @@ export const query = async (
 				params.push(value);
 				break;
 		}
-	});
+	}
 
 	const query =
 	`

@@ -4,6 +4,7 @@ import { Exception } from '@/core/exception';
 export type Cause =
 	  'Query:ConstraintsViolation:Unique'
 	| 'Query:ConstraintsViolation:ForeignKey'
+	| 'Query:ConstraintsViolation:Restrict'
 	| 'Pool:Initialization'
 	| 'Unknown'
 ;

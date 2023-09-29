@@ -5,5 +5,5 @@ export type Picture =
 {
 	id: number;
 	id_user: User['id'];
-	name: string;
+	path: string;
 };

@@ -1,4 +1,5 @@
 import type { DatabaseService } from '@/core/database/types';
+import type { Account }         from '@/feature/auth/entity';
 import type { User }            from '../../entity';
 import type { Position }        from '../../entity';
 
@@ -8,7 +9,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	User | null
+	User & Pick<Account, 'username'> | null
 ;
 
 // Function --------------------------------------------------------------------
@@ -21,11 +22,16 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id, firstname, lastname, birthdate,
+			users.id, id_picture, firstname, lastname, birthdate,
 			gender, orientation, biography,
-			ST_X(location::geometry) as longitude, ST_Y(location::geometry) as latitude
+			ST_X(location::geometry) as longitude, ST_Y(location::geometry) as latitude,
+			username
 		FROM
 			users
+		INNER JOIN
+			accounts
+		ON
+			accounts.id = users.id
 		WHERE
 			id = $1
 	`;
@@ -35,7 +41,7 @@ export const query = async (
 		dto.id,
 	];
 
-	const result = await database_svc.query<Omit<User, 'location'> & Position>(query, params);
+	const result = await database_svc.query<Omit<User, 'location'> & Position & Pick<Account, 'username'>>(query, params);
 
 	if (!result.rows[0])
 	{

@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS "users"
 	"firstname"   VARCHAR                NOT NULL,
 	"lastname"    VARCHAR                NOT NULL,
 	"birthdate"   TIMESTAMP                  NULL,
-	"gender"      Gender                     NULL,
-	"orientation" Orientation                NULL,
-	"biography"   TEXT                       NULL,
+	"gender"      Gender                 NOT NULL DEFAULT 'MALE',
+	"orientation" Orientation            NOT NULL DEFAULT 'BISEXUAL',
+	"biography"   TEXT                   NOT NULL DEFAULT '',
 	"location"    GEOGRAPHY(POINT, 4326)     NULL
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS "pictures"
 (
 	"id"      SERIAL  PRIMARY KEY,
 	"id_user" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
-	"name"    VARCHAR NOT NULL UNIQUE
+	"path"    VARCHAR NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS "users_pictures"
@@ -90,3 +90,46 @@ CREATE TABLE IF NOT EXISTS "users_pictures"
 ALTER TABLE "users"
 	ADD FOREIGN KEY ("id_picture") REFERENCES "pictures" ON DELETE SET NULL
 ;
+
+-- -----------------------------------------------------------------------------
+-- Procedure
+-- -----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION limit_user_pictures_count() RETURNS trigger AS $$
+DECLARE
+	pictures_count_max INTEGER := 10;
+	pictures_count INTEGER := 0;
+	check_required BOOLEAN := false;
+BEGIN
+	IF TG_OP = 'INSERT' THEN
+		check_required := true;
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN
+		IF (NEW.id_user != OLD.id_user) THEN
+			check_required := true;
+		END IF;
+	END IF;
+
+	IF check_required THEN
+		-- prevent concurrent inserts from multiple transactions
+		LOCK TABLE pictures IN EXCLUSIVE MODE;
+
+		SELECT INTO
+			pictures_count COUNT(*)
+		FROM
+			pictures
+		WHERE
+			id_user = NEW.id_user;
+
+		IF pictures_count >= pictures_count_max THEN
+			RAISE EXCEPTION 'User (pictures) limit reached (%).', pictures_count_max USING ERRCODE 23001;
+		END IF;
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER limit_user_pictures_count
+	BEFORE INSERT OR UPDATE ON pictures
+	FOR EACH ROW EXECUTE PROCEDURE limit_user_pictures_count();

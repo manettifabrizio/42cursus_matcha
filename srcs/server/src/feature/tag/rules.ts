@@ -16,7 +16,7 @@ export const checkName = () =>
 	.withMessage(`Tag name must be between 3 and 21 characters long.`)
 ;
 
-export const checkIdBulk = () =>
+export const checkIdBatch = () =>
 	body('ids')
 	.isArray()
 	.custom((value) => {

@@ -4,12 +4,14 @@ import * as Rules                 from '../../rules';
 // Type ------------------------------------------------------------------------
 type ValidationInput =
 {
-	ids: (string|number)[];
+	id_user: string|number;
+	path: string;
 };
 
 type ValidationOuput =
 {
-	ids: number[];
+	id_user: number;
+	path: string;
 };
 
 // Function --------------------------------------------------------------------
@@ -21,7 +23,8 @@ export const validate = async (
 {
 	const rules =
 	[
-		Rules.checkIdBulk(),
+		Rules.checkUserId(),
+		Rules.checkPath(),
 	];
 
 	return validation_svc.validate<ValidationOuput>({ body: dto }, rules);

@@ -2,7 +2,7 @@ import type { RequestHandler }       from 'express';
 import { service as database_svc }   from '@/core/database/service';
 import { service as validation_svc } from '@/core/validation/service';
 import { AuthException }             from '../../exception';
-import { action as confirmEmail }    from '../../use-case/email-confirm/action';
+import { action as emailConfirm }    from '../../use-case/email-confirm/action';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -12,7 +12,7 @@ type ResponseBody =
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
-	const account = await confirmEmail(validation_svc, database_svc,
+	const account = await emailConfirm(validation_svc, database_svc,
 	{
 		id: req.body.id,
 		secret: req.body.secret,

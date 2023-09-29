@@ -23,11 +23,11 @@ export const query = async (
 	const fields_return: string[] = [];
 	const params: any[] = [ dto.id ];
 
-	Object.entries(dto).forEach(async ([key, value]) =>
+	for (const [key, value] of Object.entries(dto))
 	{
 		if (value === undefined)
 		{
-			return;
+			continue;
 		}
 
 		switch (key)
@@ -35,11 +35,11 @@ export const query = async (
 			case 'id':
 				break;
 			case 'email':
-				fields_set.push(`email = $${params.length + 1}, secret = $${params.length + 2}, confirmed = FALSE`);
+				fields_set.push(`email_new = $${params.length + 1}, secret = $${params.length + 2}`);
 				params.push(value);
 				params.push(await crypto_svc.generateSecret());
 				fields_return.push('id');
-				fields_return.push('email');
+				fields_return.push('email_new AS email');
 				fields_return.push('secret');
 				break;
 			case 'password':
@@ -49,7 +49,7 @@ export const query = async (
 			default:
 				break;
 		}
-	});
+	}
 
 	const query =
 	`
@@ -69,5 +69,6 @@ export const query = async (
 	{
 		return null;
 	}
+
 	return result.rows[0] ?? {};
 };

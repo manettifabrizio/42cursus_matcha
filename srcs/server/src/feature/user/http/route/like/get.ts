@@ -8,8 +8,8 @@ import { action as findLikesTo }     from '@/feature/like/use-case/find-by-to/ac
 // Type ------------------------------------------------------------------------
 type ResponseBody =
 {
-	to: Like['id_user_to'][];
-	from: Like['id_user_from'][];
+	likes_to: Like['id_user_to'][];
+	likes_from: Like['id_user_from'][];
 };
 
 // Function --------------------------------------------------------------------
@@ -27,7 +27,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 
 	return res.status(200).json(
 	{
-		to: likes_from_me.map(like => like.id_user_to),
-		from: likes_to_me.map(like => like.id_user_from),
+		likes_to: likes_from_me.map(like => like.id_user_to),
+		likes_from: likes_to_me.map(like => like.id_user_from),
 	});
 };

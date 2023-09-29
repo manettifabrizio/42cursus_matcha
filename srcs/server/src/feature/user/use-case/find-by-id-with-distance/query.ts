@@ -1,4 +1,5 @@
 import type { DatabaseService } from '@/core/database/types';
+import type { Account }         from '@/feature/auth/entity';
 import type { Distance }        from '../../entity';
 import type { User }            from '../../entity';
 
@@ -8,7 +9,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	User | null
+	User & Pick<Account, 'username'> | null
 ;
 
 // Function --------------------------------------------------------------------
@@ -21,14 +22,19 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id, firstname, lastname, birthdate,
+			users.id, id_picture, firstname, lastname, birthdate,
 			gender, orientation, biography,
 			ST_Distance(
 				location,
 				(SELECT location FROM users WHERE id = $2)
-			) / 1000.0 as distance
+			) / 1000.0 as distance,
+			username
 		FROM
 			users
+		INNER JOIN
+			accounts
+		ON
+			accounts.id = users.id
 		WHERE
 			id = $1
 	`;
@@ -39,7 +45,7 @@ export const query = async (
 		dto.id_from,
 	];
 
-	const result = await database_svc.query<Omit<User, 'location'> & Distance>(query, params);
+	const result = await database_svc.query<Omit<User, 'location'> & Distance & Pick<Account, 'username'>>(query, params);
 
 	if (result.rowCount === 0)
 	{

@@ -1,11 +1,11 @@
 import type { RequestHandler }       from 'express';
-import type { Account }              from '@/feature/auth/entity';
+import type { Account }              from '../../entity';
 import * as Config                   from '@/Config';
 import { service as mail_svc }       from '@/core/mail/service';
 import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { action as editAccount }     from '@/feature/auth/use-case/edit/action';
+import { action as edit }            from '../../use-case/edit/action';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -15,7 +15,7 @@ type ResponseBody =
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
-	const account = await editAccount(validation_svc, database_svc, crypto_svc,
+	const account = await edit(validation_svc, database_svc, crypto_svc,
 	{
 		id: req.user!.id,
 		email: req.body.email,

@@ -4,6 +4,7 @@ import { ValidationException }      from '@/core/validation/exception';
 import { JwtException }             from '@/core/jwt/exception';
 import { AuthException }            from '@/feature/auth/exception';
 import { NotFoundException }        from '@/feature/error/exception';
+import { ForbiddenException }       from '@/feature/error/exception';
 import { SecurityException }        from '@/feature/security/exception';
 
 // Function --------------------------------------------------------------------
@@ -20,7 +21,12 @@ export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
 				break;
 			case 'Query:ConstraintsViolation:ForeignKey':
 				err = new ValidationException({
-					[err.data.details as string]: [ `Does not exist.` ]
+					[err.data.details as string]: [ `Does not exist.` ],
+				});
+				break
+			case 'Query:ConstraintsViolation:Restrict':
+				err = new ValidationException({
+					[err.data.details as string]: [ `Limit reached.` ],
 				});
 				break;
 			default:
@@ -54,6 +60,12 @@ export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
 	{
 		response.status.code = 404;
 		response.status.text = 'Not Found';
+		response.error = err.data;
+	}
+	else if (err instanceof ForbiddenException)
+	{
+		response.status.code = 403;
+		response.status.text = 'Forbidden';
 		response.error = err.data;
 	}
 
