@@ -1,11 +1,11 @@
-import type { RequestHandler }       from 'express';
-import { unlink }                    from 'fs';
-import { service as database_svc }   from '@/core/database/service';
-import { service as validation_svc } from '@/core/validation/service';
-import { ForbiddenException }        from '@/feature/error/exception';
-import { NotFoundException }         from '@/feature/error/exception';
-import { action as findPictureById } from '@/feature/picture/use-case/find-by-id/action';
-import { action as deletePicture }   from '@/feature/picture/use-case/delete/action';
+import type { RequestHandler }               from 'express';
+import { unlink }                            from 'fs';
+import { service as database_svc }           from '@/core/database/service';
+import { ForbiddenException }                from '@/feature/error/exception';
+import { NotFoundException }                 from '@/feature/error/exception';
+import { query as findUserByIdWithPosition } from '@/feature/user/use-case/find-by-id-with-position/query';
+import { query as findPictureById }          from '@/feature/picture/use-case/find-by-id/query';
+import { query as deletePicture }            from '@/feature/picture/use-case/delete/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -13,35 +13,45 @@ type ResponseBody =
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{ id_picture: string; }, ResponseBody> = async (req, res) =>
 {
 	try
 	{
 		database_svc.startTransaction();
 
-		const picture = await findPictureById(validation_svc, database_svc,
+		const picture = await findPictureById(database_svc,
 		{
-			id: req.params.id,
+			id: Number(req.params.id_picture),
 		});
 
 		if (picture === null)
 		{
-			throw new NotFoundException(`Image does not exist.`);
+			throw new NotFoundException(`Picture doesn't exist.`);
 		}
 
-		if (picture.id_user !== req.user!.id)
+		const user = (await findUserByIdWithPosition(database_svc,
 		{
-			throw new ForbiddenException(`You can't delete other users picture.`);
+			id: req.user!.id,
+		}))!;
+
+		if (picture.id === user.picture?.id)
+		{
+			throw new ForbiddenException(`You can't delete your profile picture.`);
 		}
 
-		const deleted = await deletePicture(validation_svc, database_svc,
+		if (picture.id_user !== user.id)
+		{
+			throw new ForbiddenException(`You don't own this picture.`);
+		}
+
+		await deletePicture(database_svc,
 		{
 			id: picture.id,
 		});
 
-		unlink(req.file!.path, (e) =>
+		unlink(picture.path, (e) =>
 		{
-			console.log(e);
+			console.log(`Feature::User::Http::Route::Picture::Remove: unlink() failed.`, e);
 		});
 
 		database_svc.commitTransaction();

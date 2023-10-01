@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 
 // Rules -----------------------------------------------------------------------
 export const checkIdUser = () =>
-	body('id_user')
+	body('id')
 	.trim()
 	.isInt({ min: 1 })
 	.withMessage(`User id must be an integer > 0.`)
@@ -10,7 +10,7 @@ export const checkIdUser = () =>
 ;
 
 export const checkIdTag = () =>
-	body('id_tag')
+	body('id')
 	.trim()
 	.isInt({ min: 1 })
 	.withMessage(`Tag id must be an integer > 0.`)

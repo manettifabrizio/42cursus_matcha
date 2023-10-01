@@ -3,7 +3,7 @@ import type { Report }          from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Report
+	Pick<Report, 'id_user_from'|'id_user_to'>
 ;
 
 type QueryOutput =
@@ -20,7 +20,7 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id_user_from, id_user_to
+			id_user_from, id_user_to, created_at
 		FROM
 			reports
 		WHERE

@@ -12,7 +12,10 @@ export type Cause =
 type Data =
 {
 	cause: Cause;
-	details?: string|string[];
+	message: string;
+	details?: {
+		column: string;
+	};
 };
 
 // Class ------------------------------------------------------------------------

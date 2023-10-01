@@ -1,7 +1,6 @@
 import type { RequestHandler }       from 'express';
 import { service as database_svc }   from '@/core/database/service';
-import { service as validation_svc } from '@/core/validation/service';
-import { action as removeTag }       from '@/feature/user-tag/use-case/delete/action';
+import { query as removeTag }       from '@/feature/user-tag/use-case/delete/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -9,12 +8,12 @@ type ResponseBody =
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{ id_tag: string; }, ResponseBody> = async (req, res) =>
 {
-	const removed = await removeTag(validation_svc, database_svc,
+	await removeTag(database_svc,
 	{
 		id_user: req.user!.id,
-		id_tag: req.params.id,
+		id_tag: Number(req.params.id_tag),
 	});
 
 	return res.status(204).send();

@@ -3,7 +3,7 @@ import type { Tag }                  from '@/feature/tag/entity';
 import { service as database_svc }   from '@/core/database/service';
 import { service as validation_svc } from '@/core/validation/service';
 import { action as createTag }       from '@/feature/tag/use-case/create/action';
-import { action as createUserTag }   from '@/feature/user-tag/use-case/create/action';
+import { query as addTagToUser }     from '@/feature/user-tag/use-case/add/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -22,7 +22,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 			name: req.body.name,
 		});
 
-		const user_tag = await createUserTag(validation_svc, database_svc,
+		await addTagToUser(database_svc,
 		{
 			id_user: req.user!.id,
 			id_tag: tag.id,

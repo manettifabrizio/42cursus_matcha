@@ -1,33 +1,37 @@
-import type { RequestHandler }       from 'express';
-import type { Like }                 from '@/feature/like/entity';
-import { service as database_svc }   from '@/core/database/service';
-import { service as validation_svc } from '@/core/validation/service';
-import { action as findLikesFrom }   from '@/feature/like/use-case/find-by-from/action';
-import { action as findLikesTo }     from '@/feature/like/use-case/find-by-to/action';
+import type { RequestHandler }          from 'express';
+import type { User }                    from '@/feature/user/entity';
+import type { Like }                    from '@/feature/like/entity';
+import { service as database_svc }      from '@/core/database/service';
+import { query as findLikesByUserFrom } from '@/feature/like/use-case/find-by-user-from/query';
+import { query as findLikesByUserTo }   from '@/feature/like/use-case/find-by-user-to/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
 {
-	likes_to: Like['id_user_to'][];
-	likes_from: Like['id_user_from'][];
+	likes: {
+		by_me: (Pick<User, 'id'> & Pick<Like, 'created_at'>)[];
+		to_me: (Pick<User, 'id'> & Pick<Like, 'created_at'>)[];
+	};
 };
 
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 {
-	const likes_from_me = await findLikesFrom(validation_svc, database_svc,
+	const liked_users = await findLikesByUserFrom(database_svc,
 	{
 		id_user_from: req.user!.id,
 	});
 
-	const likes_to_me = await findLikesTo(validation_svc, database_svc,
+	const liking_me_users = await findLikesByUserTo(database_svc,
 	{
 		id_user_to: req.user!.id,
 	});
 
 	return res.status(200).json(
 	{
-		likes_to: likes_from_me.map(like => like.id_user_to),
-		likes_from: likes_to_me.map(like => like.id_user_from),
+		likes: {
+			by_me: liked_users,
+			to_me: liking_me_users,
+		},
 	});
 };

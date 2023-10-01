@@ -1,9 +1,7 @@
-import type { RequestHandler }       from 'express';
-import type { Report }               from '@/feature/report/entity';
-import { service as database_svc }   from '@/core/database/service';
-import { service as validation_svc } from '@/core/validation/service';
-import { action as report }          from '@/feature/report/use-case/create/action';
-import { action as unlike }          from '@/feature/like/use-case/delete/action';
+import type { RequestHandler }     from 'express';
+import { service as database_svc } from '@/core/database/service';
+import { query as createReport }   from '@/feature/report/use-case/create/query';
+import { query as deleteLike }     from '@/feature/like/use-case/delete/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -11,22 +9,22 @@ type ResponseBody =
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{ id_user: string; }, ResponseBody> = async (req, res) =>
 {
 	try
 	{
 		database_svc.startTransaction();
 
-		const blocked = await report(validation_svc, database_svc,
+		await createReport(database_svc,
 		{
 			id_user_from: req.user!.id,
-			id_user_to: req.params.id,
+			id_user_to: Number(req.params.id_user),
 		});
 
-		const unliked = await unlike(validation_svc, database_svc,
+		await deleteLike(database_svc,
 		{
 			id_user_from: req.user!.id,
-			id_user_to: req.params.id,
+			id_user_to: Number(req.params.id_user),
 		});
 
 		database_svc.commitTransaction();

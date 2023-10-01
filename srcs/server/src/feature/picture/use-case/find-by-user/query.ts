@@ -7,7 +7,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	Picture[]
+	Pick<Picture, 'id'|'path'>[]
 ;
 
 // Function --------------------------------------------------------------------
@@ -20,7 +20,7 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id, id_user, path
+			id, path
 		FROM
 			pictures
 		WHERE
@@ -32,7 +32,7 @@ export const query = async (
 		dto.id_user,
 	];
 
-	const result = await database_svc.query<Picture>(query, params);
+	const result = await database_svc.query<Pick<Picture, 'id'|'path'>>(query, params);
 
 	return result.rows;
 };

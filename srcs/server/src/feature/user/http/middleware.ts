@@ -1,37 +1,34 @@
-import type { RequestHandler }       from 'express';
-import { service as database_svc }   from '@/core/database/service';
-import { service as validation_svc } from '@/core/validation/service';
-import { NotFoundException }         from '@/feature/error/exception';
-import { ForbiddenException }        from '@/feature/error/exception';
-import { action as find }            from '../use-case/find-by-id/action';
+import type { RequestHandler }               from 'express';
+import { service as database_svc }           from '@/core/database/service';
+import { NotFoundException }                 from '@/feature/error/exception';
+import { ForbiddenException }                from '@/feature/error/exception';
+import { query as findUserByIdWithPosition } from '../use-case/find-by-id-with-position/query';
 
 // Function --------------------------------------------------------------------
-export const middleware : RequestHandler =  async (req, res, next) =>
+export const middleware : RequestHandler<{ id_user?: string }> =  async (req, res, next) =>
 {
-	if (req.params.id)
+	const hasCompletedProfile = (user: object) =>
+		Object.values(user).filter((value) => value === null).length === 0
+	;
+
+	const me = await findUserByIdWithPosition(database_svc,
 	{
-		const hasCompletedProfile = (user: object) =>
-			Object.values(user)
-			.map((value) => value === null)
-			.some(is_uncomplete => is_uncomplete)
-		;
+		id: req.user!.id,
+	});
 
-		const user = await find(validation_svc, database_svc,
+	if (me === null || hasCompletedProfile(me) === false)
+	{
+		throw new ForbiddenException(`You have to complete your profile.`);
+	}
+
+	if (req.params.id_user)
+	{
+		const target = await findUserByIdWithPosition(database_svc,
 		{
-			id: req.user!.id,
+			id: Number(req.params.id_user),
 		});
 
-		if (user === null || !hasCompletedProfile(user))
-		{
-			throw new ForbiddenException(`You have to complete your profile to perform this action.`);
-		}
-
-		const target = await find(validation_svc, database_svc,
-		{
-			id: req.params.id,
-		});
-
-		if (target === null || !hasCompletedProfile(target))
+		if (target === null || hasCompletedProfile(target) === false)
 		{
 			throw new NotFoundException(`User does not exist.`);
 		}

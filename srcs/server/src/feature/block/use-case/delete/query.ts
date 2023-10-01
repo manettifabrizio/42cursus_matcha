@@ -3,7 +3,7 @@ import type { Block }           from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Block
+	Pick<Block, 'id_user_from'|'id_user_to'>
 ;
 
 type QueryOutput =

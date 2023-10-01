@@ -7,11 +7,11 @@ import { validate }               from './validate';
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id_user: string|number;
+	id_user: string | number;
 };
 
 export type ActionOutput =
-	Picture[]
+	Pick<Picture, 'id'|'path'>[]
 ;
 
 // Function --------------------------------------------------------------------

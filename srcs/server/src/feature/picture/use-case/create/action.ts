@@ -7,7 +7,7 @@ import { query }                  from './query';
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id_user: number;
+	id_user: string | number;
 	path: string;
 };
 

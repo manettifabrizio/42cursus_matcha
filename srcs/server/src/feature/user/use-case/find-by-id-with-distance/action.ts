@@ -1,6 +1,8 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
 import type { Account }           from '@/feature/auth/entity';
+import type { Picture }           from '@/feature/picture/entity';
+import type { Distance }          from '../../entity';
 import type { User }              from '../../entity';
 import { query }                  from './query';
 import { validate }               from './validate';
@@ -8,12 +10,16 @@ import { validate }               from './validate';
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id: string|number;
-	id_from: string|number;
+	id: string | number;
+	id_from: string | number;
 };
 
 export type ActionOutput =
-	User & Pick<Account, 'username'> | null
+	Omit<User, 'id_picture'>
+	& Pick<Account, 'username'>
+	& { location: Distance | null; }
+	& { picture: Pick<Picture, 'id'|'path'> | null; }
+	| null
 ;
 
 // Function --------------------------------------------------------------------

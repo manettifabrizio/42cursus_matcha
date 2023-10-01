@@ -1,14 +1,17 @@
-import type { DatabaseService }   from '@/core/database/types';
-import type { ValidationService } from '@/core/validation/types';
-import type { User }              from '../../entity';
-import { query }                  from './query';
-import { validate }               from './validate';
+import type { DatabaseService }       from '@/core/database/types';
+import type { ValidationService }     from '@/core/validation/types';
+import type { NonNullableProperties } from '@/core/typing';
+import type { Picture }               from '@/feature/picture/entity';
+import type { Position }              from '../../entity';
+import type { User }                  from '../../entity';
+import { query }                      from './query';
+import { validate }                   from './validate';
 
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id: string|number;
-	id_picture?: string|number;
+	id: string | number;
+	id_picture?: string | number;
 	firstname?: string;
 	lastname?: string;
 	birthdate?: string;
@@ -17,13 +20,18 @@ export type ActionInput =
 	biography?: string;
 	location?:
 	{
-		latitude: string|number;
-		longitude: string|number;
+		latitude: string | number;
+		longitude: string | number;
 	};
 };
 
 export type ActionOutput =
-	Partial<Omit<User, 'id'>> | null
+	Partial<
+		NonNullableProperties<Omit<User, 'id'|'id_picture'|'location'>>
+		& { picture: Pick<Picture, 'id'|'path'>; }
+		& { location: Position; }
+	>
+	| null
 ;
 
 // Function --------------------------------------------------------------------
@@ -36,7 +44,7 @@ export const action = async (
 {
 	const fields = await validate(validation_svc, dto);
 
-	if (Object.entries(fields).length <= 1)
+	if (Object.keys(fields).filter(key => key !== 'id').length === 0)
 	{
 		return {};
 	}

@@ -16,17 +16,17 @@ export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
 		{
 			case 'Query:ConstraintsViolation:Unique':
 				err = new ValidationException({
-					[err.data.details as string]: [ `Already in use.` ],
+					[err.data.details!.column]: [ `Already in use.` ],
 				});
 				break;
 			case 'Query:ConstraintsViolation:ForeignKey':
 				err = new ValidationException({
-					[err.data.details as string]: [ `Does not exist.` ],
+					[err.data.details!.column]: [ `Does not exist.` ],
 				});
 				break
 			case 'Query:ConstraintsViolation:Restrict':
 				err = new ValidationException({
-					[err.data.details as string]: [ `Limit reached.` ],
+					[err.data.details!.column]: [ err.data.message ],
 				});
 				break;
 			default:

@@ -1,17 +1,17 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { UserTag }           from '../../entity';
+import type { User }              from '@/feature/user/entity';
 import { query }                  from './query';
 import { validate }               from './validate';
 
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id_tag: string|number;
+	id_tag: string | number;
 };
 
 export type ActionOutput =
-	UserTag | null
+	Pick<User, 'id'>[] | null
 ;
 
 // Function --------------------------------------------------------------------
@@ -23,7 +23,7 @@ export const action = async (
 	: Promise<ActionOutput> =>
 {
 	const fields = await validate(validation_svc, dto);
-	const tag = await query(database_svc, fields);
+	const users = await query(database_svc, fields);
 
-	return tag;
+	return users;
 };

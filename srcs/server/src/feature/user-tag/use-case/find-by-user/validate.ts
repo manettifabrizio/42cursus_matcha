@@ -4,7 +4,7 @@ import * as Rules                 from '../../rules';
 // Type ------------------------------------------------------------------------
 type ValidationInput =
 {
-	id_user: string|number;
+	id_user: string | number;
 };
 
 type ValidationOuput =

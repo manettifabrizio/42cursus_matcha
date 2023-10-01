@@ -1,13 +1,12 @@
-import type { RequestHandler }       from 'express';
-import type { Picture }              from '@/feature/picture/entity';
-import { unlink }                    from 'fs';
-import { service as validation_svc } from '@/core/validation/service';
-import { service as database_svc }   from '@/core/database/service';
-import { action as createPicture }   from '@/feature/picture/use-case/create/action';
+import type { RequestHandler }     from 'express';
+import type { Picture }            from '@/feature/picture/entity';
+import { unlink }                  from 'fs';
+import { service as database_svc } from '@/core/database/service';
+import { query as createPicture }  from '@/feature/picture/use-case/create/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
-	Picture
+	Omit<Picture, 'id_user'>
 ;
 
 // Function --------------------------------------------------------------------
@@ -17,7 +16,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 	{
 		database_svc.startTransaction();
 
-		const picture = await createPicture(validation_svc, database_svc,
+		const { id_user, ...picture } = await createPicture(database_svc,
 		{
 			id_user: req.user!.id,
 			path: req.file!.path,
@@ -33,7 +32,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 
 		unlink(req.file!.path, (e) =>
 		{
-			console.log(e);
+			console.error(`User::Http::Route::Picture::Add: unlink() failed.`, e);
 		});
 
 		throw err;

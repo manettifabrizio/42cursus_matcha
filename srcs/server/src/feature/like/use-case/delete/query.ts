@@ -3,7 +3,7 @@ import type { Like }            from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Like
+	Pick<Like, 'id_user_from'|'id_user_to'>
 ;
 
 type QueryOutput =

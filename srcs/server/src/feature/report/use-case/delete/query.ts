@@ -3,7 +3,7 @@ import type { Report }          from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Report
+	Pick<Report, 'id_user_from'|'id_user_to'>
 ;
 
 type QueryOutput =

@@ -1,13 +1,12 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { Picture }           from '../../entity';
 import { validate }               from './validate';
 import { query }                  from './query';
 
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id: Picture['id'];
+	id: string | number;
 };
 
 export type ActionOutput =
@@ -23,7 +22,7 @@ export const action = async (
 	: Promise<ActionOutput> =>
 {
 	const fields = await validate(validation_svc, dto);
-	const deleted = await query(database_svc, fields);
+	const is_deleted = await query(database_svc, fields);
 
-	return deleted;
+	return is_deleted;
 };

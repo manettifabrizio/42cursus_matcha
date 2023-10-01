@@ -1,4 +1,5 @@
 import type { DatabaseService } from '@/core/database/types';
+import type { User }            from '@/feature/user/entity';
 import type { UserTag }         from '../../entity';
 
 // Type ------------------------------------------------------------------------
@@ -7,7 +8,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	UserTag[] | null
+	Pick<User, 'id'>[] | null
 ;
 
 // Function --------------------------------------------------------------------
@@ -20,7 +21,7 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id_user, id_tag
+			id_user as id
 		FROM
 			users_tags
 		WHERE
@@ -29,10 +30,10 @@ export const query = async (
 
 	const params =
 	[
-		dto.id_tag
+		dto.id_tag,
 	];
 
-	const result = await database_svc.query<UserTag>(query, params);
+	const result = await database_svc.query<Pick<User, 'id'>>(query, params);
 
 	return result.rows ?? null;
 };

@@ -1,17 +1,17 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { UserTag }           from '../../entity';
+import type { Tag }               from '@/feature/tag/entity';
 import { query }                  from './query';
 import { validate }               from './validate';
 
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id_user: string|number;
+	id_user: string | number;
 };
 
 export type ActionOutput =
-	UserTag[]
+	Tag[]
 ;
 
 // Function --------------------------------------------------------------------

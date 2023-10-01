@@ -41,8 +41,9 @@ CREATE TABLE IF NOT EXISTS "users"
 
 CREATE TABLE IF NOT EXISTS "likes"
 (
-	"id_user_from" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
-	"id_user_to"   INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"id_user_from" INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"id_user_to"   INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"created_at"   TIMESTAMP NOT NULL DEFAULT NOW(),
 	PRIMARY KEY ("id_user_from", "id_user_to")
 );
 
@@ -50,6 +51,7 @@ CREATE TABLE IF NOT EXISTS "reports"
 (
 	"id_user_from" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
 	"id_user_to"   INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"created_at"   TIMESTAMP NOT NULL DEFAULT NOW(),
 	PRIMARY KEY ("id_user_from", "id_user_to")
 );
 
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS "blocks"
 (
 	"id_user_from" INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
 	"id_user_to"   INTEGER NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"created_at"   TIMESTAMP NOT NULL DEFAULT NOW(),
 	PRIMARY KEY ("id_user_from", "id_user_to")
 );
 
@@ -94,6 +97,7 @@ ALTER TABLE "users"
 -- -----------------------------------------------------------------------------
 -- Procedure
 -- -----------------------------------------------------------------------------
+--  Limit user's pictures count
 CREATE OR REPLACE FUNCTION limit_user_pictures_count() RETURNS trigger AS $$
 DECLARE
 	pictures_count_max INTEGER := 10;
@@ -122,7 +126,7 @@ BEGIN
 			id_user = NEW.id_user;
 
 		IF pictures_count >= pictures_count_max THEN
-			RAISE EXCEPTION 'User (pictures) limit reached (%).', pictures_count_max USING ERRCODE 23001;
+			RAISE EXCEPTION '(picture): Cannot have more than % pictures.', pictures_count_max USING ERRCODE = '23001';
 		END IF;
 	END IF;
 
@@ -133,3 +137,40 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER limit_user_pictures_count
 	BEFORE INSERT OR UPDATE ON pictures
 	FOR EACH ROW EXECUTE PROCEDURE limit_user_pictures_count();
+
+-- Restrict user's profile picture to one they uploaded themselves
+CREATE OR REPLACE FUNCTION restrict_user_picture_owner() RETURNS trigger AS $$
+DECLARE
+	picture_owner INTEGER := 0;
+	check_required BOOLEAN := false;
+BEGIN
+	IF TG_OP = 'INSERT' THEN
+		check_required := true;
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN
+		IF (NEW.id_picture IS NOT NULL AND NEW.id_picture != OLD.id_picture) THEN
+			check_required := true;
+		END IF;
+	END IF;
+
+	IF check_required THEN
+		SELECT INTO
+			picture_owner id_user
+		FROM
+			pictures
+		WHERE
+			id = NEW.id_picture;
+
+		IF picture_owner != NEW.id THEN
+			RAISE EXCEPTION '(id_picture): Cannot use someone else picture as profile picture.' USING ERRCODE = '23001';
+		END IF;
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER restrict_user_picture_owner
+	BEFORE INSERT OR UPDATE ON users
+	FOR EACH ROW EXECUTE PROCEDURE restrict_user_picture_owner();

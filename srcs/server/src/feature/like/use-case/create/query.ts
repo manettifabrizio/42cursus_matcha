@@ -3,7 +3,7 @@ import type { Like }            from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Like
+	Pick<Like, 'id_user_from'|'id_user_to'>
 ;
 
 type QueryOutput =
@@ -28,7 +28,7 @@ export const query = async (
 		DO UPDATE SET
 			id_user_from = $1
 		RETURNING
-			id_user_from, id_user_to
+			id_user_from, id_user_to, created_at
 	`;
 
 	const params =

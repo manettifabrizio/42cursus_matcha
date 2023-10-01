@@ -7,8 +7,8 @@ import { validate }               from './validate';
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id_user_from: string|number;
-	id_user_to: string|number;
+	id_user_from: string | number;
+	id_user_to: string | number;
 };
 
 export type ActionOutput =
@@ -24,7 +24,7 @@ export const action = async (
 	: Promise<ActionOutput> =>
 {
 	const fields = await validate(validation_svc, dto);
-	const like = await query(database_svc, fields);
+	const block = await query(database_svc, fields);
 
-	return like;
+	return block;
 };

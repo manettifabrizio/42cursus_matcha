@@ -5,7 +5,23 @@ export const checkId = () =>
 	body('id')
 	.trim()
 	.isInt({ min: 1 })
-	.withMessage(`Id must be an integer.`)
+	.withMessage(`User id must be an integer > 0.`)
+	.toInt()
+;
+
+export const checkIdFrom = () =>
+	body('id_from')
+	.trim()
+	.isInt({ min: 1 })
+	.withMessage(`User id_from must be an integer > 0.`)
+	.toInt()
+;
+
+export const checkIdPicture = () =>
+	body('id_picture')
+	.trim()
+	.isInt({ min: 1 })
+	.withMessage(`Picture id must be an integer > 0.`)
 	.toInt()
 ;
 
@@ -95,12 +111,4 @@ export const checkLongitude = () =>
 	.isFloat({ min: -180, max: 180 }) // Todo: Verify limits
 	.withMessage(`Longitude must be a float between -180 and 180.`)
 	.toFloat()
-;
-
-export const checkIdFrom = () =>
-	body('id_from')
-	.trim()
-	.isInt({ min: 1 })
-	.withMessage(`User id from must be an integer > 0.`)
-	.toInt()
 ;

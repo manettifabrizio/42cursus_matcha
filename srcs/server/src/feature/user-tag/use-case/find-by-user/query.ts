@@ -1,4 +1,5 @@
 import type { DatabaseService } from '@/core/database/types';
+import type { Tag }             from '@/feature/tag/entity';
 import type { UserTag }         from '../../entity';
 
 // Type ------------------------------------------------------------------------
@@ -7,7 +8,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	UserTag[]
+	Tag[]
 ;
 
 // Function --------------------------------------------------------------------
@@ -20,19 +21,23 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id_user, id_tag
+			id, name
 		FROM
+			tags
+		INNER JOIN
 			users_tags
+		ON
+			users_tags.id_tag = tags.id
 		WHERE
 			id_user = $1
 	`;
 
 	const params =
 	[
-		dto.id_user
+		dto.id_user,
 	];
 
-	const result = await database_svc.query<UserTag>(query, params);
+	const result = await database_svc.query<Tag>(query, params);
 
 	return result.rows;
 };

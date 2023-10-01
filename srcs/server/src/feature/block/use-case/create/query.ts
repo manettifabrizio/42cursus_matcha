@@ -1,9 +1,9 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { Block }            from '../../entity';
+import type { Block }           from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Block
+	Pick<Block, 'id_user_from'|'id_user_to'>
 ;
 
 type QueryOutput =
@@ -28,7 +28,7 @@ export const query = async (
 		DO UPDATE SET
 			id_user_from = $1
 		RETURNING
-			id_user_from, id_user_to
+			id_user_from, id_user_to, created_at
 	`;
 
 	const params =

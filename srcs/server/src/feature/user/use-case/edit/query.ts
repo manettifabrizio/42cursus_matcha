@@ -1,15 +1,25 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { Override }        from '@/core/typing';
+import type { NonNullableProperties } from '@/core/typing';
+import type { Picture }         from '@/feature/picture/entity';
 import type { Position }        from '../../entity';
 import type { User }            from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Pick<User, 'id'> & Partial<Override<Omit<User, 'id'>, { 'location': Position }>>
+	Pick<User, 'id'>
+	& Partial<
+		NonNullableProperties<Omit<User, 'id'|'location'>>
+		& { location: Position; }
+	>
 ;
 
 type QueryOutput =
-	Partial<Omit<User, 'id'>> | null
+	Partial<
+		NonNullableProperties<Omit<User, 'id'|'id_picture'|'location'>>
+		& { picture: Pick<Picture, 'id'|'path'>; }
+		& { location: Position; }
+	>
+	| null
 ;
 
 // Function --------------------------------------------------------------------
@@ -51,38 +61,54 @@ export const query = async (
 
 	const query =
 	`
-		UPDATE
-			users
-		SET
-			${fields_set.join(', ')}
-		WHERE
-			id = $1
-		RETURNING
-			${fields_return.join(', ')}
+		WITH edited AS
+		(
+			UPDATE
+				users
+			SET
+				${fields_set.join(', ')}
+			WHERE
+				id = $1
+			RETURNING
+				${fields_return.join(', ')}
+		)
+		SELECT
+			edited.*, path
+		FROM
+			edited
+		LEFT JOIN
+			pictures
+		ON
+			pictures.id = edited.id_picture
 	`;
 
-	const result = await database_svc.query<Partial<Omit<User, 'id'|'location'> & Position>>(query, params);
+	const result = await database_svc.query<Partial<
+		NonNullableProperties<Omit<User, 'id'|'location'>>
+		& Position
+		& Pick<Picture, 'path'>
+	>>(query, params);
 
 	if (result.rowCount === 0)
 	{
 		return null;
 	}
 
-	const { latitude, longitude, ...partial_user } = result.rows[0];
+	const { latitude, longitude, id_picture, path, ...partial_user } = result.rows[0];
 
-	const updated: Partial<Omit<User, 'id'>> =
+	const user: QueryOutput =
 	{
 		...partial_user,
-	}
+	};
 
 	if (latitude !== undefined && longitude !== undefined)
 	{
-		updated.location =
-		{
-			latitude,
-			longitude,
-		};
+		user.location = { latitude, longitude };
 	}
 
-	return updated;
+	if (id_picture !== undefined && path !== undefined)
+	{
+		user.picture = { id: id_picture, path };
+	}
+
+	return user;
 };

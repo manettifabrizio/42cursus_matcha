@@ -7,7 +7,7 @@ import { validate }               from './validate';
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id: string|number;
+	id: string | number;
 	firstname: string;
 	lastname: string;
 };

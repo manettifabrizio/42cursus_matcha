@@ -6,8 +6,8 @@ import * as Rules                 from '../../rules';
 // Type ------------------------------------------------------------------------
 type ValidationInput =
 {
-	id: string|number;
-	// id_picture?: string|number;
+	id: string | number;
+	id_picture?: string | number;
 	firstname?: string;
 	lastname?: string;
 	birthdate?: string;
@@ -16,15 +16,15 @@ type ValidationInput =
 	biography?: string;
 	location?:
 	{
-		latitude: string|number;
-		longitude: string|number;
+		latitude: string | number;
+		longitude: string | number;
 	};
 };
 
 type ValidationOuput =
 {
 	id: number;
-	// id_picture?: string|number;
+	id_picture?: number;
 	firstname?: string;
 	lastname?: string;
 	birthdate?: Date;
@@ -55,7 +55,7 @@ export const validate = async (
 		switch (key)
 		{
 			case 'id':          return Rules.checkId();
-			// case 'id_picture': return Rules.checkIdPicture();
+			case 'id_picture':  return Rules.checkIdPicture();
 			case 'firstname':   return Rules.checkFirstname();
 			case 'lastname':    return Rules.checkLastname();
 			case 'birthdate':   return Rules.checkBirthdate();

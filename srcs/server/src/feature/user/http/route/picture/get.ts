@@ -7,11 +7,11 @@ import { action as findPicturesByUser } from '@/feature/picture/use-case/find-by
 // Type ------------------------------------------------------------------------
 type ResponseBody =
 {
-	pictures: Picture[];
+	pictures: Pick<Picture, 'id'|'path'>[];
 };
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{ id?: string; }, ResponseBody> = async (req, res) =>
 {
 	const pictures = await findPicturesByUser(validation_svc, database_svc,
 	{

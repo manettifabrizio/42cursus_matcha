@@ -5,15 +5,15 @@ export const checkId = () =>
 	body('id')
 	.trim()
 	.isInt({ min: 1 })
-	.withMessage(`Picture id from must be an integer > 0.`)
+	.withMessage(`Picture id must be an integer > 0.`)
 	.toInt()
 ;
 
-export const checkUserId = () =>
+export const checkIdUser = () =>
 	body('id_user')
 	.trim()
 	.isInt({ min: 1 })
-	.withMessage(`User id from must be an integer > 0.`)
+	.withMessage(`Picture id_user must be an integer > 0.`)
 	.toInt()
 ;
 
