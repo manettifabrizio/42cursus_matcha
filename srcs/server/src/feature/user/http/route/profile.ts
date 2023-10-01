@@ -1,17 +1,18 @@
-import type { RequestHandler }            from 'express';
-import type { Account }                   from '@/feature/auth/entity';
-import type { Picture }                   from '@/feature/picture/entity';
-import type { Tag }                       from '@/feature/tag/entity';
-import type { User }                      from '../../entity';
-import { service as database_svc }        from '@/core/database/service';
-import { NotFoundException }              from '@/feature/error/exception';
-import { query as findUserByIdWithDistance } from '../../use-case/find-by-id-with-distance/query';
-import { query as findUserByIdWithPosition } from '../../use-case/find-by-id-with-position/query';
+import type { RequestHandler }               from 'express';
+import type { Account }                      from '@/feature/auth/entity';
+import type { Picture }                      from '@/feature/picture/entity';
+import type { Tag }                          from '@/feature/tag/entity';
+import type { User }                         from '../../entity';
+import { service as database_svc }           from '@/core/database/service';
+import { NotFoundException }                 from '@/feature/error/exception';
 import { query as findPicturesByUser }       from '@/feature/picture/use-case/find-by-user/query';
 import { query as findTagsByUser }           from '@/feature/user-tag/use-case/find-by-user/query';
 import { query as findLike }                 from '@/feature/like/use-case/find/query';
 import { query as findBlock }                from '@/feature/block/use-case/find/query';
 import { query as findReport }               from '@/feature/report/use-case/find/query';
+import { query as createActivity }           from '@/feature/activity/use-case/create/query';
+import { query as findUserByIdWithDistance } from '../../use-case/find-by-id-with-distance/query';
+import { query as findUserByIdWithPosition } from '../../use-case/find-by-id-with-position/query';
 
 // Type ------------------------------------------------------------------------
 type ResponseBody =
@@ -89,6 +90,13 @@ export const route: RequestHandler<{ id_user?: string; }, ResponseBody> = async 
 				by_me: is_reported,
 			}
 		}
+
+		createActivity(database_svc,
+		{
+			id_user_from: req.user!.id,
+			id_user_to: user.id,
+			action: 'WATCHED_PROFILE',
+		});
 	}
 
 	return res.status(200).json(profile);

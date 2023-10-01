@@ -1,5 +1,4 @@
 import type { RequestHandler }           from 'express';
-import type { User }                     from '@/feature/user/entity';
 import type { Block }                    from '@/feature/block/entity';
 import { service as database_svc }       from '@/core/database/service';
 import { query as findBlocksByUserFrom } from '@/feature/block/use-case/find-by-user-from/query';
@@ -8,7 +7,7 @@ import { query as findBlocksByUserFrom } from '@/feature/block/use-case/find-by-
 type ResponseBody =
 {
 	blocks: {
-		by_me: (Pick<User, 'id'> & Pick<Block, 'created_at'>)[];
+		by_me: Omit<Block, 'id_user_from'>[];
 	};
 };
 

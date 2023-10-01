@@ -14,6 +14,11 @@ CREATE TYPE Orientation AS ENUM
 	'HOMOSEXUAL'
 );
 
+CREATE TYPE Activity AS ENUM
+(
+	'WATCHED_PROFILE'
+);
+
 
 CREATE TABLE IF NOT EXISTS "accounts"
 (
@@ -93,6 +98,14 @@ CREATE TABLE IF NOT EXISTS "users_pictures"
 ALTER TABLE "users"
 	ADD FOREIGN KEY ("id_picture") REFERENCES "pictures" ON DELETE SET NULL
 ;
+
+CREATE TABLE IF NOT EXISTS "activities"
+(
+	"id_user_from" INTEGER   NOT NULL INDEX REFERENCES "users" ON DELETE CASCADE,
+	"id_user_to"   INTEGER   NOT NULL INDEX REFERENCES "users" ON DELETE CASCADE,
+	"action"       Activity  NOT NULL,
+	"created_at"   TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
 -- -----------------------------------------------------------------------------
 -- Procedure

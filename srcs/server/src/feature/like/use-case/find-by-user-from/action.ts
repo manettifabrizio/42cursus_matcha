@@ -1,6 +1,5 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { User }              from '@/feature/user/entity';
 import type { Like }              from '../../entity';
 import { query }                  from './query';
 import { validate }               from './validate';
@@ -8,11 +7,11 @@ import { validate }               from './validate';
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
-	id_user_from: string|number;
+	id_user_from: string | number;
 };
 
 export type ActionOutput =
-	(Pick<User, 'id'> & Pick<Like, 'created_at'>)[]
+	Omit<Like, 'id_user_from'>[]
 ;
 
 // Function --------------------------------------------------------------------

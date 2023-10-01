@@ -2,12 +2,15 @@ import type { Account } from '@/feature/auth/entity';
 import type { Picture } from '@/feature/picture/entity';
 
 // Type ------------------------------------------------------------------------
+export const GENDERS = [ 'MALE', 'FEMALE' ] as const;
+export const ORIENTATIONS = [ 'BISEXUAL', 'HETEROSEXUAL', 'HOMOSEXUAL' ] as const;
+
 export type Gender =
-	'MALE'|'FEMALE'
+	typeof GENDERS[number]
 ;
 
 export type Orientation =
-	'BISEXUAL'|'HETEROSEXUAL'|'HOMOSEXUAL'
+	typeof ORIENTATIONS[number]
 ;
 
 export type Position =

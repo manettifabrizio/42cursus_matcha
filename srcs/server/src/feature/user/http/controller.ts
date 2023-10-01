@@ -21,6 +21,7 @@ import { route as Unblock }       from './route/block/delete';
 import { route as Reports }       from './route/report/get';
 import { route as Report }        from './route/report/create';
 import { route as Unreport }      from './route/report/delete';
+import { route as Activities }    from './route/activity/get';
 
 // Controller ------------------------------------------------------------------
 export const controller = Router();
@@ -38,9 +39,10 @@ controller.get('/:id_user?(\\d+)',          UserGet);
 controller.get('/:id_user?(\\d+)/pictures', Pictures);
 controller.get('/:id_user?(\\d+)/tags',     Tags);
 
-controller.get('/likes',   Likes);
-controller.get('/blocks',  Blocks);
-controller.get('/reports', Reports);
+controller.get('/likes',   Likes); // Todo: Pagination
+controller.get('/blocks',  Blocks); // Todo: Pagination
+controller.get('/reports', Reports); // Todo: Pagination
+controller.get('/activities', Activities); // Todo: Pagination
 
 controller.post('/:id_user(\\d+)/like',  NotReportedMiddleware, NotBlockedMiddleware, Like);
 controller.post('/:id_user(\\d+)/block', Block);

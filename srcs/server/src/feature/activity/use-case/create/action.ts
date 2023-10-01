@@ -1,17 +1,18 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { Block }             from '../../entity';
 import { query }                  from './query';
 import { validate }               from './validate';
 
 // Type ------------------------------------------------------------------------
 export type ActionInput =
 {
+	id_user_from: string | number;
 	id_user_to: string | number;
+	action: string;
 };
 
 export type ActionOutput =
-	Omit<Block, 'id_user_to'>[]
+	boolean
 ;
 
 // Function --------------------------------------------------------------------
@@ -23,7 +24,7 @@ export const action = async (
 	: Promise<ActionOutput> =>
 {
 	const fields = await validate(validation_svc, dto);
-	const users = await query(database_svc, fields);
+	const is_created = await query(database_svc, fields);
 
-	return users;
+	return is_created;
 };

@@ -1,4 +1,6 @@
-import { body } from 'express-validator';
+import { body }         from 'express-validator';
+import { GENDERS }      from './entity';
+import { ORIENTATIONS } from './entity';
 
 // Format ----------------------------------------------------------------------
 export const checkId = () =>
@@ -66,9 +68,9 @@ export const checkGender = () =>
 	.toUpperCase()
 	.custom((value) =>
 	{
-		if (!['MALE', 'FEMALE'].includes(value))
+		if (!GENDERS.includes(value))
 		{
-			throw new Error("Gender must be either MALE or FEMALE.");
+			throw new Error(`Gender must be one of the following value: ${GENDERS.join(', ')}.`);
 		}
 
 		return true;
@@ -81,9 +83,9 @@ export const checkOrientation = () =>
 	.toUpperCase()
 	.custom((value) =>
 	{
-		if (!['BISEXUAL', 'HOMOSEXUAL', 'HETEROSEXUAL'].includes(value))
+		if (!ORIENTATIONS.includes(value))
 		{
-			throw new Error("Orientation must be either BISEXUAL, HOMOSEXUAL, or HETEROSEXUAL.");
+			throw new Error(`Orientation must be one of the following value: ${ORIENTATIONS.join(', ')}.`);
 		}
 
 		return true;

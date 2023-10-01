@@ -1,5 +1,4 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { User }            from '@/feature/user/entity';
 import type { Like }            from '../../entity';
 
 // Type ------------------------------------------------------------------------
@@ -8,7 +7,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	(Pick<User, 'id'> & Pick<Like, 'created_at'>)[]
+	Omit<Like, 'id_user_to'>[]
 ;
 
 // Function --------------------------------------------------------------------
@@ -21,7 +20,7 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id_user_from, id_user_to, created_at
+			id_user_from, created_at
 		FROM
 			likes
 		WHERE
@@ -33,7 +32,7 @@ export const query = async (
 		dto.id_user_to,
 	];
 
-	const result = await database_svc.query<Pick<User, 'id'> & Pick<Like, 'created_at'>>(query, params);
+	const result = await database_svc.query<Omit<Like, 'id_user_to'>>(query, params);
 
 	return result.rows;
 };

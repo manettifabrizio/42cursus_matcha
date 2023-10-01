@@ -8,7 +8,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	(Pick<User, 'id'> & Pick<Report, 'created_at'>)[]
+	Omit<Report, 'id_user_from'>[]
 ;
 
 // Function --------------------------------------------------------------------
@@ -21,7 +21,7 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id_user_to AS id, created_at
+			id_user_to, created_at
 		FROM
 			reports
 		WHERE
@@ -33,7 +33,7 @@ export const query = async (
 		dto.id_user_from,
 	];
 
-	const result = await database_svc.query<Pick<User, 'id'> & Pick<Report, 'created_at'>>(query, params);
+	const result = await database_svc.query<Omit<Report, 'id_user_from'>>(query, params);
 
 	return result.rows ?? [];
 };

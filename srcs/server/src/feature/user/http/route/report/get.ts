@@ -1,5 +1,4 @@
 import type { RequestHandler }            from 'express';
-import type { User }                      from '@/feature/user/entity';
 import type { Report }                    from '@/feature/report/entity';
 import { service as database_svc }        from '@/core/database/service';
 import { query as findReportsByUserFrom } from '@/feature/report/use-case/find-by-user-from/query';
@@ -8,7 +7,7 @@ import { query as findReportsByUserFrom } from '@/feature/report/use-case/find-b
 type ResponseBody =
 {
 	reports: {
-		by_me: (Pick<User, 'id'> & Pick<Report, 'created_at'>)[];
+		by_me: Omit<Report, 'id_user_from'>[];
 	};
 };
 

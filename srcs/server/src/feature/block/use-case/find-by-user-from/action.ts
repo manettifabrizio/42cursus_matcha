@@ -1,6 +1,5 @@
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { User }              from '@/feature/user/entity';
 import type { Block }             from '../../entity';
 import { query }                  from './query';
 import { validate }               from './validate';
@@ -12,7 +11,7 @@ export type ActionInput =
 };
 
 export type ActionOutput =
-	(Pick<User, 'id'> & Pick<Block, 'created_at'>)[]
+	Omit<Block, 'id_user_from'>[]
 ;
 
 // Function --------------------------------------------------------------------

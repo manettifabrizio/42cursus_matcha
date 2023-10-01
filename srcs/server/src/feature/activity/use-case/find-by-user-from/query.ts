@@ -1,13 +1,13 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { Block }           from '../../entity';
+import type { Activity }        from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Pick<Block, 'id_user_to'>
+	Pick<Activity, 'id_user_from'>
 ;
 
 type QueryOutput =
-	Omit<Block, 'id_user_to'>[]
+	Omit<Activity, 'id_user_from'>[]
 ;
 
 // Function --------------------------------------------------------------------
@@ -20,19 +20,19 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id_user_from, created_at
+			id_user_to, action, created_at
 		FROM
-			blocks
+			activities
 		WHERE
-			id_user_to = $1
+			id_user_from = $1
 	`;
 
 	const params =
 	[
-		dto.id_user_to,
+		dto.id_user_from,
 	];
 
-	const result = await database_svc.query<Omit<Block, 'id_user_to'>>(query, params);
+	const result = await database_svc.query<Omit<Activity, 'id_user_from'>>(query, params);
 
 	return result.rows;
 };

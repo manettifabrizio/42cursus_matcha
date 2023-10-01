@@ -1,5 +1,4 @@
 import type { RequestHandler }          from 'express';
-import type { User }                    from '@/feature/user/entity';
 import type { Like }                    from '@/feature/like/entity';
 import { service as database_svc }      from '@/core/database/service';
 import { query as findLikesByUserFrom } from '@/feature/like/use-case/find-by-user-from/query';
@@ -9,8 +8,8 @@ import { query as findLikesByUserTo }   from '@/feature/like/use-case/find-by-us
 type ResponseBody =
 {
 	likes: {
-		by_me: (Pick<User, 'id'> & Pick<Like, 'created_at'>)[];
-		to_me: (Pick<User, 'id'> & Pick<Like, 'created_at'>)[];
+		by_me: Omit<Like, 'id_user_from'>[];
+		to_me: Omit<Like, 'id_user_to'>[];
 	};
 };
 

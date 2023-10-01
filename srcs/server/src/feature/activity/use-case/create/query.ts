@@ -1,13 +1,13 @@
 import type { DatabaseService } from '@/core/database/types';
-import type { Block }           from '../../entity';
+import type { Activity }        from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
-	Pick<Block, 'id_user_to'>
+	Pick<Activity, 'id_user_from'|'id_user_to'|'action'>
 ;
 
 type QueryOutput =
-	Omit<Block, 'id_user_to'>[]
+	boolean
 ;
 
 // Function --------------------------------------------------------------------
@@ -19,20 +19,31 @@ export const query = async (
 {
 	const query =
 	`
+	IF NOT EXISTS
+	(
 		SELECT
-			id_user_from, created_at
+			*
 		FROM
-			blocks
+			activities
 		WHERE
-			id_user_to = $1
+			created_at > NOW() - (15 || ' minutes')::interval
+	)
+	THEN
+		INSERT INTO activities
+			( id_user_from, id_user_to, action )
+		VALUES
+			( $1, $2, $3 )
+	END
 	`;
 
 	const params =
 	[
+		dto.id_user_from,
 		dto.id_user_to,
+		dto.action
 	];
 
-	const result = await database_svc.query<Omit<Block, 'id_user_to'>>(query, params);
+	const result = await database_svc.query(query, params);
 
-	return result.rows;
+	return (result.rowCount > 0);
 };
