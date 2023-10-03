@@ -27,6 +27,10 @@ export const authRoutes: RouteObject[] = [
 				path: "auth/register",
 				lazy: () => import("./register"),
 			},
+			{
+			    path: "auth/confirm",
+				lazy: () => import("./register/confirm"),
+			}
 		],
 	},
 	{

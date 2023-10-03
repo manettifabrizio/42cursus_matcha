@@ -23,7 +23,7 @@ export function Component() {
 					</Link>
 					<div className="text-3xl m-3">Let's find your account</div>
 					<div className="text-sm opacity-80 my-2">
-						Enter the email or username associated with your account to change
+						Enter the email and username associated with your account to change
 						your password.
 					</div>
 					<Form method="post" className="w-full my-4">
@@ -32,9 +32,18 @@ export function Component() {
 							input_props={{
 								required: true,
 								type: "text",
-								name: "username-email",
-								placeholder: "Email or Username",
+								name: "username",
+								placeholder: "Username",
 								id: "username",
+							}}
+						/>
+						<LabelInput
+							input_props={{
+								required: true,
+								type: "email",
+								name: "email",
+								placeholder: "Email",
+								id: "email",
 							}}
 						/>
 						<button

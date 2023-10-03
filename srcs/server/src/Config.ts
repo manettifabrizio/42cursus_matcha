@@ -1,10 +1,9 @@
-import * as dotenv from 'dotenv';
-import * as path   from 'path';
+import * as dotenv from "dotenv";
+import * as path from "path";
 
 dotenv.config();
 
-export const
-{
+export const {
 	// App
 	SERVER_PORT: PORT = "3000",
 	PUBLIC_PATH = path.join(path.dirname(__dirname), "public"),
@@ -22,6 +21,7 @@ export const
 	// Socket
 	SOCKET_URL = "",
 
+	// Defined in the .env
 	// Mailer
 	MAILER_HOST = "",
 	MAILER_PORT = "",
@@ -42,5 +42,4 @@ export const
 	JWT_ACCESS_LIFETIME = "60",
 	JWT_REFRESH_SECRET = "",
 	JWT_REFRESH_LIFETIME = "86400",
-
 } = process.env;

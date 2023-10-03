@@ -19,8 +19,15 @@ type LoginRequest = {
 };
 type LoginResponse = void;
 
+type ConfirmRequest = {
+	id: string;
+	secret: string;
+};
+type ConfirmResponse = void;
+
 type ResetPasswordRequest = {
 	username: string;
+	email: string;
 };
 type ResetPasswordResponse = void;
 
@@ -49,6 +56,13 @@ export const authApi = api.injectEndpoints({
 		login: builder.mutation<LoginResponse, LoginRequest>({
 			query: (data) => ({
 				url: `auth/login`,
+				method: "POST",
+				body: data,
+			}),
+		}),
+		confirm: builder.mutation<ConfirmResponse, ConfirmRequest>({
+			query: (data) => ({
+				url: `auth/confirm`,
 				method: "POST",
 				body: data,
 			}),

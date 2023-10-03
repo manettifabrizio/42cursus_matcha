@@ -16,6 +16,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 	const fields = {
 		username: form.get("username") as string,
+        email: form.get("email") as string
 	};
 
 	const req = store.dispatch(authApi.endpoints.reset_password.initiate(fields));
