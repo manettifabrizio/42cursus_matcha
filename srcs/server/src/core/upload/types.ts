@@ -1,7 +1,6 @@
-import { RequestHandler } from 'express';
+import { RequestHandler } from "express";
 
 // Type ------------------------------------------------------------------------
-export interface UploadService
-{
-	single: (field_name: string) => RequestHandler;
-};
+export interface UploadService {
+  single: (field_name: string) => RequestHandler;
+}

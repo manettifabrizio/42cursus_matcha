@@ -1,9 +1,4 @@
 // Component -------------------------------------------------------------------
-export default function Logout()
-{
-	return (
-		<>
-			Logging out ...
-		</>
-	);
+export default function Logout() {
+    return <>Logging out ...</>;
 }

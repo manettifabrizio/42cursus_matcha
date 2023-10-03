@@ -1,7 +1,6 @@
-import { createTransport } from 'nodemailer';
+import { createTransport } from "nodemailer";
 
 // Type ------------------------------------------------------------------------
-export interface MailService
-{
-	send: ReturnType<typeof createTransport>['sendMail'];
-};
+export interface MailService {
+  send: ReturnType<typeof createTransport>["sendMail"];
+}

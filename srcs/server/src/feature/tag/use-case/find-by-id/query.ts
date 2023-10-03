@@ -1,24 +1,17 @@
-import type { DatabaseService } from '@/core/database/types';
-import type { Tag }             from '../../entity';
+import type { DatabaseService } from "@/core/database/types";
+import type { Tag } from "../../entity";
 
 // Type ------------------------------------------------------------------------
-type QueryInput =
-	Pick<Tag, 'id'>
-;
+type QueryInput = Pick<Tag, "id">;
 
-type QueryOutput =
-	Tag | null
-;
+type QueryOutput = Tag | null;
 
 // Function --------------------------------------------------------------------
 export const query = async (
-	database_svc: DatabaseService,
-	dto : QueryInput,
-)
-	: Promise<QueryOutput> =>
-{
-	const query =
-	`
+  database_svc: DatabaseService,
+  dto: QueryInput
+): Promise<QueryOutput> => {
+  const query = `
 		SELECT
 			id, name
 		FROM
@@ -27,12 +20,9 @@ export const query = async (
 			id = $1
 	`;
 
-	const params =
-	[
-		dto.id
-	];
+  const params = [dto.id];
 
-	const result = await database_svc.query<Tag>(query, params);
+  const result = await database_svc.query<Tag>(query, params);
 
-	return result.rows[0] ?? null;
+  return result.rows[0] ?? null;
 };

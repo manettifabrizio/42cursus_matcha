@@ -1,24 +1,17 @@
-import type { DatabaseService } from '@/core/database/types';
-import type { Account }         from '../../entity';
+import type { DatabaseService } from "@/core/database/types";
+import type { Account } from "../../entity";
 
 // Type ------------------------------------------------------------------------
-type QueryInput =
-	Pick<Account, 'id'|'secret'>
-;
+type QueryInput = Pick<Account, "id" | "secret">;
 
-type QueryOutput =
-	Pick<Account, 'id'> | null
-;
+type QueryOutput = Pick<Account, "id"> | null;
 
 // Function --------------------------------------------------------------------
 export const query = async (
-	database_svc: DatabaseService,
-	dto : QueryInput,
-)
-	: Promise<QueryOutput> =>
-{
-	const query =
-	`
+  database_svc: DatabaseService,
+  dto: QueryInput
+): Promise<QueryOutput> => {
+  const query = `
 		UPDATE
 			accounts
 		SET
@@ -29,13 +22,9 @@ export const query = async (
 			id
 	`;
 
-	const params =
-	[
-		dto.id,
-		dto.secret,
-	];
+  const params = [dto.id, dto.secret];
 
-	const result = await database_svc.query<Pick<Account, 'id'>>(query, params);
+  const result = await database_svc.query<Pick<Account, "id">>(query, params);
 
-	return result.rows[0] ?? null;
+  return result.rows[0] ?? null;
 };

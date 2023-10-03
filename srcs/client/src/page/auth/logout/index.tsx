@@ -4,15 +4,14 @@ import Logout from '@/feature/auth/logout';
 export { loader } from '@/feature/auth/logout/loader';
 
 // Component -------------------------------------------------------------------
-export function Component()
-{
-	return (
-		<>
-			<h1>Auth::Logout</h1>
+export function Component() {
+    return (
+        <>
+            <h1>Auth::Logout</h1>
 
-			<Logout />
-		</>
-	);
+            <Logout />
+        </>
+    );
 }
 
 Component.displayName = 'Auth::Logout';

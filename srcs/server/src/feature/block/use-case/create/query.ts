@@ -1,24 +1,17 @@
-import type { DatabaseService } from '@/core/database/types';
-import type { Block }           from '../../entity';
+import type { DatabaseService } from "@/core/database/types";
+import type { Block } from "../../entity";
 
 // Type ------------------------------------------------------------------------
-type QueryInput =
-	Pick<Block, 'id_user_from'|'id_user_to'>
-;
+type QueryInput = Pick<Block, "id_user_from" | "id_user_to">;
 
-type QueryOutput =
-	Block
-;
+type QueryOutput = Block;
 
 // Function --------------------------------------------------------------------
 export const query = async (
-	database_svc: DatabaseService,
-	dto : QueryInput,
-)
-	: Promise<QueryOutput> =>
-{
-	const query =
-	`
+  database_svc: DatabaseService,
+  dto: QueryInput
+): Promise<QueryOutput> => {
+  const query = `
 		INSERT INTO blocks
 		 	( id_user_from, id_user_to )
 		VALUES
@@ -31,13 +24,9 @@ export const query = async (
 			id_user_from, id_user_to, created_at
 	`;
 
-	const params =
-	[
-		dto.id_user_from,
-		dto.id_user_to,
-	];
+  const params = [dto.id_user_from, dto.id_user_to];
 
-	const result = await database_svc.query<Block>(query, params);
+  const result = await database_svc.query<Block>(query, params);
 
-	return result.rows[0];
+  return result.rows[0];
 };

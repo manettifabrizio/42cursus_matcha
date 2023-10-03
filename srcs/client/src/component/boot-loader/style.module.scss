@@ -1,29 +1,29 @@
 .loading-screen {
-  display: grid;
-  place-items: center;
-  place-content: center;
-  gap: 1em;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  background: #121212;
+    display: grid;
+    place-items: center;
+    place-content: center;
+    gap: 1em;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background: #121212;
 }
 
 .loader {
-  margin-top: 30px;
-  display: inline-block;
-  position: relative;
-  animation: animloader 1s ease infinite;
+    margin-top: 30px;
+    display: inline-block;
+    position: relative;
+    animation: animloader 1s ease infinite;
 }
 
 @keyframes animloader {
-  0% {
-    width: 85%;
-  }
-  50% {
-    width: 100%;
-  }
-  100% {
-    width: 85%;
-  }
+    0% {
+        width: 85%;
+    }
+    50% {
+        width: 100%;
+    }
+    100% {
+        width: 85%;
+    }
 }
