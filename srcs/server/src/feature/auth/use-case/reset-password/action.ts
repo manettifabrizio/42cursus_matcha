@@ -13,7 +13,7 @@ type ActionInput =
 };
 
 type ActionOutput =
-	Pick<Account, 'id'|'email'|'secret'> | null
+	Pick<Account, 'id'|'email'|'secret'|'is_confirmed'> | null
 ;
 
 // Function --------------------------------------------------------------------

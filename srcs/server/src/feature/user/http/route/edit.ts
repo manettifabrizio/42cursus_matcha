@@ -3,12 +3,27 @@ import type { NonNullableProperties } from '@/core/typing';
 import type { Picture }               from '@/feature/picture/entity';
 import type { User }                  from '../../entity';
 import type { Position }              from '../../entity';
+import { HttpException }              from '@/core/exception';
 import { service as database_svc }    from '@/core/database/service';
 import { service as validation_svc }  from '@/core/validation/service';
-import { NotFoundException }          from '@/feature/error/exception';
 import { action as editUser }         from '../../use-case/edit/action';
 
 // Type ------------------------------------------------------------------------
+type RequestBody =
+{
+	id_picture: string;
+	firstname: string;
+	lastname: string;
+	birthdate: string;
+	gender: string;
+	orientation: string;
+	biography: string;
+	location: {
+		latitude: string;
+		longitude: string;
+	};
+};
+
 type ResponseBody =
 	Partial<
 		NonNullableProperties<Omit<User, 'id'|'id_picture'|'location'>>
@@ -18,7 +33,7 @@ type ResponseBody =
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (req, res) =>
 {
 	const user = await editUser(validation_svc, database_svc,
 	{
@@ -35,7 +50,9 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 
 	if (user === null)
 	{
-		throw new NotFoundException(`User does not exist.`);
+		throw new HttpException('Not Found', {
+			cause: `User does not exist.`,
+		});
 	}
 
 	return res.status(200).json(user);

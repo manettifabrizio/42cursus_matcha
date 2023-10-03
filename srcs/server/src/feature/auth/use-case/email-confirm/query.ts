@@ -22,7 +22,7 @@ export const query = async (
 		UPDATE
 			accounts
 		SET
-			email = email_new, secret = NULL, confirmed = TRUE
+			email = email_new, secret = NULL, is_confirmed = TRUE
 		WHERE
 			id = $1 AND secret = $2
 		RETURNING

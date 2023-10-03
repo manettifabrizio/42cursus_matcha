@@ -1,18 +1,13 @@
 import { Exception } from '@/core/exception';
 
 // Type ------------------------------------------------------------------------
-export type Cause =
-	'InvalidCsrfToken'
-;
-
 type Data =
 {
-	cause: Cause;
-	details?: string|string[];
+	[field: string]: string[];
 };
 
 // Class -----------------------------------------------------------------------
-export class SecurityException
+export class UploadException
 	extends Exception<Data>
 {
 	constructor(data: Data)

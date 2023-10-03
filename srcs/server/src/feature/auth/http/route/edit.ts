@@ -8,12 +8,19 @@ import { service as validation_svc } from '@/core/validation/service';
 import { action as edit }            from '../../use-case/edit/action';
 
 // Type ------------------------------------------------------------------------
+type RequestBody =
+{
+	email: string;
+	password: string;
+	password_confirm: string;
+};
+
 type ResponseBody =
 	Pick<Account, 'email'> | void
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (req, res) =>
 {
 	const account = await edit(validation_svc, database_svc, crypto_svc,
 	{

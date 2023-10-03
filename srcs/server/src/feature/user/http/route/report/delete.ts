@@ -3,12 +3,17 @@ import { service as database_svc } from '@/core/database/service';
 import { query as deleteReport }   from '@/feature/report/use-case/delete/query';
 
 // Type ------------------------------------------------------------------------
+type RequestQuery =
+{
+	id_user: string;
+};
+
 type ResponseBody =
 	void
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id_user: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<RequestQuery, ResponseBody> = async (req, res) =>
 {
 	await deleteReport(database_svc,
 	{

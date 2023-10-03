@@ -3,12 +3,17 @@ import { service as database_svc }   from '@/core/database/service';
 import { query as removeTag }       from '@/feature/user-tag/use-case/delete/query';
 
 // Type ------------------------------------------------------------------------
+type RequestParams =
+{
+	id_tag: string;
+};
+
 type ResponseBody =
 	void
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id_tag: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<RequestParams, ResponseBody> = async (req, res) =>
 {
 	await removeTag(database_svc,
 	{

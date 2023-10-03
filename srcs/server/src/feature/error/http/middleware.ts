@@ -1,11 +1,9 @@
 import type { ErrorRequestHandler } from 'express';
+import { HttpException }            from '@/core/exception';
 import { DatabaseException }        from '@/core/database/exception';
 import { ValidationException }      from '@/core/validation/exception';
 import { JwtException }             from '@/core/jwt/exception';
-import { AuthException }            from '@/feature/auth/exception';
-import { NotFoundException }        from '@/feature/error/exception';
-import { ForbiddenException }       from '@/feature/error/exception';
-import { SecurityException }        from '@/feature/security/exception';
+import { UploadException }          from '@/core/upload/exception';
 
 // Function --------------------------------------------------------------------
 export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
@@ -34,6 +32,11 @@ export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
 		}
 	}
 
+	if (err instanceof UploadException)
+	{
+		err = new ValidationException(err.data);
+	}
+
 	const response =
 	{
 		status: {
@@ -49,23 +52,17 @@ export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
 		response.status.text = 'Unprocessable Content';
 		response.error = err.data;
 	}
-	else if (err instanceof AuthException || err instanceof JwtException || err instanceof SecurityException)
+	else if (err instanceof JwtException)
 	{
 
 		response.status.code = 401;
 		response.status.text = 'Unauthorized';
 		response.error = err.data;
 	}
-	else if (err instanceof NotFoundException)
+	else if (err instanceof HttpException)
 	{
-		response.status.code = 404;
-		response.status.text = 'Not Found';
-		response.error = err.data;
-	}
-	else if (err instanceof ForbiddenException)
-	{
-		response.status.code = 403;
-		response.status.text = 'Forbidden';
+		response.status.code = err.code;
+		response.status.text = err.type;
 		response.error = err.data;
 	}
 

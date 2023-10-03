@@ -8,7 +8,7 @@ type QueryInput =
 ;
 
 type QueryOutput =
-	Pick<Account, 'id'> | null
+	Pick<Account, 'id'|'is_confirmed'> | null
 ;
 
 // Function --------------------------------------------------------------------
@@ -22,11 +22,11 @@ export const query = async (
 	const query =
 	`
 		SELECT
-			id, password
+			id, password, is_confirmed
 		FROM
 			accounts
 		WHERE
-			username = $1 AND confirmed = TRUE
+			username = $1
 	`;
 
 	const params =
@@ -34,7 +34,7 @@ export const query = async (
 		dto.username,
 	];
 
-	const result = await database_svc.query<Pick<Account, 'id'|'password'>>(query, params);
+	const result = await database_svc.query<Pick<Account, 'id'|'password'|'is_confirmed'>>(query, params);
 
 	if (result.rowCount === 0)
 	{

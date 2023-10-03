@@ -1,6 +1,6 @@
 import type { RequestHandler }     from 'express';
+import { HttpException }           from '@/core/exception';
 import { service as database_svc } from '@/core/database/service';
-import { ForbiddenException }      from '@/feature/error/exception';
 import { query as findBlock }      from '../use-case/find/query';
 
 // Function --------------------------------------------------------------------
@@ -14,7 +14,9 @@ export const middleware : RequestHandler<{ id_user: string}> =  async (req, res,
 
 	if (is_blocked)
 	{
-		throw new ForbiddenException(`You have blocked this user.`);
+		throw new HttpException('Forbidden', {
+			cause: `You have blocked this user.`,
+		});
 	}
 
 	return next();

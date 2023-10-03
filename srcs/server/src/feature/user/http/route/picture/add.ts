@@ -19,7 +19,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 		const { id_user, ...picture } = await createPicture(database_svc,
 		{
 			id_user: req.user!.id,
-			path: req.file!.path,
+			path: req.file!.filename,
 		});
 
 		database_svc.commitTransaction();
@@ -32,7 +32,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 
 		unlink(req.file!.path, (e) =>
 		{
-			console.error(`User::Http::Route::Picture::Add: unlink() failed.`, e);
+			e && console.error(`User::Picture::Add: unlink() failed.`, e);
 		});
 
 		throw err;

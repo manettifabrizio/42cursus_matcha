@@ -26,7 +26,7 @@ export const query = async (
 		SET
 			password = $3, secret = NULL
 		WHERE
-			id = $1 AND secret = $2 AND confirmed = TRUE
+			id = $1 AND secret = $2
 		RETURNING
 			id
 	`;

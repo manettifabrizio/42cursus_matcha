@@ -9,3 +9,7 @@ export type NullableProperties<T> =
 export type NonNullableProperties<T> =
 	{ [K in keyof T]: NonNullable<T[K]>; }
 ;
+
+export type ValueOf<T> =
+	T[keyof T]
+;

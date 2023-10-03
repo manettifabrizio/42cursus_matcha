@@ -4,6 +4,7 @@ import type { Tag }                           from '@/feature/tag/entity';
 import type { User }                          from '@/feature/user/entity';
 import type { Account }                       from '../../entity';
 import * as Config                            from '@/Config';
+import { HttpException }                      from '@/core/exception';
 import { service as crypto_svc }              from '@/core/cryto/service';
 import { service as database_svc }            from '@/core/database/service';
 import { service as jwt_svc }                 from '@/core/jwt/service';
@@ -11,10 +12,15 @@ import { service as validation_svc }          from '@/core/validation/service';
 import { query as findUserByIdWithPosition }  from '@/feature/user/use-case/find-by-id-with-position/query';
 import { query as findPicturesByUser }        from '@/feature/picture/use-case/find-by-user/query';
 import { query as findTagsByUser }            from '@/feature/user-tag/use-case/find-by-user/query';
-import { AuthException }                      from '../../exception';
 import { action as findAccountByCredentials } from '../../use-case/find-by-credentials/action';
 
 // Type ------------------------------------------------------------------------
+type RequestBody =
+{
+	username: string;
+	password: string;
+};
+
 type ResponseBody =
 	Omit<User, 'id_picture'>
 	& Pick<Account, 'username'>
@@ -26,7 +32,7 @@ type ResponseBody =
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (req, res) =>
 {
 	const account = await findAccountByCredentials(validation_svc, database_svc, crypto_svc,
 	{
@@ -36,8 +42,15 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 
 	if (account === null)
 	{
-		throw new AuthException({
-			cause: "Invalid credentials.",
+		throw new HttpException('Unauthorized', {
+			cause: `Invalid credentials.`,
+		});
+	}
+
+	if (account.is_confirmed === false)
+	{
+		throw new HttpException('Forbidden', {
+			cause: `Account email hasn't been confirmed.`,
 		});
 	}
 

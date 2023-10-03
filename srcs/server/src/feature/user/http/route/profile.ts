@@ -3,8 +3,8 @@ import type { Account }                      from '@/feature/auth/entity';
 import type { Picture }                      from '@/feature/picture/entity';
 import type { Tag }                          from '@/feature/tag/entity';
 import type { User }                         from '../../entity';
+import { HttpException }                     from '@/core/exception';
 import { service as database_svc }           from '@/core/database/service';
-import { NotFoundException }                 from '@/feature/error/exception';
 import { query as findPicturesByUser }       from '@/feature/picture/use-case/find-by-user/query';
 import { query as findTagsByUser }           from '@/feature/user-tag/use-case/find-by-user/query';
 import { query as findLike }                 from '@/feature/like/use-case/find/query';
@@ -15,6 +15,11 @@ import { query as findUserByIdWithDistance } from '../../use-case/find-by-id-wit
 import { query as findUserByIdWithPosition } from '../../use-case/find-by-id-with-position/query';
 
 // Type ------------------------------------------------------------------------
+type RequestParams =
+{
+	id_user?: string;
+};
+
 type ResponseBody =
 	Omit<User, 'id_picture'>
 	& Pick<Account, 'username'>
@@ -31,7 +36,7 @@ type ResponseBody =
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id_user?: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<RequestParams, ResponseBody> = async (req, res) =>
 {
 	let user;
 
@@ -53,7 +58,9 @@ export const route: RequestHandler<{ id_user?: string; }, ResponseBody> = async 
 
 	if (user === null)
 	{
-		throw new NotFoundException(`User does not exist.`);
+		throw new HttpException('Not Found', {
+			cause: `User does not exist.`,
+		});
 	}
 
 	const pictures = await findPicturesByUser(database_svc, { id_user: user.id });

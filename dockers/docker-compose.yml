@@ -37,9 +37,11 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      - TZ=Europe/Paris
+      - PGTZ=Europe/Paris
     volumes:
       # - ./db:/var/lib/postgresql/data # Uncomment for persistency
       - ../srcs/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports: # Remove to disable connection from outside
       - "5432:5432"
-

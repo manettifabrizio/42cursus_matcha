@@ -22,13 +22,13 @@ CREATE TYPE Activity AS ENUM
 
 CREATE TABLE IF NOT EXISTS "accounts"
 (
-	"id"        SERIAL  PRIMARY KEY,
-	"username"  VARCHAR NOT NULL UNIQUE,
-	"password"  VARCHAR NOT NULL,
-	"email"     VARCHAR NOT NULL UNIQUE,
-	"email_new" VARCHAR NOT NULL UNIQUE,
-	"secret"    VARCHAR     NULL,
-	"confirmed" BOOLEAN NOT NULL DEFAULT FALSE
+	"id"           SERIAL  PRIMARY KEY,
+	"username"     VARCHAR NOT NULL UNIQUE,
+	"password"     VARCHAR NOT NULL,
+	"email"        VARCHAR NOT NULL UNIQUE,
+	"email_new"    VARCHAR NOT NULL UNIQUE,
+	"secret"       VARCHAR     NULL,
+	"is_confirmed" BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS "users"
@@ -101,11 +101,14 @@ ALTER TABLE "users"
 
 CREATE TABLE IF NOT EXISTS "activities"
 (
-	"id_user_from" INTEGER   NOT NULL INDEX REFERENCES "users" ON DELETE CASCADE,
-	"id_user_to"   INTEGER   NOT NULL INDEX REFERENCES "users" ON DELETE CASCADE,
+	"id_user_from" INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"id_user_to"   INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,
 	"action"       Activity  NOT NULL,
 	"created_at"   TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE INDEX activites_user_from ON activities (id_user_from);
+CREATE INDEX activites_user_to   ON activities (id_user_to);
 
 -- -----------------------------------------------------------------------------
 -- Procedure
@@ -113,7 +116,7 @@ CREATE TABLE IF NOT EXISTS "activities"
 --  Limit user's pictures count
 CREATE OR REPLACE FUNCTION limit_user_pictures_count() RETURNS trigger AS $$
 DECLARE
-	pictures_count_max INTEGER := 10;
+	pictures_count_max INTEGER := 5;
 	pictures_count INTEGER := 0;
 	check_required BOOLEAN := false;
 BEGIN
@@ -139,7 +142,8 @@ BEGIN
 			id_user = NEW.id_user;
 
 		IF pictures_count >= pictures_count_max THEN
-			RAISE EXCEPTION '(picture): Cannot have more than % pictures.', pictures_count_max USING ERRCODE = '23001';
+			RAISE EXCEPTION 'Cannot have more than % pictures.', pictures_count_max
+			USING ERRCODE = '23001', DETAIL = '(picture)';
 		END IF;
 	END IF;
 
@@ -162,7 +166,7 @@ BEGIN
 	END IF;
 
 	IF TG_OP = 'UPDATE' THEN
-		IF (NEW.id_picture IS NOT NULL AND NEW.id_picture != OLD.id_picture) THEN
+		IF (NEW.id_picture IS NOT NULL) THEN
 			check_required := true;
 		END IF;
 	END IF;
@@ -176,7 +180,8 @@ BEGIN
 			id = NEW.id_picture;
 
 		IF picture_owner != NEW.id THEN
-			RAISE EXCEPTION '(id_picture): Cannot use someone else picture as profile picture.' USING ERRCODE = '23001';
+			RAISE EXCEPTION 'Cannot use someone else picture as profile picture.'
+			USING ERRCODE = '23001', DETAIL = '(id_picture)';
 		END IF;
 	END IF;
 

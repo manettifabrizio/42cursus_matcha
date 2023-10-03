@@ -9,12 +9,22 @@ import { action as createUser }      from '@/feature/user/use-case/create/action
 import { action as createAccount }   from '../../use-case/create/action';
 
 // Type ------------------------------------------------------------------------
+type RequestBody =
+{
+	username: string;
+	password: string;
+	password_confirm: string;
+	email: string;
+	firstname: string;
+	lastname: string;
+};
+
 type ResponseBody =
-	Pick<Account, 'id'>
+	Pick<Account, 'id'|'email'>
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (req, res) =>
 {
 	try
 	{
@@ -55,7 +65,11 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 			console.log(`MailService::Send: Failed.`, err);
 		});
 
-		return res.status(200).json(user);
+		return res.status(200).json(
+		{
+			id: account.id,
+			email: account.email,
+		});
 	}
 	catch (err: unknown)
 	{

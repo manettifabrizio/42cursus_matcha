@@ -3,12 +3,17 @@ import { service as database_svc } from '@/core/database/service';
 import { query as deleteBlock }    from '@/feature/block/use-case/delete/query';
 
 // Type ------------------------------------------------------------------------
+type RequestParams =
+{
+	id_user: string;
+};
+
 type ResponseBody =
 	void
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{ id_user: string; }, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<RequestParams, ResponseBody> = async (req, res) =>
 {
 	await deleteBlock(database_svc,
 	{

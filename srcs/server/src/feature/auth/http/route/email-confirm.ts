@@ -1,27 +1,33 @@
 import type { RequestHandler }       from 'express';
+import { HttpException }             from '@/core/exception';
 import { service as database_svc }   from '@/core/database/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { AuthException }             from '../../exception';
 import { action as emailConfirm }    from '../../use-case/email-confirm/action';
 
 // Type ------------------------------------------------------------------------
+type RequestQuery =
+{
+	id: string;
+	secret: string;
+};
+
 type ResponseBody =
 	void
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, {}, RequestQuery> = async (req, res) =>
 {
 	const account = await emailConfirm(validation_svc, database_svc,
 	{
-		id: req.body.id,
-		secret: req.body.secret,
+		id: req.query.id,
+		secret: req.query.secret,
 	});
 
 	if (account === null)
 	{
-		throw new AuthException({
-			cause: `Invalid credentials.`
+		throw new HttpException('Unauthorized', {
+			cause: `Invalid credentials.`,
 		});
 	}
 

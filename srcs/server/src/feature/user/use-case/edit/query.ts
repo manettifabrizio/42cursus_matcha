@@ -30,7 +30,7 @@ export const query = async (
 	: Promise<QueryOutput> =>
 {
 	const fields_set: string[] = [];
-	const fields_return: string[] = [];
+	const fields_return: string[] = [ 'id_picture' ];
 	const params: any[] = [ dto.id ];
 
 	for (const [key, value] of Object.entries(dto))
@@ -43,6 +43,10 @@ export const query = async (
 		switch (key)
 		{
 			case 'id':
+				break;
+			case 'id_picture':
+				fields_set.push(`${key} = $${params.length + 1}`);
+				params.push(value);
 				break;
 			case 'location':
 				// Note: ST_MakePoint() values are indeed longitude then latitude.
@@ -105,7 +109,7 @@ export const query = async (
 		user.location = { latitude, longitude };
 	}
 
-	if (id_picture !== undefined && path !== undefined)
+	if (dto.id_picture !== undefined && id_picture !== undefined && path !== undefined)
 	{
 		user.picture = { id: id_picture, path };
 	}

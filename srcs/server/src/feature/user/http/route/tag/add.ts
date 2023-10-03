@@ -6,12 +6,17 @@ import { action as createTag }       from '@/feature/tag/use-case/create/action'
 import { query as addTagToUser }     from '@/feature/user-tag/use-case/add/query';
 
 // Type ------------------------------------------------------------------------
+type RequestBody =
+{
+	name: string;
+};
+
 type ResponseBody =
 	Tag
 ;
 
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (req, res) =>
 {
 	try
 	{

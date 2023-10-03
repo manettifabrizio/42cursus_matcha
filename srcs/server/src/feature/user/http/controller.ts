@@ -33,11 +33,11 @@ controller.post('/tags', TagAdd);
 
 controller.use(HasCompletedProfileMiddleware);
 
-controller.get('/:id_user?(\\d+)/profile',  UserProfile);
+controller.get('/:id_user(\\d+)?/profile',  UserProfile);
 
-controller.get('/:id_user?(\\d+)',          UserGet);
-controller.get('/:id_user?(\\d+)/pictures', Pictures);
-controller.get('/:id_user?(\\d+)/tags',     Tags);
+controller.get('/:id_user(\\d+)?',          UserGet);
+controller.get('/:id_user(\\d+)?/pictures', Pictures);
+controller.get('/:id_user(\\d+)?/tags',     Tags);
 
 controller.get('/likes',   Likes); // Todo: Pagination
 controller.get('/blocks',  Blocks); // Todo: Pagination

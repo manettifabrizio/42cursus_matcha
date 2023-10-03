@@ -53,16 +53,11 @@ export const service: DatabaseService = ((pool: Pool) =>
 			const column = err.detail?.substring(
 				err.detail.indexOf('(') + 1,
 				err.detail.indexOf(')')
-			) ?? 'undefined';
-
-			const message = (err.code === '23001')
-				? err.message.substring(err.message.indexOf('): ') + 3)
-				: err.message
-			;
+			) ?? 'unknown';
 
 			throw new DatabaseException({
 				cause: causes[err.code ?? ''] ?? 'Query::Unknown',
-				message: message,
+				message: err.message,
 				details: { column },
 			});
 		}

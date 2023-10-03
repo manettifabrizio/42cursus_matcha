@@ -13,7 +13,7 @@ type ActionInput =
 };
 
 type ActionOutput =
-	Pick<Account, 'id'> | null
+	Pick<Account, 'id'|'is_confirmed'> | null
 ;
 
 // Function --------------------------------------------------------------------

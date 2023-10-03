@@ -1,7 +1,6 @@
 import type { RequestHandler }               from 'express';
+import { HttpException }                     from '@/core/exception';
 import { service as database_svc }           from '@/core/database/service';
-import { NotFoundException }                 from '@/feature/error/exception';
-import { ForbiddenException }                from '@/feature/error/exception';
 import { query as findUserByIdWithPosition } from '../use-case/find-by-id-with-position/query';
 
 // Function --------------------------------------------------------------------
@@ -18,7 +17,9 @@ export const middleware : RequestHandler<{ id_user?: string }> =  async (req, re
 
 	if (me === null || hasCompletedProfile(me) === false)
 	{
-		throw new ForbiddenException(`You have to complete your profile.`);
+		throw new HttpException('Forbidden', {
+			cause: `You have to complete your profile.`,
+		});
 	}
 
 	if (req.params.id_user)
@@ -30,7 +31,9 @@ export const middleware : RequestHandler<{ id_user?: string }> =  async (req, re
 
 		if (target === null || hasCompletedProfile(target) === false)
 		{
-			throw new NotFoundException(`User does not exist.`);
+			throw new HttpException('Not Found', {
+				cause: `User does not exist.`,
+			});
 		}
 	}
 

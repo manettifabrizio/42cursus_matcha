@@ -1,5 +1,6 @@
 import type { RequestHandler }       from 'express';
 import * as Config                   from '@/Config';
+import { HttpException }             from '@/core/exception';
 import { service as mail_svc }       from '@/core/mail/service';
 import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
@@ -20,26 +21,37 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 		email: req.body.email,
 	});
 
-	if (account !== null)
+	if (account === null)
 	{
-		// Todo: Match link with frontend routing
-		// Note: Do not use await to avoid blocking
-		mail_svc.send(
-		{
-			from: '"Matcha" <noreply@matcha.org>',
-			to: account.email,
-			subject: "Reset Password",
-			html: `
-				Please, click on the following link to update your password: <br>
-				<a href="https://${Config.FRONTEND_HOST}/auth/reset-password?id=${account.id}&secret=${account.secret}">
-					Update my password
-				</a>
-			`
-		}).catch((err) =>
-		{
-			console.log(`MailService::Send: Failed.`, err);
+		throw new HttpException('Unauthorized', {
+			cause: `Invalid credentials.`,
 		});
 	}
+
+	if (account.is_confirmed === false)
+	{
+		throw new HttpException('Forbidden', {
+			cause: `Account email hasn't been confirmed.`,
+		});
+	}
+
+	// Todo: Match link with frontend routing
+	// Note: Do not use await to avoid blocking
+	mail_svc.send(
+	{
+		from: '"Matcha" <noreply@matcha.org>',
+		to: account.email,
+		subject: "Reset Password",
+		html: `
+			Please, click on the following link to update your password: <br>
+			<a href="https://${Config.FRONTEND_HOST}/auth/reset-password?id=${account.id}&secret=${account.secret}">
+				Update my password
+			</a>
+		`
+	}).catch((err) =>
+	{
+		console.log(`MailService::Send: Failed.`, err);
+	});
 
 	return res.status(204).send();
 };

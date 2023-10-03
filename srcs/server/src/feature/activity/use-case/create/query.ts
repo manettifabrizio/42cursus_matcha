@@ -19,7 +19,11 @@ export const query = async (
 {
 	const query =
 	`
-	IF NOT EXISTS
+	INSERT INTO activities
+		( id_user_from, id_user_to, action )
+	SELECT
+		$1, $2, $3
+	WHERE NOT EXISTS
 	(
 		SELECT
 			*
@@ -28,12 +32,6 @@ export const query = async (
 		WHERE
 			created_at > NOW() - (15 || ' minutes')::interval
 	)
-	THEN
-		INSERT INTO activities
-			( id_user_from, id_user_to, action )
-		VALUES
-			( $1, $2, $3 )
-	END
 	`;
 
 	const params =
