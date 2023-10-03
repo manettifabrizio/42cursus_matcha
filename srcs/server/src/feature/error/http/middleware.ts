@@ -6,8 +6,13 @@ import { JwtException }             from '@/core/jwt/exception';
 import { UploadException }          from '@/core/upload/exception';
 
 // Function --------------------------------------------------------------------
-export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
+export const middleware: ErrorRequestHandler =  async (err: unknown, req, res, next) =>
 {
+	if (err instanceof JwtException)
+	{
+		err = new HttpException('Unauthorized', err.data);
+	}
+
 	if (err instanceof DatabaseException)
 	{
 		switch (err.data.cause)
@@ -37,34 +42,29 @@ export const middleware: ErrorRequestHandler =  async (err, req, res, next) =>
 		err = new ValidationException(err.data);
 	}
 
-	const response =
-	{
-		status: {
-			code: 500,
-			text: 'Internal Server Error',
-		},
-		error: err
-	};
-
 	if (err instanceof ValidationException)
 	{
-		response.status.code = 422;
-		response.status.text = 'Unprocessable Content';
-		response.error = err.data;
-	}
-	else if (err instanceof JwtException)
-	{
-
-		response.status.code = 401;
-		response.status.text = 'Unauthorized';
-		response.error = err.data;
-	}
-	else if (err instanceof HttpException)
-	{
-		response.status.code = err.code;
-		response.status.text = err.type;
-		response.error = err.data;
+		err = new HttpException('Unprocessable Entity', {
+			cause: `See details.`,
+			details: err.data,
+		});
 	}
 
-	res.status(response.status.code).json(response);
+	// Uniform error responses
+	const error = (err instanceof HttpException)
+		? err
+		: new HttpException('Internal Server Error', {
+			cause: String(err),
+		});
+	;
+
+	res.status(error.code).json(
+	{
+		status:
+		{
+			code: error.code,
+			text: error.type
+		},
+		error: error.data,
+	});
 };

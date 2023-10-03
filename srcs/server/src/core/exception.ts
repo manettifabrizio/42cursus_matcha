@@ -6,12 +6,14 @@ const HTTP_ERROR =
 	'Not Found': 404,
 	'Unauthorized': 401,
 	'Forbidden': 403,
-	'Unprocessable Content': 422,
+	'Unprocessable Entity': 422,
+	'Internal Server Error': 500,
 } as const;
 
 type HttpData =
 {
 	cause: string|string[];
+	details?: Record<string, string[]>;
 };
 
 // Class -----------------------------------------------------------------------
