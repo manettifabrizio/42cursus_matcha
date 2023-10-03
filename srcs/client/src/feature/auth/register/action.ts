@@ -1,13 +1,14 @@
-import type { ActionFunction }       from 'react-router-dom';
-import type { ApiErrorResponse }     from '@/core/api';
-import { redirect }                  from 'react-router-dom';
-import { store }                     from '@/core/store';
-import { isRTKQFetchBaseQueryError } from '@/tool/isRTKQError';
-import { authApi }                   from '../api.slice';
+import type { ActionFunction } from "react-router-dom";
+import type { ApiErrorResponse } from "@/core/api";
+import { redirect } from "react-router-dom";
+import { store } from "@/core/store";
+import { isRTKQFetchBaseQueryError } from "@/tool/isRTKQError";
+import { authApi } from "../api.slice";
+import { toast } from "react-toastify";
 
 // Type ------------------------------------------------------------------------
-export type RegisterError =
-{
+
+export type RegisterError = {
 	username: string[];
 	password: string[];
 	password_confirm: string[];
@@ -17,41 +18,45 @@ export type RegisterError =
 };
 
 // Action ----------------------------------------------------------------------
-export const action: ActionFunction = async ({ request }) =>
-{
+export const action: ActionFunction = async ({ request }) => {
 	const form = await request.formData();
 
 	// Note: Find better way to handle types
-	const fields =
-	{
-		username: form.get('username') as string,
-		password: form.get('password') as string,
-		password_confirm: form.get('password_confirm') as string,
-		email: form.get('email') as string,
-		firstname: form.get('firstname') as string,
-		lastname: form.get('lastname') as string,
+	const fields = {
+		username: form.get("username") as string,
+		password: form.get("password") as string,
+		password_confirm: form.get("password_confirm") as string,
+		email: form.get("email") as string,
+		firstname: form.get("firstname") as string,
+		lastname: form.get("lastname") as string,
 	};
 
 	const req = store.dispatch(authApi.endpoints.register.initiate(fields));
 
-	try
-	{
+	try {
 		const res = await req.unwrap();
 
+		toast.success(
+			`Account successfully created! An email was sent to ${fields.email} please confirm to log in.`
+		);
 		return redirect(`/auth/login?id=${res.id}`);
-	}
-	catch (error: unknown)
-	{
-		if (isRTKQFetchBaseQueryError(error))
-		{
+	} catch (error: unknown) {
+		if (isRTKQFetchBaseQueryError(error)) {
 			const registerError = error.data as ApiErrorResponse<RegisterError>;
 
-			if ('cause' in registerError.error)
-			{
-				return { username: [ registerError.error.cause ] };
-			}
+			if (typeof registerError === "object") {
+				if ("cause" in registerError.error) {
+					toast.error(
+						`Error while creating the account: ${registerError.error.cause}`
+					);
+					return {};
+				}
 
-			return registerError.error;
+				return registerError.error;
+			}
+			toast.error(`Error while creating the account: ${registerError}`);
+
+			return registerError;
 		}
 
 		return null;
