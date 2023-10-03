@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express';
-import { SecurityException }   from '@/feature/security/exception';
+import { HttpException }       from '@/core/exception';
 
 // Function --------------------------------------------------------------------
 export const middleware: RequestHandler =  async (req, res, next) =>
@@ -16,8 +16,8 @@ export const middleware: RequestHandler =  async (req, res, next) =>
 
 	if (!valid_token || received_token !== valid_token)
 	{
-		throw new SecurityException({
-			cause: 'InvalidCsrfToken',
+		throw new HttpException('Unauthorized', {
+			cause: 'Invalid CSRF Token',
 		});
 	}
 

@@ -6,6 +6,5 @@ export type Account =
 	password: string;
 	email: string;
 	secret: string|null;
-	created_at: Date;
-	updated_at: Date;
+	is_confirmed: boolean;
 };

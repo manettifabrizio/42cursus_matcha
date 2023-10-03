@@ -4,6 +4,7 @@ import { Exception } from '@/core/exception';
 export type Cause =
 	  'Query:ConstraintsViolation:Unique'
 	| 'Query:ConstraintsViolation:ForeignKey'
+	| 'Query:ConstraintsViolation:Restrict'
 	| 'Pool:Initialization'
 	| 'Unknown'
 ;
@@ -11,7 +12,10 @@ export type Cause =
 type Data =
 {
 	cause: Cause;
-	details?: string|string[];
+	message: string;
+	details?: {
+		column: string;
+	};
 };
 
 // Class ------------------------------------------------------------------------

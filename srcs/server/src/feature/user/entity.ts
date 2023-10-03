@@ -1,23 +1,42 @@
 import type { Account } from '@/feature/auth/entity';
+import type { Picture } from '@/feature/picture/entity';
 
 // Type ------------------------------------------------------------------------
+export const GENDERS = [ 'MALE', 'FEMALE' ] as const;
+export const ORIENTATIONS = [ 'BISEXUAL', 'HETEROSEXUAL', 'HOMOSEXUAL' ] as const;
+
 export type Gender =
-	'male'|'female'
+	typeof GENDERS[number]
 ;
 
 export type Orientation =
-	'bisexual'|'heterosexual'|'homosexual'
+	typeof ORIENTATIONS[number]
+;
+
+export type Position =
+{
+	latitude: number;
+	longitude: number;
+};
+
+export type Distance =
+{
+	distance: number;
+};
+
+export type Location =
+	Position | Distance | (Position & Distance)
 ;
 
 export type User =
 {
 	id: Account['id'];
+	id_picture: Picture['id']|null;
 	firstname: string;
 	lastname: string;
 	birthdate: Date|null;
-	gender: Gender|null;
-	orientation: Orientation|null;
-	biography: string|null;
-	created_at: Date;
-	updated_at: Date;
+	gender: Gender;
+	orientation: Orientation;
+	biography: string;
+	location: Location|null;
 };

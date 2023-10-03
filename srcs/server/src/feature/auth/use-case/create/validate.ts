@@ -1,5 +1,5 @@
 import type { ValidationService } from '@/core/validation/types';
-import * as Rules                 from '@/feature/auth/rules';
+import * as Rules                 from '../../rules';
 
 // Type ------------------------------------------------------------------------
 type ValidationInput =
@@ -11,8 +11,11 @@ type ValidationInput =
 };
 
 type ValidationOuput =
-	Omit<ValidationInput, 'password_confirm'>
-;
+{
+	username: string;
+	password: string;
+	email: string;
+};
 
 // Function --------------------------------------------------------------------
 export const validate = async (

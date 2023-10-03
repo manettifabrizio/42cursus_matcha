@@ -1,6 +1,13 @@
 import { body } from 'express-validator';
 
 // Format ----------------------------------------------------------------------
+export const checkId = () =>
+	body('id')
+	.trim()
+	.isInt({ min: 1 })
+	.withMessage(`Account id must be an integer > 0.`)
+;
+
 export const checkUsername = () =>
 	body('username')
 	.trim()
@@ -19,6 +26,18 @@ export const checkPassword = () =>
 	.withMessage(`Password must contains: at least 1 non-alphanumeric character.`)
 ;
 
+export const checkPasswordConfirm = () =>
+	body('password_confirm')
+	.trim()
+	.custom((value: string, { req }) =>
+	{
+		if (value !== req.body['password'])
+			throw new Error(`Password confirmation mismatch.`);
+
+		return true;
+	})
+;
+
 export const checkEmail = () =>
 	body('email')
 	.trim()
@@ -27,13 +46,6 @@ export const checkEmail = () =>
 ;
 
 // Not Empty -------------------------------------------------------------------
-export const checkIdNotEmpty = () =>
-	body('id')
-	.trim()
-	.isInt()
-	.withMessage(`Id is required.`)
-;
-
 export const checkUsernameNotEmpty = () =>
 	body('username')
 	.trim()
@@ -50,23 +62,18 @@ export const checkPasswordNotEmpty = () =>
 	.withMessage(`Password is required.`)
 ;
 
+export const checkEmailNotEmpty = () =>
+	body('email')
+	.trim()
+	.not()
+	.isEmpty()
+	.withMessage(`Email is required.`)
+;
+
 export const checkSecretNotEmpty = () =>
 	body('secret')
 	.trim()
 	.not()
 	.isEmpty()
 	.withMessage(`Secret is required.`)
-;
-
-// Special ---------------------------------------------------------------------
-export const checkPasswordConfirm = () =>
-	body('password_confirm')
-	.trim()
-	.custom((value: string, { req }) =>
-	{
-		if (value !== req.body['password'])
-			throw new Error(`Password confirmation mismatch.`);
-
-		return true;
-	})
 ;

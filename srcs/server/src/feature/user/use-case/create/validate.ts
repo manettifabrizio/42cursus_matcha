@@ -1,17 +1,20 @@
 import type { ValidationService } from '@/core/validation/types';
-import * as Rules                 from '@/feature/user/rules';
+import * as Rules                 from '../../rules';
 
 // Type ------------------------------------------------------------------------
 type ValidationInput =
 {
-	id: number;
+	id: string | number;
 	firstname: string;
 	lastname: string;
 };
 
 type ValidationOuput =
-	ValidationInput
-;
+{
+	id: number;
+	firstname: string;
+	lastname: string;
+};
 
 // Function --------------------------------------------------------------------
 export const validate = async (

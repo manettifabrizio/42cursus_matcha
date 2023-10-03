@@ -1,21 +1,30 @@
 import type { RequestHandler }       from 'express';
-import type { Account }              from '@/feature/auth/entity';
+import type { Account }              from '../../entity';
 import * as Config                   from '@/Config';
 import { service as crypto_svc }     from '@/core/cryto/service';
 import { service as database_svc }   from '@/core/database/service';
 import { service as mail_svc }       from '@/core/mail/service';
 import { service as validation_svc } from '@/core/validation/service';
-import { action as createAccount }   from '@/feature/auth/use-case/create/action';
 import { action as createUser }      from '@/feature/user/use-case/create/action';
+import { action as createAccount }   from '../../use-case/create/action';
 
 // Type ------------------------------------------------------------------------
-type ResponseBody =
+type RequestBody =
 {
-	id: Account['id'];
+	username: string;
+	password: string;
+	password_confirm: string;
+	email: string;
+	firstname: string;
+	lastname: string;
 };
 
+type ResponseBody =
+	Pick<Account, 'id'|'email'>
+;
+
 // Function --------------------------------------------------------------------
-export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
+export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (req, res) =>
 {
 	try
 	{
@@ -56,7 +65,11 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) =>
 			console.log(`MailService::Send: Failed.`, err);
 		});
 
-		return res.status(200).json(user);
+		return res.status(200).json(
+		{
+			id: account.id,
+			email: account.email,
+		});
 	}
 	catch (err: unknown)
 	{

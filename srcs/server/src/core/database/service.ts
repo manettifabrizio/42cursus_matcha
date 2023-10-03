@@ -19,7 +19,7 @@ pool.on('error', (err, client) =>
 {
 	throw new DatabaseException({
 		cause: 'Pool:Initialization',
-		details: err.message,
+		message: err.message,
 	});
 });
 
@@ -47,16 +47,18 @@ export const service: DatabaseService = ((pool: Pool) =>
 			{
 				'23505': 'Query:ConstraintsViolation:Unique',
 				'23503': 'Query:ConstraintsViolation:ForeignKey',
+				'23001': 'Query:ConstraintsViolation:Restrict',
 			};
 
 			const column = err.detail?.substring(
 				err.detail.indexOf('(') + 1,
 				err.detail.indexOf(')')
-			);
+			) ?? 'unknown';
 
 			throw new DatabaseException({
-				cause: causes[err.code ?? ''] ?? 'Unknown',
-				details: column,
+				cause: causes[err.code ?? ''] ?? 'Query::Unknown',
+				message: err.message,
+				details: { column },
 			});
 		}
 	}

@@ -1,7 +1,7 @@
 import type { CryptoService }     from '@/core/cryto/types';
 import type { DatabaseService }   from '@/core/database/types';
 import type { ValidationService } from '@/core/validation/types';
-import type { Account }           from '@/feature/auth/entity';
+import type { Account }           from '../../entity';
 import { query }                  from './query';
 import { validate }               from './validate';
 

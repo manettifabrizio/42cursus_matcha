@@ -1,6 +1,6 @@
 import type { CryptoService }   from '@/core/cryto/types';
 import type { DatabaseService } from '@/core/database/types';
-import type { Account }         from '@/feature/auth/entity';
+import type { Account }         from '../../entity';
 
 // Type ------------------------------------------------------------------------
 type QueryInput =
@@ -22,18 +22,11 @@ export const query = async (
 	const query =
 	`
 		INSERT INTO accounts
-		(
-			username,
-			password,
-			email,
-			secret
-		)
+			( username, password, email, email_new, secret )
 		VALUES
-			($1, $2, $3, $4)
+			( $1, $2, $3, $3, $4 )
 		RETURNING
-			id,
-			email,
-			secret
+			id, email, secret
 	`;
 
 	const params =
