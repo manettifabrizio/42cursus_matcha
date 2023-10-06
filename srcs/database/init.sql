@@ -88,13 +88,6 @@ CREATE TABLE IF NOT EXISTS "pictures"
 	"path"    VARCHAR NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS "users_pictures"
-(
-	"id_user"    INTEGER NOT NULL REFERENCES "users"    ON DELETE CASCADE,
-	"id_picture" INTEGER NOT NULL REFERENCES "pictures" ON DELETE CASCADE,
-	PRIMARY KEY ("id_user", "id_picture")
-);
-
 ALTER TABLE "users"
 	ADD FOREIGN KEY ("id_picture") REFERENCES "pictures" ON DELETE SET NULL
 ;
