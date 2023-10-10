@@ -20,6 +20,10 @@ type CompleteProfileError = {
 	pictures: string[];
 };
 
+// Exporting action this way only works if the element has a lazy import
+// otherwise you will have a 405 import
+export { action } from '@/feature/user/complete-profile/action';
+
 export function Component() {
 	const [profile, setProfile] = useState<Profile>({
 		birthday: new Date(),
@@ -32,24 +36,37 @@ export function Component() {
 	const navigation = useNavigation();
 	const data = useActionData() as CompleteProfileError | undefined;
 
+	let form_data = new FormData();
+
 	return (
 		<>
+			{console.log(profile)}
 			<div className="flex justify-between flex-col items-center w-full">
 				<Link to="/" className="flex justify-center">
 					<img src={MatchaLogo} alt="MatchaLogo" className="w-1/3" />
 				</Link>
 				<div className="overflow-auto w-full h-full">
 					<div className="flex justify-center my-4">
-						<div className="flex flex-col justify-center items-center xs:w-1/2 md:w-1/3">
+						<div className="flex flex-col justify-center items-center w-80 sm:w-1/2 md:w-1/3">
 							<h4>
 								Please complete your profile to start matching
 								with people!
 							</h4>
-							<Form className="w-full">
+							<Form
+								className="w-full"
+								method="post"
+								action="/user/complete-profile"
+							>
 								<BirthdayForm
 									setProfile={setProfile}
 									id={id}
 									errors={data?.birthday}
+								/>
+                                <input
+									hidden
+									value={profile.birthday.toDateString()}
+									name="birthday"
+                                    readOnly
 								/>
 								<GenderForm
 									setProfile={setProfile}
@@ -65,6 +82,12 @@ export function Component() {
 									setProfile={setProfile}
 									id={id}
 									errors={data?.pictures}
+								/>
+								<input
+									hidden
+									value={profile.tags}
+									name="tags[]"
+                                    readOnly
 								/>
 								<div className="flex justify-center mt-5">
 									<button

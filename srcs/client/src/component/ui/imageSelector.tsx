@@ -64,7 +64,7 @@ export default function ImageSelector({
 			<h6>Please upload at least 2 images to start:</h6>
 			<div className="grid w-full grid-cols-3 gap-3">
 				{uploadedFiles.map((file) => (
-					<div className="relative">
+					<div className="relative" key={file.name}>
 						<button
 							onClick={() => rmFile(file)}
 							className="absolute -right-2 top-0 rounded-full text-red-500"
@@ -74,7 +74,6 @@ export default function ImageSelector({
 						<img
 							src={file.name}
 							id={file.name}
-							key={file.name}
 							className="border-2 rounded my-2 object-scale-down"
 						/>
 					</div>

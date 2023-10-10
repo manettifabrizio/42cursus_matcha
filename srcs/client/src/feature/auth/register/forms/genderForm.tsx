@@ -30,6 +30,7 @@ export default function GenderForm({
 			<h5>How do you identify?</h5>
 			<div className="flex justify-center items-center">
 				<SelectDropdown
+					name="gender"
 					options={genderOptions}
 					errors={errors}
 					multi_select={false}

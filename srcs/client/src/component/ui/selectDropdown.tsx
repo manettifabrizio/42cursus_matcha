@@ -7,6 +7,7 @@ export type Option = {
 };
 
 type SelectDropdownProps = {
+	name: string;
 	errors?: string[];
 	options: Option[];
 	multi_select: boolean;
@@ -39,7 +40,7 @@ export default function SelectDropdown(props: SelectDropdownProps) {
 					option: () =>
 						'hover:bg-gray-700 px-1 rounded-sm hover:cursor-pointer',
 					menu: () => {
-						return 'flex border-2 rounded-md p-2 border-s-white bg-black hover:cursor-pointer mb-3 max-h-36 overflow-y-scroll';
+						return 'flex border-2 rounded-md p-2 border-s-white bg-black hover:cursor-pointer mb-3 max-h-36 overflow-y-auto';
 					},
 					menuList: () => 'w-full',
 				}}
@@ -47,6 +48,8 @@ export default function SelectDropdown(props: SelectDropdownProps) {
 				id={props.id}
 				unstyled
 				options={props.options}
+				name={props.name}
+                required
 				className={
 					'w-full border-2 rounded-md bg-inherit px-2 py-1 border-s-' +
 					(props.errors && props.errors.length > 0

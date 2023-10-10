@@ -1,4 +1,4 @@
-import ImageSelector from '@/component/ui/imageUpload';
+import ImageSelector from '@/component/ui/imageSelector';
 import { Profile } from '@/page/user/complete-profile';
 
 type PicturesFormProps = {

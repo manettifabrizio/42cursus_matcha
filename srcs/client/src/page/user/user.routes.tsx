@@ -1,6 +1,5 @@
 import { RouteObject } from 'react-router-dom';
 import ProtectedLayout from '@/component/layout/protected';
-import { Component as CompleteProfile } from './complete-profile';
 
 // Route -----------------------------------------------------------------------
 export const userRoutes: RouteObject[] = [
@@ -13,7 +12,7 @@ export const userRoutes: RouteObject[] = [
 			},
 			{
 				path: 'user/complete-profile',
-				element: <CompleteProfile />,
+				lazy: () => import('./complete-profile'),
 			},
 		],
 	},
