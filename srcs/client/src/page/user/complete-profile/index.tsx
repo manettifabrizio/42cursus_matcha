@@ -1,46 +1,161 @@
-import BirthdayForm from '@/feature/auth/register/forms/birthdayForm';
 import { useId, useState } from 'react';
-import { Form, Link, useActionData, useNavigation } from 'react-router-dom';
+import { Form, Link, useNavigate } from 'react-router-dom';
 import MatchaLogo from '/matcha.svg';
+import PicturesForm from '@/feature/auth/register/forms/picturesForm';
+import {
+	useSetUserTagMutation,
+	useUploadUserPictureMutation,
+	useUserEditMutation,
+} from '@/feature/user/api.slice';
+import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
+import BirthdayForm from '@/feature/auth/register/forms/birthdayForm';
 import GenderForm from '@/feature/auth/register/forms/genderForm';
 import TagsForm from '@/feature/auth/register/forms/tagsForm';
-import PicturesForm from '@/feature/auth/register/forms/picturesForm';
+import { toast } from 'react-toastify';
 
 export type Profile = {
-	birthday: Date;
-	gender: string;
-	pictures: string[];
+	birthday: string | undefined;
+	gender: 'MALE' | 'FEMALE' | undefined;
+	pictures: File[];
 	tags: string[];
 };
 
-type CompleteProfileError = {
-	birthday: string[];
-	gender: string[];
-	tags: string[];
-	pictures: string[];
+export type CompleteProfileError = {
+	birthday?: string[];
+	gender?: string[];
+	tags?: string[];
+	pictures?: string[];
 };
 
-// Exporting action this way only works if the element has a lazy import
-// otherwise you will have a 405 import
-export { action } from '@/feature/user/complete-profile/action';
+type UserEditError = { birthday?: string[]; gender?: string[] };
+type TagsError = { name: string[] };
+type PictureError = { picture: string[] };
+
+const initErrors: CompleteProfileError = {
+	birthday: [],
+	gender: [],
+	pictures: [],
+	tags: [],
+};
 
 export function Component() {
+	const [editUser] = useUserEditMutation();
+	const [setTag] = useSetUserTagMutation();
+	const [uploadUserPicture] = useUploadUserPictureMutation();
+	const navigate = useNavigate();
+
 	const [profile, setProfile] = useState<Profile>({
-		birthday: new Date(),
-		gender: '',
+		birthday: undefined,
+		gender: undefined,
 		pictures: [],
 		tags: [],
 	});
+	const [errors, setErrors] = useState<CompleteProfileError>(initErrors);
+
+	async function editProfile(): Promise<boolean> {
+		try {
+			Promise.resolve(
+				await editUser({
+					birthdate: profile.birthday,
+					gender: profile.gender,
+				}).unwrap(),
+			);
+
+			return true;
+		} catch (error: unknown) {
+			const editError = manageRTKQErrorDetails<UserEditError>(error);
+			setErrors((c) => ({
+				...c,
+				birthday: editError?.birthday,
+				gender: editError?.gender,
+			}));
+
+			return false;
+		}
+	}
+
+	async function sendTags(): Promise<boolean> {
+		if (profile.tags.length > 4) {
+			toast.error('Too many tags selected. Max is 4.');
+			return false;
+		}
+
+		const promises = profile.tags.map(
+			async (t) => await setTag({ name: t }).unwrap(),
+		);
+		const res = await Promise.allSettled(promises);
+
+		res.forEach((r) => {
+			if (r.status === 'rejected') {
+				const tagsError = manageRTKQErrorDetails<TagsError>(r.reason);
+
+				setErrors((c) => ({
+					...c,
+					tags: c.tags?.concat(tagsError?.name ?? []),
+				}));
+			}
+		});
+
+		return (
+			!res.length ||
+			res.find((r) => r.status === 'rejected') === undefined
+		);
+	}
+
+	async function uploadImages(): Promise<boolean> {
+		if (profile.pictures && profile.pictures.length < 2) {
+			toast.error('Select at least 2 images to start.');
+			return false;
+		}
+
+		const promises = profile.pictures.map(async (p) => {
+			const formData = new FormData();
+
+			formData.append('picture', p);
+
+			await uploadUserPicture(formData).unwrap();
+		});
+
+		const res = await Promise.allSettled(promises);
+
+		res.forEach((r) => {
+			if (r.status === 'rejected') {
+				const imageError = manageRTKQErrorDetails<PictureError>(
+					r.reason,
+				);
+
+				setErrors((c) => ({
+					...c,
+					pictures: c.pictures?.concat(imageError?.picture ?? []),
+				}));
+			}
+		});
+
+		return (
+			!res.length ||
+			res.find((r) => r.status === 'rejected') === undefined
+		);
+	}
+
+	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		setErrors(initErrors);
+
+		if (await editProfile())
+			if (await sendTags())
+				if (await uploadImages()) {
+					toast.success(
+						"Profile completed successfully! Let's start matching!!",
+					);
+					return navigate('/home');
+				}
+	};
 
 	const id = useId();
-	const navigation = useNavigation();
-	const data = useActionData() as CompleteProfileError | undefined;
-
-	let form_data = new FormData();
 
 	return (
 		<>
-			{console.log(profile)}
 			<div className="flex justify-between flex-col items-center w-full">
 				<Link to="/" className="flex justify-center">
 					<img src={MatchaLogo} alt="MatchaLogo" className="w-1/3" />
@@ -52,42 +167,27 @@ export function Component() {
 								Please complete your profile to start matching
 								with people!
 							</h4>
-							<Form
-								className="w-full"
-								method="post"
-								action="/user/complete-profile"
-							>
+							<Form onSubmit={submit} className="w-full">
 								<BirthdayForm
 									setProfile={setProfile}
 									id={id}
-									errors={data?.birthday}
-								/>
-                                <input
-									hidden
-									value={profile.birthday.toDateString()}
-									name="birthday"
-                                    readOnly
+									errors={errors?.birthday}
 								/>
 								<GenderForm
 									setProfile={setProfile}
 									id={id}
-									errors={data?.gender}
+									errors={errors?.gender}
 								/>
 								<TagsForm
 									setProfile={setProfile}
 									id={id}
-									errors={data?.tags}
+									errors={errors?.tags}
 								/>
 								<PicturesForm
+									setErrors={setErrors}
 									setProfile={setProfile}
-									id={id}
-									errors={data?.pictures}
-								/>
-								<input
-									hidden
-									value={profile.tags}
-									name="tags[]"
-                                    readOnly
+									errors={errors?.pictures}
+									pictures={profile.pictures}
 								/>
 								<div className="flex justify-center mt-5">
 									<button

@@ -8,11 +8,25 @@ type ProfileResponse = {
 	lastname: string;
 };
 
-type EditRequest = void;
+type EditRequest = {
+	id_picture?: number;
+	firstname?: string;
+	lastname?: string;
+	birthdate?: string;
+	gender?: 'MALE' | 'FEMALE';
+	orientation?: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
+	biography?: string;
+	location?: { latitude: number; longitude: number };
+};
 type EditResponse = {
-	id: number;
-	firstname: string;
-	lastname: string;
+	picture?: { id: number; path: string };
+	firstname?: string;
+	lastname?: string;
+	birthdate?: Date;
+	gender?: 'MALE' | 'FEMALE';
+	orientation?: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
+	biography?: string;
+	location?: { latitude: number; longitude: number };
 };
 
 type UserTagRequest = {
@@ -23,6 +37,11 @@ type UserTagResponse = {
 	name: string;
 };
 
+type UploadUserPictureRequest = FormData;
+type UploadUserPictureResponse = {
+	id: number;
+	path: string;
+};
 // Api -------------------------------------------------------------------------
 export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
@@ -32,21 +51,24 @@ export const userApi = api.injectEndpoints({
 				method: 'GET',
 			}),
 		}),
-		userEdit: builder.query<EditResponse, EditRequest>({
+		userEdit: builder.mutation<EditResponse, EditRequest>({
 			query: (data) => ({
 				url: `user/edit`,
 				method: 'PATCH',
 				body: data,
 			}),
 		}),
-		setUserTag: builder.query<UserTagResponse, UserTagRequest>({
+		setUserTag: builder.mutation<UserTagResponse, UserTagRequest>({
 			query: (data) => ({
 				url: `user/tags`,
 				method: 'POST',
 				body: data,
 			}),
 		}),
-		uploadUserPicture: builder.query<ProfileResponse, ProfileRequest>({
+		uploadUserPicture: builder.mutation<
+			UploadUserPictureResponse,
+			UploadUserPictureRequest
+		>({
 			query: (data) => ({
 				url: `user/pictures`,
 				method: 'POST',
@@ -56,5 +78,12 @@ export const userApi = api.injectEndpoints({
 	}),
 });
 
+export const { uploadUserPicture, userEdit, setUserTag } = userApi.endpoints;
+
 // Hook ------------------------------------------------------------------------
-export const { useGetProfileQuery } = userApi;
+export const {
+	useGetProfileQuery,
+	useUserEditMutation,
+	useSetUserTagMutation,
+	useUploadUserPictureMutation,
+} = userApi;

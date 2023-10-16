@@ -24,6 +24,7 @@ export default function TagsForm({ id, errors, setProfile }: TagsFormProps) {
 			<h5>Select up to 4 tags to share your interests</h5>
 			<div className="flex justify-center items-center">
 				<SelectDropdown
+					name="tags"
 					options={tagsOptions}
 					errors={errors}
 					multi_select={true}

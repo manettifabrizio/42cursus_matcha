@@ -7,7 +7,7 @@ export type Option = {
 };
 
 type SelectDropdownProps = {
-	name: string;
+	name?: string;
 	errors?: string[];
 	options: Option[];
 	multi_select: boolean;
@@ -49,7 +49,7 @@ export default function SelectDropdown(props: SelectDropdownProps) {
 				unstyled
 				options={props.options}
 				name={props.name}
-                required
+				required
 				className={
 					'w-full border-2 rounded-md bg-inherit px-2 py-1 border-s-' +
 					(props.errors && props.errors.length > 0

@@ -21,8 +21,10 @@ export default function GenderForm({
 	const [value, setValue] = useState<Option[]>([]);
 
 	useEffect(() => {
-		if (value && value.length === 1)
-			setProfile((current) => ({ ...current, gender: value[0].value }));
+		if (value && value.length === 1) {
+			const gender = value[0].value as 'MALE' | 'FEMALE' | undefined;
+			setProfile((current) => ({ ...current, gender }));
+		}
 	}, [value]);
 
 	return (

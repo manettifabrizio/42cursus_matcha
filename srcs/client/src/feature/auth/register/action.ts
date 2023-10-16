@@ -1,64 +1,45 @@
 import type { ActionFunction } from 'react-router-dom';
-import type { ApiErrorResponse } from '@/core/api';
 import { redirect } from 'react-router-dom';
 import { store } from '@/core/store';
-import { isRTKQFetchBaseQueryError } from '@/tool/isRTKQError';
 import { authApi } from '../api.slice';
 import { toast } from 'react-toastify';
+import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
 
 // Type ------------------------------------------------------------------------
 
 export type RegisterError = {
-    username: string[];
-    password: string[];
-    password_confirm: string[];
-    email: string[];
-    firstname: string[];
-    lastname: string[];
+	username: string[];
+	password: string[];
+	password_confirm: string[];
+	email: string[];
+	firstname: string[];
+	lastname: string[];
 };
 
 // Action ----------------------------------------------------------------------
 export const action: ActionFunction = async ({ request }) => {
-    const form = await request.formData();
+	const form = await request.formData();
 
-    // Note: Find better way to handle types
-    const fields = {
-        username: form.get('username') as string,
-        password: form.get('password') as string,
-        password_confirm: form.get('password_confirm') as string,
-        email: form.get('email') as string,
-        firstname: form.get('firstname') as string,
-        lastname: form.get('lastname') as string
-    };
+	// Note: Find better way to handle types
+	const fields = {
+		username: form.get('username') as string,
+		password: form.get('password') as string,
+		password_confirm: form.get('password_confirm') as string,
+		email: form.get('email') as string,
+		firstname: form.get('firstname') as string,
+		lastname: form.get('lastname') as string,
+	};
 
-    const req = store.dispatch(authApi.endpoints.register.initiate(fields));
+	const req = store.dispatch(authApi.endpoints.register.initiate(fields));
 
-    try {
-        const res = await req.unwrap();
+	try {
+		const res = await req.unwrap();
 
-        toast.success(
-            `Account successfully created! An email was sent to ${fields.email} please confirm to log in.`
-        );
-        return redirect(`/auth/login?id=${res.id}`);
-    } catch (error: unknown) {
-        if (isRTKQFetchBaseQueryError(error)) {
-            const registerError = error.data as ApiErrorResponse<RegisterError>;
-
-            if (typeof registerError === 'object') {
-                if ('cause' in registerError.error) {
-                    toast.error(
-                        `Error while creating the account: ${registerError.error.cause}`
-                    );
-                    return {};
-                }
-
-                return registerError.error;
-            }
-            toast.error(`Error while creating the account: ${registerError}`);
-
-            return registerError;
-        }
-
-        return null;
-    }
+		toast.success(
+			`Account successfully created! An email was sent to ${fields.email} please confirm to log in.`,
+		);
+		return redirect(`/auth/login?id=${res.id}`);
+	} catch (error: unknown) {
+		return manageRTKQErrorDetails<RegisterError>(error);
+	}
 };
