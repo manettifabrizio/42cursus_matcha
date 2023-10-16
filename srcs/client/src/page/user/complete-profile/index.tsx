@@ -162,9 +162,9 @@ export function Component() {
 				</Link>
 				<div className="overflow-auto w-full h-full">
 					<div className="flex justify-center my-4">
-						<div className="flex flex-col justify-center items-center w-80 sm:w-1/2 md:w-1/3">
-							<h4>
-								Please complete your profile to start matching
+						<div className="flex flex-col justify-center items-center w-10/12 sm:w-3/4 md:w-1/3">
+							<h4 className="font-bold">
+								Let's complete your profile to start matching
 								with people!
 							</h4>
 							<Form onSubmit={submit} className="w-full">
@@ -192,7 +192,7 @@ export function Component() {
 								<div className="flex justify-center mt-5">
 									<button
 										type="submit"
-										className="group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 "
+										className="group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 border border-black hover:opacity-80 transition"
 									>
 										Save
 									</button>

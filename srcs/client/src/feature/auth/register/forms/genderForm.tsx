@@ -28,9 +28,9 @@ export default function GenderForm({
 	}, [value]);
 
 	return (
-		<>
-			<h5>How do you identify?</h5>
-			<div className="flex justify-center items-center">
+		<div className="mb-5">
+			<h5 className="mb-1">How do you identify?</h5>
+			<div className="flex justify-center items-center cursor-pointer">
 				<SelectDropdown
 					name="gender"
 					options={genderOptions}
@@ -40,6 +40,6 @@ export default function GenderForm({
 					setValue={setValue}
 				/>
 			</div>
-		</>
+		</div>
 	);
 }

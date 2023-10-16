@@ -20,8 +20,10 @@ export default function TagsForm({ id, errors, setProfile }: TagsFormProps) {
 			}));
 	}, [value]);
 	return (
-		<>
-			<h5>Select up to 4 tags to share your interests</h5>
+		<div className="mb-5">
+			<h5 className="mb-1">
+				Select up to 4 tags to share your interests
+			</h5>
 			<div className="flex justify-center items-center">
 				<SelectDropdown
 					name="tags"
@@ -32,6 +34,6 @@ export default function TagsForm({ id, errors, setProfile }: TagsFormProps) {
 					setValue={setValue}
 				/>
 			</div>
-		</>
+		</div>
 	);
 }

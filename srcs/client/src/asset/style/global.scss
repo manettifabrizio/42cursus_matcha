@@ -5,33 +5,33 @@
 @import url('./fonts.scss');
 
 :root {
-    // Colors
-    --c-dark: hsl(0, 0%, 7%);
-    --c-light: hsl(0, 0%, 95%);
-    --c-accent-1: hsl(96, 46%, 57%);
-    --c-accent-2: hsl(22, 43%, 41%);
-    --c-success: hsl(96, 46%, 57%);
-    --c-danger: hsl(0, 51%, 56%);
-    --c-warn: hsl(39, 74%, 57%);
-    --c-info: hsl(209, 66%, 72%);
+	// Colors
+	--c-dark: hsl(0, 0%, 7%);
+	--c-light: hsl(0, 0%, 95%);
+	--c-accent-1: hsl(96, 46%, 57%);
+	--c-accent-2: hsl(22, 43%, 41%);
+	--c-success: hsl(96, 46%, 57%);
+	--c-danger: hsl(0, 51%, 56%);
+	--c-warn: hsl(39, 74%, 57%);
+	--c-info: hsl(209, 66%, 72%);
 }
 
 html {
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: inherit;
+	box-sizing: inherit;
 }
 
 body {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    color: var(--c-light);
-    background-color: var(--c-dark);
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	color: var(--c-light);
+	background-color: var(--c-dark);
 }
 
 h1,
@@ -40,31 +40,51 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 0 0 1em 0;
-    padding: 0;
+	margin: 0 0 1em 0;
+	padding: 0;
 }
 
 h1 {
-    font-size: 3rem;
+	font-size: 3rem;
 }
 h2 {
-    font-size: 2.5rem;
+	font-size: 2.5rem;
 }
 h3 {
-    font-size: 2rem;
+	font-size: 2rem;
 }
 h4 {
-    font-size: 1.5rem;
+	font-size: 1.5rem;
 }
 h5 {
-    font-size: 1.25rem;
+	font-size: 1.25rem;
 }
 h6 {
-    font-size: 1rem;
+	font-size: 1rem;
 }
 
 .ellipse {
-    width: 50rem;
-    height: 50rem;
-    filter: blur(80px);
+    transition: 1s;
+	width: 50rem;
+	height: 50rem;
+	filter: blur(80px);
+    border-radius: 9999px;
+
+	@media only screen and (max-width: 768px) {
+		width: 20rem;
+		height: 20rem;
+		filter: blur(40px);
+	}
+
+	@media only screen and (min-width: 768px) and (max-width: 1024px) {
+		width: 30rem;
+		height: 30rem;
+		filter: blur(60px);
+	}
+
+	@media only screen and (min-width: 1024px) {
+		width: 50rem;
+		height: 50rem;
+		filter: blur(80px);
+	}
 }

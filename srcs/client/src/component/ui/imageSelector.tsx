@@ -95,7 +95,7 @@ export default function ImageSelector({
 					{pictures.length < 5 && (
 						<label
 							htmlFor="files"
-							className={`group relative w-full text-white py-2 rounded-full border text-center cursor-pointer`}
+							className={`group relative w-full text-white py-2 rounded-full border text-center cursor-pointer hover:text-gray-300`}
 						>
 							Select Images
 						</label>

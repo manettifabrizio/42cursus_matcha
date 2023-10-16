@@ -14,8 +14,8 @@ export default function BirthdayForm({ id, errors, setProfile }: BirthdayFormPro
     }
 
 	return (
-		<>
-			<h5>When is your birthday?</h5>
+		<div className='mb-5'>
+			<h5 className='mb-1'>When is your birthday?</h5>
 			<div className="flex flex-col justify-center items-center mb-1 w-full">
 				<input
 					required
@@ -38,6 +38,6 @@ export default function BirthdayForm({ id, errors, setProfile }: BirthdayFormPro
 			<h6 className="opacity-80">
 				You must be at least 18 years old to use Matcha.
 			</h6>
-		</>
+		</div>
 	);
 }
