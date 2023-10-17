@@ -35,7 +35,7 @@ type ValidationOuput = {
 };
 
 // Function --------------------------------------------------------------------
-export const    validate = async (
+export const validate = async (
   validation_svc: ValidationService,
   dto: ValidationInput
 ): Promise<ValidationOuput> => {
