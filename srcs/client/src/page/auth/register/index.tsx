@@ -1,4 +1,4 @@
-import RegisterForm from '@/feature/auth/register';
+import RegisterForm from '@/feature/auth/register/registerForm';
 import MatchaLogo from '/matcha.svg';
 import { Link } from 'react-router-dom';
 

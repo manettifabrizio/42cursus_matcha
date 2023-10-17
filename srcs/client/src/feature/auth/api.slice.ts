@@ -62,7 +62,7 @@ export const authApi = api.injectEndpoints({
         }),
         confirm: builder.mutation<ConfirmResponse, ConfirmRequest>({
             query: (data) => ({
-                url: `auth/confirm`,
+                url: `auth/confirm?id=${data.id}&secret=${data.secret}`,
                 method: 'POST',
                 body: data
             })

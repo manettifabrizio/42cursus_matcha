@@ -1,4 +1,4 @@
-import LoginForm from '@/feature/auth/login';
+import LoginForm from '@/feature/auth/login/loginForm';
 import { Link } from 'react-router-dom';
 import MatchaLogo from '/matcha.svg';
 

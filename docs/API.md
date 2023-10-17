@@ -260,9 +260,7 @@
 - POST `/user/pictures`
 
   ```ts
-  Request: {
-    picture: File;
-  }
+  Request: FormData,
   Response: {
     id: number;
     path: string;
