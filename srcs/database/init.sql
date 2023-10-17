@@ -185,3 +185,61 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER restrict_user_picture_owner
 	BEFORE INSERT OR UPDATE ON users
 	FOR EACH ROW EXECUTE PROCEDURE restrict_user_picture_owner();
+
+-- Get matching (gender, orientation) to someone
+CREATE OR REPLACE FUNCTION get_matching_types(_gender Gender, _orientation Orientation)
+	RETURNS TABLE (
+		gender Gender,
+		orientation Orientation
+	)
+AS $$
+BEGIN
+	IF (_gender = 'MALE') THEN
+		IF (_orientation = 'HOMOSEXUAL')
+		THEN
+			RETURN QUERY SELECT * FROM (VALUES
+				('MALE'::Gender, 'HOMOSEXUAL'::Orientation),
+				('MALE'::Gender, 'BISEXUAL'::Orientation)
+			) AS t(gender, orientation);
+
+		ELSIF (_orientation = 'HETEROSEXUAL')
+		THEN
+			RETURN QUERY SELECT * FROM (VALUES
+				('FEMALE'::Gender, 'HETEROSEXUAL'::Orientation),
+				('FEMALE'::Gender, 'BISEXUAL'::Orientation)
+			) AS t(gender, orientation);
+
+		ELSE -- _orientation = BISEXUAL
+			RETURN QUERY SELECT * FROM (VALUES
+				('MALE'::Gender, 'HOMOSEXUAL'::Orientation),
+				('MALE'::Gender, 'BISEXUAL'::Orientation),
+				('FEMALE'::Gender, 'HETEROSEXUAL'::Orientation),
+				('FEMALE'::Gender, 'BISEXUAL'::Orientation)
+			) AS t(gender, orientation);
+		END IF;
+	ELSE -- _gender = FEMALE
+		IF (_orientation = 'HOMOSEXUAL')
+		THEN
+			RETURN QUERY SELECT * FROM (VALUES
+				('FEMALE'::Gender, 'HOMOSEXUAL'::Orientation),
+				('FEMALE'::Gender, 'BISEXUAL'::Orientation)
+			) AS t(gender, orientation);
+
+		ELSIF (_orientation = 'HETEROSEXUAL')
+		THEN
+			RETURN QUERY SELECT * FROM (VALUES
+				('MALE'::Gender, 'HETEROSEXUAL'::Orientation),
+				('MALE'::Gender, 'BISEXUAL'::Orientation)
+			) AS t(gender, orientation);
+
+		ELSE -- _orientation = BISEXUAL
+			RETURN QUERY SELECT * FROM (VALUES
+				('FEMALE'::Gender, 'HOMOSEXUAL'::Orientation),
+				('FEMALE'::Gender, 'BISEXUAL'::Orientation),
+				('MALE'::Gender, 'HETEROSEXUAL'::Orientation),
+				('MALE'::Gender, 'BISEXUAL'::Orientation)
+			) AS t(gender, orientation);
+		END IF;
+	END IF;
+END
+$$ LANGUAGE plpgsql;
