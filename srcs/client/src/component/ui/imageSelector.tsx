@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { AiFillCloseSquare } from 'react-icons/ai';
-import { PicturesFormProps } from '@/feature/auth/register/forms/picturesForm';
+import { PicturesFormProps } from '@/feature/user/forms/picturesForm';
 
 export default function ImageSelector({
 	errors,

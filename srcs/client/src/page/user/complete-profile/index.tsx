@@ -1,28 +1,36 @@
 import { useId, useState } from 'react';
 import { Form, Link, useNavigate } from 'react-router-dom';
 import MatchaLogo from '/matcha.svg';
-import PicturesForm from '@/feature/auth/register/forms/picturesForm';
+import PicturesForm from '@/feature/user/forms/picturesForm';
 import {
 	useSetUserTagMutation,
 	useUploadUserPictureMutation,
 	useUserEditMutation,
 } from '@/feature/user/api.slice';
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
-import BirthdayForm from '@/feature/auth/register/forms/birthdayForm';
-import GenderForm from '@/feature/auth/register/forms/genderForm';
-import TagsForm from '@/feature/auth/register/forms/tagsForm';
+import BirthdayForm from '@/feature/user/forms/birthdayForm';
+import GenderForm from '@/feature/user/forms/genderForm';
+import TagsForm from '@/feature/user/forms/tagsForm';
 import { toast } from 'react-toastify';
+import OrientationForm from '@/feature/user/forms/orientationForm';
+import { Position, getGeolocation } from '@/tool/getLocation';
 
 export type Profile = {
 	birthday: string | undefined;
 	gender: 'MALE' | 'FEMALE' | undefined;
-	pictures: File[];
+	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL' | undefined;
+	biography: string;
+	location: Position | undefined;
 	tags: string[];
+	pictures: File[];
 };
 
 export type CompleteProfileError = {
 	birthday?: string[];
 	gender?: string[];
+	orientation?: string[];
+	biography?: string[];
+	location?: string[];
 	tags?: string[];
 	pictures?: string[];
 };
@@ -47,17 +55,24 @@ export function Component() {
 	const [profile, setProfile] = useState<Profile>({
 		birthday: undefined,
 		gender: undefined,
+		orientation: undefined,
+		biography: '',
+		location: undefined,
 		pictures: [],
 		tags: [],
 	});
 	const [errors, setErrors] = useState<CompleteProfileError>(initErrors);
 
 	async function editProfile(): Promise<boolean> {
+		const location = await getGeolocation();
+
 		try {
 			Promise.resolve(
 				await editUser({
 					birthdate: profile.birthday,
 					gender: profile.gender,
+					orientation: profile.orientation,
+					location,
 				}).unwrap(),
 			);
 
@@ -177,6 +192,11 @@ export function Component() {
 									setProfile={setProfile}
 									id={id}
 									errors={errors?.gender}
+								/>
+								<OrientationForm
+									setProfile={setProfile}
+									id={id}
+									errors={errors?.orientation}
 								/>
 								<TagsForm
 									setProfile={setProfile}
