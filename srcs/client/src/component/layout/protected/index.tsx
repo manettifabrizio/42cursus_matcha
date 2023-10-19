@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { selectAuth } from '@/feature/auth/store.slice';
 import { useStoreSelector } from '@/hook/useStore';
+import { isProfileCompleted } from '@/tool/userTools';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -20,18 +21,30 @@ export default function ProtectedLayout({ accepted }: Props) {
 		`https://localhost`,
 	).searchParams.get('redirect');
 
-	return accepted === 'AUTHENTICATED' && !isAuthenticated ? (
-		<Navigate to={`/auth/login?redirect=${location.pathname}`} />
-	) : accepted === 'UNAUTHENTICATED' && isAuthenticated ? (
-		<Navigate to={redirectTo ?? '/'} replace />
-	) : (
+	if (accepted === 'AUTHENTICATED' && !isAuthenticated)
+		return <Navigate to={`/auth/login?redirect=${location.pathname}`} />;
+
+	if (accepted === 'UNAUTHENTICATED' && isAuthenticated)
+		return <Navigate to={redirectTo ?? '/home'} replace />;
+
+	if (
+		isAuthenticated &&
+		!isProfileCompleted() &&
+		location.pathname !== '/user/complete-profile'
+	) {
+		return (
+			<Navigate
+				to={`/user/complete-profile?redirect=${location.pathname}`}
+			/>
+		);
+	}
+
+	return (
 		<div className="black-background relative h-screen overflow-hidden">
 			<div className="ellipse absolute bottom-0 right-0 transform translate-x-1/2 translate-y-1/2 bg-red-600 rounded-full -z-30"></div>
 			<div className="ellipse absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 bg-amber-400 rounded-full -z-30"></div>
 
-			<div className="flex w-full h-full justify-center">
-				<Outlet />
-			</div>
+			<Outlet />
 		</div>
 	);
 }

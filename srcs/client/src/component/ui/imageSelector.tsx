@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { AiFillCloseSquare } from 'react-icons/ai';
-import { PicturesFormProps } from '@/feature/auth/register/forms/picturesForm';
+import { PicturesInputProps } from '@/feature/user/forms/picturesInput';
 
 export default function ImageSelector({
+	disabled,
 	errors,
 	setProfile,
 	pictures,
-}: PicturesFormProps) {
+}: PicturesInputProps) {
 	const MAX_COUNT = 5;
 
 	const [inputValue, setInputValue] = useState<
@@ -75,6 +76,8 @@ export default function ImageSelector({
 					{pictures.map((p) => (
 						<div className="relative" key={p.name}>
 							<button
+								type="button"
+								disabled={disabled}
 								onClick={() => rmFile(p.name)}
 								className="absolute right-1 top-3 text-red-500"
 							>
@@ -101,7 +104,7 @@ export default function ImageSelector({
 						</label>
 					)}
 					<input
-						disabled={pictures.length === 5}
+						disabled={pictures.length === 5 || disabled}
 						id="files"
 						required
 						className="opacity-0 h-1"

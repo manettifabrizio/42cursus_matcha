@@ -2,39 +2,49 @@ import type { StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { clearAuth } from '@/feature/auth/store.slice';
+import { User } from './types';
 
 // State -----------------------------------------------------------------------
-type State = {
-    id: number | null;
-    firstname: string | null;
-    lastname: string | null;
-};
+type State = User;
 
 const initialState: State = {
-    id: null,
-    firstname: null,
-    lastname: null
+	id: -1,
+	username: '',
+	firstname: '',
+	lastname: '',
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: '',
+	location: null,
+	tags: [],
+	picture: null,
+	pictures: [],
 };
 
 // Slice -----------------------------------------------------------------------
 const slice = createSlice({
-    name: 'user',
-    initialState,
-    reducers: {
-        setUser: (state, { payload }: PayloadAction<State>) => {
-            state.id = payload.id;
-            state.firstname = payload.firstname;
-            state.lastname = payload.lastname;
-        }
-    },
-    extraReducers: (builder) => {
-        builder.addCase(clearAuth, (state) => {
-            // Todo: Avoid duplicate with initialState
-            state.id = null;
-            state.firstname = null;
-            state.lastname = null;
-        });
-    }
+	name: 'user',
+	initialState,
+	reducers: {
+		setUser: (state, { payload }: PayloadAction<State>) => {
+			state.id = payload.id;
+			state.username = payload.username;
+			state.firstname = payload.firstname;
+			state.lastname = payload.lastname;
+			state.gender = payload.gender;
+			state.orientation = payload.orientation;
+			state.biography = payload.biography;
+			state.location = payload.location;
+			state.tags = payload.tags;
+			state.picture = payload.picture;
+			state.pictures = payload.pictures;
+		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(clearAuth, (state) => {
+			state = initialState;
+		});
+	},
 });
 
 // Action ----------------------------------------------------------------------

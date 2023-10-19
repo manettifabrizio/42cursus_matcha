@@ -1,15 +1,14 @@
 import SelectDropdown, { Option } from '@/component/ui/selectDropdown';
-import { Profile } from '@/page/user/complete-profile';
 import { tagsOptions } from '@/page/user/tags_options';
 import { useEffect, useState } from 'react';
+import { CompleteProfileInputProps } from '../types';
 
-type TagsFormProps = {
-	id: string;
-	errors?: string[];
-	setProfile: React.Dispatch<React.SetStateAction<Profile>>;
-};
-
-export default function TagsForm({ id, errors, setProfile }: TagsFormProps) {
+export default function TagsInput({
+	disabled,
+	id,
+	errors,
+	setProfile,
+}: CompleteProfileInputProps) {
 	const [value, setValue] = useState<Option[]>([]);
 
 	useEffect(() => {
@@ -26,6 +25,7 @@ export default function TagsForm({ id, errors, setProfile }: TagsFormProps) {
 			</h5>
 			<div className="flex justify-center items-center">
 				<SelectDropdown
+					disabled={disabled}
 					name="tags"
 					options={tagsOptions}
 					errors={errors}

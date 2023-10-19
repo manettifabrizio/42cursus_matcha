@@ -1,12 +1,9 @@
 import { api } from '@/core/api';
+import { User } from './types';
 
 // Type ------------------------------------------------------------------------
 type ProfileRequest = void;
-type ProfileResponse = {
-	id: number;
-	firstname: string;
-	lastname: string;
-};
+type ProfileResponse = User;
 
 type EditRequest = {
 	id_picture?: number;

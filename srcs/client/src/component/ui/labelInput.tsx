@@ -6,7 +6,6 @@ type LabelInputProps = {
 };
 
 export default function LabelInput(props: LabelInputProps) {
-	const [value, setValue] = useState('');
 	const [errors, setErrors] = useState<string[]>([]);
 
 	useEffect(() => {
@@ -15,7 +14,6 @@ export default function LabelInput(props: LabelInputProps) {
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setErrors([]);
-		setValue(e.target.value);
 	};
 
 	return (
@@ -26,7 +24,6 @@ export default function LabelInput(props: LabelInputProps) {
 					'w-full border-2 rounded-md bg-inherit p-2 border-' +
 					(errors.length > 0 ? 'red-500' : 'white')
 				}
-				value={value}
 				onChange={handleChange}
 			/>
 			{errors && (

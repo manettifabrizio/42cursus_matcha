@@ -1,23 +1,18 @@
 import SelectDropdown, { Option } from '@/component/ui/selectDropdown';
-import { Profile } from '@/page/user/complete-profile';
 import { useEffect, useState } from 'react';
-
-type GenderFormProps = {
-	id: string;
-	errors?: string[];
-	setProfile: React.Dispatch<React.SetStateAction<Profile>>;
-};
+import { CompleteProfileInputProps } from '../types';
 
 const genderOptions: Option[] = [
 	{ label: 'MALE', value: 'MALE' },
 	{ label: 'FEMALE', value: 'FEMALE' },
 ];
 
-export default function GenderForm({
+export default function GenderInput({
+    disabled,
 	id,
 	errors,
 	setProfile,
-}: GenderFormProps) {
+}: CompleteProfileInputProps) {
 	const [value, setValue] = useState<Option[]>([]);
 
 	useEffect(() => {
@@ -32,6 +27,7 @@ export default function GenderForm({
 			<h5 className="mb-1">How do you identify?</h5>
 			<div className="flex justify-center items-center cursor-pointer">
 				<SelectDropdown
+                    disabled={disabled}
 					name="gender"
 					options={genderOptions}
 					errors={errors}
