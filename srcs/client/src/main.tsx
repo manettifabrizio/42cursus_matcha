@@ -11,12 +11,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 // Application -----------------------------------------------------------------
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <div className="w-screen h-screen">
-                <RouterProvider router={router} />
-                <ToastContainer position="top-right" />
-            </div>
-        </Provider>
-    </React.StrictMode>
+	<React.StrictMode>
+		<Provider store={store}>
+			<div className="w-screen h-screen">
+				<RouterProvider router={router} />
+				<ToastContainer position="top-right" />
+			</div>
+		</Provider>
+	</React.StrictMode>,
 );

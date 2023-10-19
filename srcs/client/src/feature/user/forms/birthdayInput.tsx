@@ -1,29 +1,29 @@
-import { Profile } from '@/page/user/complete-profile';
+import { CompleteProfileInputProps } from '../types';
 
-type BirthdayFormProps = {
-	id: string;
-	errors?: string[];
-	setProfile: React.Dispatch<React.SetStateAction<Profile>>;
-};
-
-export default function BirthdayForm({ id, errors, setProfile }: BirthdayFormProps) {
+export default function BirthdayInput({
+	disabled,
+	id,
+	errors,
+	setProfile,
+}: CompleteProfileInputProps) {
 	let currentDate = new Date().toISOString().split('T')[0];
 
-    const onDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setProfile((c) => ({...c, birthday: e.target.value}));
-    }
+	const onDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setProfile((c) => ({ ...c, birthday: e.target.value }));
+	};
 
 	return (
-		<div className='mb-5'>
-			<h5 className='mb-1'>When is your birthday?</h5>
+		<div className="mb-5">
+			<h5 className="mb-1">When is your birthday?</h5>
 			<div className="flex flex-col justify-center items-center mb-1 w-full">
 				<input
 					required
 					className="w-full border-2 rounded-md bg-inherit p-2 cursor-pointer"
-                    onChange={onDateChange}
+					onChange={onDateChange}
 					max={currentDate}
 					id={`${id}-year`}
 					type="date"
+					disabled={disabled}
 				/>
 			</div>
 			{errors && (

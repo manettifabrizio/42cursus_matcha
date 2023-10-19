@@ -1,12 +1,6 @@
 import SelectDropdown, { Option } from '@/component/ui/selectDropdown';
-import { Profile } from '@/page/user/complete-profile';
 import { useEffect, useState } from 'react';
-
-type OrientationFormProps = {
-	id: string;
-	errors?: string[];
-	setProfile: React.Dispatch<React.SetStateAction<Profile>>;
-};
+import { CompleteProfileInputProps } from '../types';
 
 const orientationOptions: Option[] = [
 	{ label: 'HETEROSEXUAL', value: 'HETEROSEXUAL' },
@@ -14,11 +8,12 @@ const orientationOptions: Option[] = [
 	{ label: 'BISEXUAL', value: 'BISEXUAL' },
 ];
 
-export default function OrientationForm({
+export default function OrientationInput({
+	disabled,
 	id,
 	errors,
 	setProfile,
-}: OrientationFormProps) {
+}: CompleteProfileInputProps) {
 	const [value, setValue] = useState<Option[]>([]);
 
 	useEffect(() => {
@@ -37,6 +32,7 @@ export default function OrientationForm({
 			<h5 className="mb-1">What is your orientation?</h5>
 			<div className="flex justify-center items-center cursor-pointer">
 				<SelectDropdown
+					disabled={disabled}
 					name="gender"
 					options={orientationOptions}
 					errors={errors}

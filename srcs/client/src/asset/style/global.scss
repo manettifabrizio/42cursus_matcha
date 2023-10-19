@@ -63,12 +63,27 @@ h6 {
 	font-size: 1rem;
 }
 
+input[type='date']::-webkit-calendar-picker-indicator {
+	background: transparent;
+	bottom: 0;
+	color: transparent;
+	cursor: pointer;
+	height: auto;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: auto;
+}
+
+// Baground ellipses
+
 .ellipse {
-    transition: 1s;
+	transition: 1s;
 	width: 50rem;
 	height: 50rem;
 	filter: blur(80px);
-    border-radius: 9999px;
+	border-radius: 9999px;
 
 	@media only screen and (max-width: 768px) {
 		width: 20rem;
