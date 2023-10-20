@@ -38,6 +38,7 @@ export function Component() {
 	const [uploadUserPicture] = useUploadUserPictureMutation();
 	const navigate = useNavigate();
 
+	// TODO: move this in the route loader
 	useEffect(() => {
 		if (isProfileCompleted()) {
 			navigate('/home');

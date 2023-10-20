@@ -1,3 +1,9 @@
+import SideBar from "@/component/home/sidebar/sideBar";
+
 export function Component() {
-    return <></>;
+    return (<>
+        <div>
+            <SideBar />
+        </div>
+    </>);
 }
