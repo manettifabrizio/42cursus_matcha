@@ -23,15 +23,17 @@ export default function SideBar() {
 				<div className="mb-4">
 					<p className="font-bold mb-2 text-2xl">Your Matches</p>
 					<ul className="flex list-none p-0 flex-row">
-						<li className="mb-1">
-							<a href="#" className="flex items-center">
-								<img
-									src="https://via.placeholder.com/40"
-									alt="Match"
-									className="mr-2 rounded-full"
-								/>
-							</a>
-						</li>
+						{
+							<li className="mb-1">
+								<a href="#" className="flex items-center">
+									<img
+										src="https://via.placeholder.com/45"
+										alt="Match"
+										className="mr-2 rounded-full"
+									/>
+								</a>
+							</li>
+						}
 					</ul>
 				</div>
 
@@ -39,21 +41,23 @@ export default function SideBar() {
 				<div className="flex-1 overflow-auto">
 					<p className="font-bold mb-2 text-2xl">Conversations</p>
 					<ul className="list-none p-0">
-						<li className="mb-1">
-							<a href="#" className="flex items-center">
-								<img
-									src="https://via.placeholder.com/50"
-									alt="Chat"
-									className="mr-2 rounded-full"
-								/>
-								<div className="flex flex-col justify-end">
-									<p>Tanya</p>
-									<p className="text-gray-400">
-										Hello! How are you?
-									</p>
-								</div>
-							</a>
-						</li>
+						{
+							<li className="mb-1">
+								<a href="#" className="flex items-center">
+									<img
+										src="https://via.placeholder.com/50"
+										alt="Chat"
+										className="mr-2 rounded-full"
+									/>
+									<div className="flex flex-col justify-end">
+										<p>Tanya</p>
+										<p className="text-gray-400">
+											Hello! How are you?
+										</p>
+									</div>
+								</a>
+							</li>
+						}
 					</ul>
 				</div>
 				<Link to="/auth/logout" className="text-center underline">

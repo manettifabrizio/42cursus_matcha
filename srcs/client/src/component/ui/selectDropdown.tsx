@@ -7,7 +7,7 @@ export type Option = {
 };
 
 type SelectDropdownProps = {
-	disabled: boolean;
+	disabled?: boolean;
 	name?: string;
 	errors?: string[];
 	options: Option[];

@@ -14,6 +14,7 @@ export type User = {
 	tags: Tag[];
 	picture: Picture | null;
 	pictures: Picture[];
+    age: number;
 };
 
 export type CompleteProfile = {
