@@ -3,16 +3,13 @@ require('express-async-errors');
 import type { Express } from 'express';
 import express from 'express';
 import * as http from 'http';
-import * as io from 'socket.io';
 import * as Config from '@/Config';
+import { service as socket_svc } from '@/core/socket/service';
 
 // Application -----------------------------------------------------------------
 const app: Express = express();
 const server: http.Server = http.createServer(app);
-const socket: io.Server = new io.Server(server, {
-	path: Config.SOCKET_URL,
-	serveClient: false,
-});
+const io = socket_svc.enable(server);
 
 // =============================================================================
 // HTTP
@@ -50,8 +47,22 @@ app.use(ErrorMiddleware); // Note: Must be last
 // =============================================================================
 // Socket
 // =============================================================================
-socket.on('connection', (client) => {
-	console.log(`Socket: New Client (${client.id}) connected!`);
+import { middleware as SocketAuthMiddleware } from '@/feature/auth/socket/middleware';
+import { onMessageTo } from '@/feature/chat/socket/event/on-message-to';
+import { onStateChange } from '@/feature/auth/socket/event/on-state-change';
+import { onPing } from '@/feature/auth/socket/event/on-ping';
+
+io.use(SocketAuthMiddleware);
+
+io.on('connection', (client) => {
+	onStateChange(client)();
+
+	client.join(`user-${client.data.user.id}`);
+
+	client.on('ping', onPing);
+	client.on('message:to', onMessageTo);
+	client.on('disconnecting', onStateChange(client));
+	// client.on('disconnect', () => {});
 });
 
 // Export ----------------------------------------------------------------------

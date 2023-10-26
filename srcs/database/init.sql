@@ -33,15 +33,16 @@ CREATE TABLE IF NOT EXISTS "accounts"
 
 CREATE TABLE IF NOT EXISTS "users"
 (
-	"id"          INTEGER                PRIMARY KEY REFERENCES "accounts" ON DELETE CASCADE,
-	"id_picture"  INTEGER                    NULL,
-	"firstname"   VARCHAR                NOT NULL,
-	"lastname"    VARCHAR                NOT NULL,
-	"birthdate"   TIMESTAMP                  NULL,
-	"gender"      Gender                 NOT NULL DEFAULT 'MALE',
-	"orientation" Orientation            NOT NULL DEFAULT 'BISEXUAL',
-	"biography"   TEXT                   NOT NULL DEFAULT '',
-	"location"    GEOGRAPHY(POINT, 4326)     NULL
+	"id"           INTEGER                PRIMARY KEY REFERENCES "accounts" ON DELETE CASCADE,
+	"id_picture"   INTEGER                    NULL,
+	"firstname"    VARCHAR                NOT NULL,
+	"lastname"     VARCHAR                NOT NULL,
+	"birthdate"    TIMESTAMP                  NULL,
+	"gender"       Gender                 NOT NULL DEFAULT 'MALE',
+	"orientation"  Orientation            NOT NULL DEFAULT 'BISEXUAL',
+	"biography"    TEXT                   NOT NULL DEFAULT '',
+	"location"     GEOGRAPHY(POINT, 4326)     NULL,
+	"last_seen_at" TIMESTAMP              NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "likes"
