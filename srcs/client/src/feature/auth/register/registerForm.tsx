@@ -12,7 +12,7 @@ export default function RegisterForm() {
 
 	return (
 		<>
-			<Form method="post" className="w-full">
+			<Form method="post" className="w-full grid gap-2">
 				<LabelInput
 					input_props={{
 						required: true,

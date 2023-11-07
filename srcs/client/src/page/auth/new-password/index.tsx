@@ -3,6 +3,7 @@ import LabelInput from '@/component/ui/labelInput';
 import { useId } from 'react';
 import { NewPasswordError } from '@/feature/auth/new-password/action';
 import MatchaLogo from '@/component/ui/matchaLogo';
+import FormContainer from '@/component/layout/form/formContainer';
 
 // Action ----------------------------------------------------------------------
 export { action } from '@/feature/auth/new-password/action';
@@ -15,11 +16,11 @@ export function Component() {
 
 	return (
 		<>
-			<div className="flex justify-between flex-col items-center w-full">
+			<div className="flex justify-between flex-col items-center w-full h-full">
 				<MatchaLogo />
-				<div className="flex flex-col h-full justify-center items-center w-1/3">
+				<FormContainer>
 					<div className="text-3xl m-3">Choose your new password</div>
-					<Form method="post" className="w-full my-4">
+					<Form method="post" className="w-full my-4 grid gap-2">
 						<input
 							name="form-id"
 							hidden
@@ -50,7 +51,7 @@ export function Component() {
 							<div className="absolute inset-0 bg-gradient-to-r from-red-600 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 						</button>
 					</Form>
-				</div>
+				</FormContainer>
 			</div>
 		</>
 	);

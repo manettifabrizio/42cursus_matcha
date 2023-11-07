@@ -21,11 +21,7 @@ export default function LabelInput(props: LabelInputProps) {
 	};
 
 	return (
-		<div
-			className={
-				'flex flex-col w-full ' + (errors.length > 0 ? 'mb-2' : '')
-			}
-		>
+		<div className={'flex flex-col w-full'}>
 			<input
 				{...props.input_props}
 				className={

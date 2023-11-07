@@ -8,6 +8,7 @@ import { User } from './types';
 type State = User;
 
 const initialState: State = {
+	age: -1,
 	id: -1,
 	username: '',
 	firstname: '',

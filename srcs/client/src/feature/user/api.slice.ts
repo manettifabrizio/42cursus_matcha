@@ -1,5 +1,5 @@
 import { api } from '@/core/api';
-import { User } from './types';
+import { Profile, User } from './types';
 
 // Type ------------------------------------------------------------------------
 type ProfileRequest = void;
@@ -39,6 +39,12 @@ type UploadUserPictureResponse = {
 	id: number;
 	path: string;
 };
+
+type GetUsersRequest = {
+	filters: string;
+};
+type GetUsersResponse = { users: Profile[] };
+
 // Api -------------------------------------------------------------------------
 export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
@@ -72,6 +78,12 @@ export const userApi = api.injectEndpoints({
 				body: data,
 			}),
 		}),
+		getUsers: builder.query<GetUsersResponse, GetUsersRequest>({
+			query: (data) => ({
+				url: `search${data.filters}`,
+				method: 'GET',
+			}),
+		}),
 	}),
 });
 
@@ -83,4 +95,5 @@ export const {
 	useUserEditMutation,
 	useSetUserTagMutation,
 	useUploadUserPictureMutation,
+	useGetUsersQuery,
 } = userApi;

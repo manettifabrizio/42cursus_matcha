@@ -1,92 +1,99 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 type MultiRangeSliderProps = {
-	min: number;
-	max: number;
+	currentValue: { min: number; max: number };
+	limits: { min: number; max: number };
 	onChange: ({}: { min: number; max: number }) => void;
+	disabled?: boolean;
 };
 
 export default function MultiRangeSlider({
-	min,
-	max,
+	currentValue,
+	limits,
 	onChange,
+	disabled,
 }: MultiRangeSliderProps) {
-	const [minVal, setMinVal] = useState(min);
-	const [maxVal, setMaxVal] = useState(max);
-	const minValRef = useRef(min);
-	const maxValRef = useRef(max);
 	const range = useRef<HTMLInputElement>(null);
 
 	// Convert to percentage
 	const getPercent = useCallback(
-		(value: number) => Math.round(((value - min) / (max - min)) * 100),
-		[min, max],
+		(value: number) =>
+			Math.round(
+				((value - currentValue.min) /
+					(currentValue.max - currentValue.min)) *
+					100,
+			),
+		[currentValue.min, currentValue.max],
 	);
 
 	// Set width of the range to decrease from the left side
 	useEffect(() => {
-		const minPercent = getPercent(minVal);
-		const maxPercent = getPercent(maxValRef.current);
+		const minPercent = getPercent(currentValue.min);
+		const maxPercent = getPercent(currentValue.max);
 
 		if (range.current) {
 			range.current.style.left = `${minPercent}%`;
 			range.current.style.width = `${maxPercent - minPercent}%`;
 		}
-	}, [minVal, getPercent]);
+	}, [currentValue.min, getPercent]);
 
 	// Set width of the range to decrease from the right side
 	useEffect(() => {
-		const minPercent = getPercent(minValRef.current);
-		const maxPercent = getPercent(maxVal);
+		const minPercent = getPercent(currentValue.min);
+		const maxPercent = getPercent(currentValue.max);
 
 		if (range.current) {
 			range.current.style.width = `${maxPercent - minPercent}%`;
 		}
-	}, [maxVal, getPercent]);
-
-	// Get min and max values when their state changes
-	// useEffect(() => {
-	// 	onChange({ min: minVal, max: maxVal });
-	// }, [minVal, maxVal, onChange]);
+	}, [currentValue.max, getPercent]);
 
 	return (
-		<div>
+		<div className="relative w-full">
 			<input
+				required
+				disabled={disabled}
+				name="range-1"
 				type="range"
-				min={min}
-				max={max}
-				value={minVal}
+				min={limits.min}
+				max={limits.max}
+				value={currentValue.min}
 				onChange={(event) => {
 					const value = Math.min(
 						Number(event.target.value),
-						maxVal - 1,
+						currentValue.max - 1,
 					);
-					setMinVal(value);
-					minValRef.current = value;
+					onChange({ max: currentValue.max, min: value });
 				}}
-				className="thumb thumb--left"
+				className="absolute h-0 w-full outline-none z-30 pointer-events-none"
 			/>
 			<input
+				required
+				disabled={disabled}
+				name="range-2"
 				type="range"
-				min={min}
-				max={max}
-				value={maxVal}
+				min={limits.min}
+				max={limits.max}
+				value={currentValue.max}
 				onChange={(event) => {
 					const value = Math.max(
 						Number(event.target.value),
-						minVal + 1,
+						currentValue.min + 1,
 					);
-					setMaxVal(value);
-					maxValRef.current = value;
+					onChange({ max: value, min: currentValue.min });
 				}}
-				className="thumb thumb--right"
+				className="absolute h-0 w-full outline-none z-30 pointer-events-none"
 			/>
 
-			<div className="slider">
-				<div className="slider__track" />
-				<div ref={range} className="slider__range" />
-				<div className="slider__left-value">{minVal}</div>
-				<div className="slider__right-value">{maxVal}</div>
+			{/* Slider */}
+			<div
+				ref={range}
+				className="absolute border-2 border-white z-20 rounded-md"
+			/>
+			<div className="absolute text-white text-xs mt-3 left-0">
+				{currentValue.min}
+			</div>
+			<div className="absolute text-white text-xs mt-3 right-0">
+				{currentValue.max}
 			</div>
 		</div>
 	);

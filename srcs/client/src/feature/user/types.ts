@@ -14,7 +14,47 @@ export type User = {
 	tags: Tag[];
 	picture: Picture | null;
 	pictures: Picture[];
-    age: number;
+	age: number;
+};
+
+export type Profile = {
+	id: number;
+	username: string;
+	firstname: string;
+	lastname: string;
+	birthdate: string;
+	gender: 'MALE' | 'FEMALE';
+	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
+	biography: string;
+	picture: { id: number; path: string };
+	location: { distance: number };
+	pictures: { id: number; path: string }[];
+	tags: { id: number; name: string }[];
+	likes?: { by_me: boolean; to_me: boolean };
+	blocks?: { by_me: boolean };
+	reports?: { by_me: boolean };
+};
+
+export interface UserFilters {
+	age_min: number;
+	age_max: number;
+	distance_min: number;
+	distance_max: number;
+	tags_min: number;
+	tags_max: number;
+	fame_min: number;
+	fame_max: number;
+}
+
+export const initFilters: UserFilters = {
+	age_min: 18,
+	age_max: 80,
+	distance_min: 1,
+	distance_max: 1,
+	tags_min: 0,
+	tags_max: 0,
+	fame_min: 0,
+	fame_max: 100,
 };
 
 export type CompleteProfile = {

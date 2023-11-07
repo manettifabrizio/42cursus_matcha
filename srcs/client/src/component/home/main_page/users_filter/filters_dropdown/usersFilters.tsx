@@ -1,13 +1,52 @@
 import { useEffect, useRef, useState } from 'react';
 import { GoFilter } from 'react-icons/go';
 import AgeFilter from './ageFilter';
+import DistanceFilter from './distanceFilter';
+import TagsFilter from './tagsFilter';
+import FameFilter from './fameFilter';
+import { UserFilters, initFilters } from '@/feature/user/types';
 
-export default function UsersFilter() {
+export type UserFiltersProps = {
+	filters: UserFilters;
+	setFilters: React.Dispatch<React.SetStateAction<UserFilters>>;
+};
+
+export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 	const [show, setShow] = useState(false);
-	const [age, setAge] = useState({ min: 18, max: 80 });
-	const [submitting, setSubmitting] = useState(false);
+	const [age, setAge] = useState({
+		min: initFilters.age_min,
+		max: initFilters.age_max,
+	});
+	const [distance, setDistance] = useState(initFilters.distance_max);
+	const [tags, setTags] = useState(initFilters.tags_max);
+	const [fame, setFame] = useState({
+		min: initFilters.fame_min,
+		max: initFilters.fame_max,
+	});
+
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	const resetFilters = () => {
+		setAge({ min: initFilters.age_min, max: initFilters.age_max });
+		setDistance(initFilters.distance_max);
+		setTags(initFilters.tags_max);
+		setFame({ min: initFilters.fame_min, max: initFilters.fame_max });
+		setFilters(initFilters);
+	};
+
+	useEffect(() => {
+		setFilters({
+			age_min: age.min,
+			age_max: age.max,
+			distance_min: 1,
+			distance_max: distance,
+			tags_min: 0,
+			tags_max: tags,
+			fame_min: fame.min,
+			fame_max: fame.max,
+		});
+	}, [age, distance, tags, fame]);
 
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
@@ -28,31 +67,44 @@ export default function UsersFilter() {
 	}, []);
 
 	return (
-		<div className="relative">
-			<button
-				onClick={() => setShow(!show)}
-				tabIndex={0}
-				ref={dropdownBtnRef}
-			>
-				<div className="border-2 rounded-md text-2xl p-2">
-					<GoFilter />
+		<>
+			<div className="relative">
+				<button
+					onClick={() => setShow(!show)}
+					tabIndex={0}
+					ref={dropdownBtnRef}
+				>
+					<div className="border-2 rounded-md text-2xl p-2">
+						<GoFilter />
+					</div>
+				</button>
+				<div
+					ref={dropdownRef}
+					className={`items-end absolute right-0 px-3 py-2 z-10 bg-black border rounded-md w-60 h-72 ${
+						show ? '' : 'hidden'
+					}`}
+				>
+					<AgeFilter
+						age={{ min: filters.age_min, max: filters.age_max }}
+						setAge={setAge}
+					/>
+					<DistanceFilter
+						distance={filters.distance_max}
+						setDistance={setDistance}
+					/>
+					<TagsFilter setTags={setTags} tags={filters.tags_max} />
+					<FameFilter
+						setFame={setFame}
+						fame={{ min: filters.fame_min, max: filters.fame_max }}
+					/>
+					<button
+						className="hover:cursor-pointer hover:opacity-80 underline w-full"
+						onClick={resetFilters}
+					>
+						Reset
+					</button>
 				</div>
-			</button>
-			<div
-				ref={dropdownRef}
-				className={`flex flex-col justify-evenly items-end absolute right-0 p-3 z-10 bg-black border rounded-md h-80 ${
-					show ? '' : 'hidden'
-				}`}
-			>
-				<div className="h-full">
-					Age
-					<AgeFilter age={age} setAge={setAge} />
-					Distance 
-                    Tags 
-                    Fame
-				</div>
-				<button className="w-1/3 border rounded-md">Save</button>
 			</div>
-		</div>
+		</>
 	);
 }

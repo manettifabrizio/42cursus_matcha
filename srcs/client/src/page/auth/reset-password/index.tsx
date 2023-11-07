@@ -2,6 +2,7 @@ import { Form, Link } from 'react-router-dom';
 import LabelInput from '@/component/ui/labelInput';
 import { SlArrowLeft } from 'react-icons/sl';
 import MatchaLogo from '@/component/ui/matchaLogo';
+import FormContainer from '@/component/layout/form/formContainer';
 
 // Action ----------------------------------------------------------------------
 export { action } from '@/feature/auth/reset-password/action';
@@ -10,9 +11,9 @@ export { action } from '@/feature/auth/reset-password/action';
 export function Component() {
 	return (
 		<>
-			<div className="flex justify-between flex-col items-center w-full">
+			<div className="flex justify-between flex-col items-center w-full h-full">
 				<MatchaLogo />
-				<div className="flex flex-col h-full justify-center items-center w-1/3">
+				<FormContainer>
 					<Link
 						to="/auth/login"
 						className="w-full justify-start flex flex-row items-center"
@@ -24,7 +25,7 @@ export function Component() {
 						Enter the email and username associated with your
 						account to change your password.
 					</div>
-					<Form method="post" className="w-full my-4">
+					<Form method="post" className="w-full my-4 grid gap-2 ">
 						<input
 							name="form-id"
 							hidden
@@ -55,7 +56,7 @@ export function Component() {
 							Next
 						</button>
 					</Form>
-				</div>
+				</FormContainer>
 			</div>
 		</>
 	);

@@ -8,14 +8,12 @@ type AgeFilterProps = {
 export default function AgeFilter({ age, setAge }: AgeFilterProps) {
 	return (
 		<>
-			<div className="w-52 h-24 mt-3">
+			<div className="w-full h-1/5 mb-2">
+				<p className="mb-2">Age</p>
 				<MultiRangeSlider
-					min={age.min}
-					max={age.max}
-					onChange={({ min, max }) => {
-						console.log(min, max);
-						setAge({ min, max });
-					}}
+					currentValue={age}
+					limits={{ min: 18, max: 80 }}
+					onChange={({ min, max }) => setAge({ min, max })}
 				/>
 			</div>
 		</>
