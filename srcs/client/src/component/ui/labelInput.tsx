@@ -1,6 +1,7 @@
 import { InputHTMLAttributes, useEffect, useState } from 'react';
 
 type LabelInputProps = {
+	setExternalValue?: React.Dispatch<React.SetStateAction<string>>;
 	errors?: string[];
 	input_props: InputHTMLAttributes<HTMLInputElement>;
 };
@@ -13,20 +14,23 @@ export default function LabelInput(props: LabelInputProps) {
 	}, [props.errors]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (props.setExternalValue) {
+			props.setExternalValue(e.target.value);
+		}
 		setErrors([]);
 	};
 
 	return (
-		<div className="flex flex-col mb-2 w-full">
+		<div className={'flex flex-col w-full'}>
 			<input
 				{...props.input_props}
 				className={
-					'w-full border-2 rounded-md bg-inherit p-2 border-' +
+					'w-full border-2 cursor-pointer rounded-md bg-inherit p-2 border-' +
 					(errors.length > 0 ? 'red-500' : 'white')
 				}
 				onChange={handleChange}
 			/>
-			{errors && (
+			{errors.length > 0 && (
 				<ul className="pt-1">
 					{errors.map((error) => (
 						<li key={error} className="text-xs text-red-500">

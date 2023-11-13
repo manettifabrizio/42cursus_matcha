@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('./fonts.scss');
+@import url('./slider.scss');
 
 :root {
 	// Colors
@@ -74,6 +75,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
 	right: 0;
 	top: 0;
 	width: auto;
+}
+
+[type='search']::-webkit-search-cancel-button {
+	filter: invert(0.8);
 }
 
 // Baground ellipses

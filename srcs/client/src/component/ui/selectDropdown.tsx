@@ -7,7 +7,9 @@ export type Option = {
 };
 
 type SelectDropdownProps = {
-	disabled: boolean;
+	isSearchable?: boolean;
+	size?: 'sm' | 'md';
+	disabled?: boolean;
 	name?: string;
 	errors?: string[];
 	options: Option[];
@@ -16,24 +18,34 @@ type SelectDropdownProps = {
 	setValue: React.Dispatch<React.SetStateAction<Option[]>>;
 };
 
-export default function SelectDropdown(props: SelectDropdownProps) {
+export default function SelectDropdown({
+	isSearchable,
+	size = 'md',
+	disabled,
+	name,
+	errors,
+	options,
+	multi_select,
+	id,
+	setValue,
+}: SelectDropdownProps) {
 	const [length, setLength] = useState(0);
 
 	const handleChange = (
 		newValue: MultiValue<Option> | SingleValue<Option>,
 	) => {
 		if (newValue != null) {
-			if (props.multi_select) {
-				props.setValue(newValue as Option[]);
+			if (multi_select) {
+				setValue(newValue as Option[]);
 				setLength((newValue as Option[]).length);
-			} else props.setValue([newValue as Option]);
-		} else props.setValue([]);
+			} else setValue([newValue as Option]);
+		} else setValue([]);
 	};
 
 	return (
-		<div className="flex flex-col mb-2 w-full">
+		<div className={'flex flex-col mb-2 w-full text-' + size}>
 			<Select
-				closeMenuOnSelect={!props.multi_select || length === 3}
+				closeMenuOnSelect={!multi_select || length === 3}
 				classNames={{
 					valueContainer: () => 'gap-1',
 					multiValue: () =>
@@ -45,25 +57,25 @@ export default function SelectDropdown(props: SelectDropdownProps) {
 					},
 					menuList: () => 'w-full',
 				}}
-				isSearchable={false}
-				id={props.id}
+				isSearchable={isSearchable ?? false}
+				id={id}
 				unstyled
-				options={props.options}
-				name={props.name}
+				options={options}
+				name={name}
 				required
-				isDisabled={props.disabled}
+				isDisabled={disabled}
 				className={
-					'w-full border-2 rounded-md bg-inherit px-2 py-1 border-s-' +
-					(props.errors && props.errors.length > 0
-						? 'red-500'
-						: 'white')
+					`w-full border-2 rounded-md bg-inherit px-${
+						size === 'md' ? '1' : '2'
+					} py-1 border-s-` +
+					(errors && errors.length > 0 ? 'red-500' : 'white')
 				}
-				isMulti={props.multi_select}
+				isMulti={multi_select}
 				onChange={handleChange}
 			/>
-			{props.errors && (
+			{errors && (
 				<ul className="pt-1">
-					{props.errors.map((error) => (
+					{errors.map((error) => (
 						<li key={error} className="text-xs text-red-500">
 							{error}
 						</li>

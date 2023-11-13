@@ -1,6 +1,5 @@
 import { useEffect, useId, useState } from 'react';
-import { Form, Link, useNavigate } from 'react-router-dom';
-import MatchaLogo from '/matcha.svg';
+import { Form, useNavigate } from 'react-router-dom';
 import {
 	useSetUserTagMutation,
 	useUploadUserPictureMutation,
@@ -24,6 +23,7 @@ import {
 } from '@/feature/user/types';
 import { isProfileCompleted, setCurrentUser } from '@/tool/userTools';
 import FormContainer from '@/component/layout/form/formContainer';
+import MatchaLogo from '@/component/ui/matchaLogo';
 
 const initErrors: CompleteProfileError = {
 	birthday: [],
@@ -38,6 +38,7 @@ export function Component() {
 	const [uploadUserPicture] = useUploadUserPictureMutation();
 	const navigate = useNavigate();
 
+	// TODO: move this in the route loader
 	useEffect(() => {
 		if (isProfileCompleted()) {
 			navigate('/home');
@@ -191,9 +192,7 @@ export function Component() {
 		<>
 			{console.log(submitting)}
 			<div className="flex justify-between flex-col items-center w-full h-full">
-				<Link to="/" className="flex justify-center">
-					<img src={MatchaLogo} alt="MatchaLogo" className="w-1/3" />
-				</Link>
+				<MatchaLogo to="/home" />
 				<FormContainer>
 					<h4 className="font-bold">
 						Let's complete your profile to start matching with
