@@ -5,11 +5,7 @@ import type { Pagination, SortBy, SortOrder } from '../../entity';
 // Type ------------------------------------------------------------------------
 type QueryInput = {
 	id_user_from: number;
-
-	type?: {
-		gender?: Gender[];
-		orientation?: Orientation[];
-	};
+	recommandation?: boolean;
 	age?: {
 		min?: number;
 		max?: number;
@@ -52,25 +48,15 @@ export const query = async (
 		+ count(DISTINCT a.id_user_from)
 		- count(DISTINCT b.id_user_from) * 10`;
 
-	if (dto.type) {
-		if (dto.type.gender) {
-			params.push(dto.type.gender);
-			pre_filter.push(`gender = ANY($${params.length}::Gender[])`);
-		}
-		if (dto.type.orientation) {
-			params.push(dto.type.orientation);
-			pre_filter.push(
-				`orientation = ANY($${params.length}::Orientation[])`,
-			);
-		}
-	} else {
-		pre_filter.push(
-			`(gender, orientation) IN (
-				SELECT gender, orientation
-				FROM get_matching_types((SELECT gender FROM cte_me), (SELECT orientation FROM cte_me))
-			)`,
-		);
-		// Recommendation sorting
+	pre_filter.push(
+		`(gender, orientation) IN (
+			SELECT gender, orientation
+			FROM get_matching_types((SELECT gender FROM cte_me), (SELECT orientation FROM cte_me))
+		)`,
+	);
+
+	if (dto.recommandation) {
+		console.log(`RECOMMANDATION`);
 		pre_sort.push(`
 			trunc(distance / 25) * 4 - tags * 2 - fame ASC
 		`);
@@ -200,9 +186,8 @@ export const query = async (
 				*
 			FROM
 				cte_post_filtered_users
-			${
-				pre_sort.length > 0
-					? `
+			${pre_sort.length > 0
+			? `
 					ORDER BY
 						${pre_sort.join(', ')}
 					LIMIT
@@ -210,23 +195,22 @@ export const query = async (
 					OFFSET
 						(${Math.trunc(dto.page.index)} - 1) * ${Math.trunc(dto.page.size)}
 					`
-					: ``
-			}
+			: ``
+		}
 		)
 		SELECT
 			id
 		FROM
 			cte_pre_sorted_users
 		${post_sort.length > 0 ? `ORDER BY ${post_sort.join(', ')}` : ``}
-		${
-			pre_sort.length <= 0
-				? `
+		${pre_sort.length <= 0
+			? `
 				LIMIT
 					${Math.trunc(dto.page.size)}
 				OFFSET
 					(${Math.trunc(dto.page.index)} - 1) * ${Math.trunc(dto.page.size)}
 				`
-				: ``
+			: ``
 		}
 	`;
 

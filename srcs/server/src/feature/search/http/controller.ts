@@ -9,4 +9,4 @@ export const controller = Router();
 controller.use(AuthMiddleware);
 controller.use(HasCompletedProfileMiddleware);
 
-controller.get('/', Search);
+controller.get('/:recommandation(recommandation)?', Search);
