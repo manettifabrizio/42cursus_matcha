@@ -8,7 +8,7 @@ export type Option = {
 
 type SelectDropdownProps = {
 	isSearchable?: boolean;
-	size: 'sm' | 'md';
+	size?: 'sm' | 'md';
 	disabled?: boolean;
 	name?: string;
 	errors?: string[];

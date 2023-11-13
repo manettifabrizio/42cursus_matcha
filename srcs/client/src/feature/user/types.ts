@@ -35,7 +35,12 @@ export type Profile = {
 	reports?: { by_me: boolean };
 };
 
+export type UserSortCriteria = 'age' | 'distance' | 'tags' | 'fame';
+
+type SortOption = `${UserSortCriteria},${'asc' | 'desc'}`;
+
 export interface UserFilters {
+	page: number;
 	age_min: number;
 	age_max: number;
 	distance_min: number;
@@ -44,9 +49,11 @@ export interface UserFilters {
 	tags_max: number;
 	fame_min: number;
 	fame_max: number;
+	sort?: SortOption;
 }
 
 export const initFilters: UserFilters = {
+	page: 1,
 	age_min: 18,
 	age_max: 80,
 	distance_min: 1,
@@ -55,6 +62,7 @@ export const initFilters: UserFilters = {
 	tags_max: 0,
 	fame_min: 0,
 	fame_max: 100,
+	sort: undefined,
 };
 
 export type CompleteProfile = {

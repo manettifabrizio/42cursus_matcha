@@ -1,6 +1,7 @@
 import { UserFilters } from '@/feature/user/types';
 import UsersFilter from './filters_dropdown/usersFilters';
 import UsersSearchBar from './usersSearchBar';
+import UsersSort from './usersSort';
 
 type SearchAndFilterProps = {
 	setSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -22,10 +23,10 @@ export default function SearchAndFilter({
 					value={searchValue}
 					setSearchValue={setSearchValue}
 				/>
-				<UsersFilter
-					filters={filters}
-					setFilters={setFilters}
-				/>
+				<div className="flex flex-row">
+					<UsersSort setFilters={setFilters} />
+					<UsersFilter filters={filters} setFilters={setFilters} />
+				</div>
 			</div>
 		</>
 	);

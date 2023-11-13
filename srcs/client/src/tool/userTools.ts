@@ -25,13 +25,22 @@ export function isProfileCompleted(): boolean {
 
 export function getSearchStr(filters: UserFilters) {
 	const defined_filters = Object.keys(filters)
-		.filter(
-			(value) =>
+		.filter((value) => {
+			let other_value = null;
+			if (value.includes('_min'))
+				other_value = value.replace('_min', '_max');
+			else if (value.includes('_max'))
+				other_value = value.replace('_max', '_min');
+			return (
 				filters[value as keyof typeof filters] !==
-				initFilters[value as keyof typeof initFilters],
-		)
+					initFilters[value as keyof typeof initFilters] ||
+				(other_value &&
+					filters[other_value as keyof typeof filters] !==
+						initFilters[other_value as keyof typeof initFilters])
+			);
+		})
 		.map((key) => `${key}=${filters[key as keyof typeof filters]}`)
 		.join('&');
 
-	return '?' + JSON.stringify(defined_filters).replace(/['"]+/g, '');
+	return defined_filters.length > 0 ? '?' + defined_filters : '';
 }

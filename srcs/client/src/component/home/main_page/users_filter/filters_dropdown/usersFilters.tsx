@@ -5,6 +5,7 @@ import DistanceFilter from './distanceFilter';
 import TagsFilter from './tagsFilter';
 import FameFilter from './fameFilter';
 import { UserFilters, initFilters } from '@/feature/user/types';
+import { AiOutlineClose } from 'react-icons/ai';
 
 export type UserFiltersProps = {
 	filters: UserFilters;
@@ -32,11 +33,11 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 		setDistance(initFilters.distance_max);
 		setTags(initFilters.tags_max);
 		setFame({ min: initFilters.fame_min, max: initFilters.fame_max });
-		setFilters(initFilters);
 	};
 
 	useEffect(() => {
-		setFilters({
+		setFilters((c) => ({
+			...c,
 			age_min: age.min,
 			age_max: age.max,
 			distance_min: 1,
@@ -45,7 +46,7 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 			tags_max: tags,
 			fame_min: fame.min,
 			fame_max: fame.max,
-		});
+		}));
 	}, [age, distance, tags, fame]);
 
 	useEffect(() => {
@@ -64,7 +65,7 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 		return () => {
 			window.removeEventListener('mousedown', handleOutsideClick);
 		};
-	}, []);
+	});
 
 	return (
 		<>
@@ -74,13 +75,13 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 					tabIndex={0}
 					ref={dropdownBtnRef}
 				>
-					<div className="border-2 rounded-md text-2xl p-2">
-						<GoFilter />
+					<div className="border-2 rounded-md text-2xl p-2 hover:bg-white hover:text-black hover:border-black transition">
+						{show ? <AiOutlineClose /> : <GoFilter />}
 					</div>
 				</button>
 				<div
 					ref={dropdownRef}
-					className={`items-end absolute right-0 px-3 py-2 z-10 bg-black border rounded-md w-60 h-72 ${
+					className={`items-end absolute right-0 px-3 py-2 z-10 bg-black border-2 rounded-md w-60 h-72 ${
 						show ? '' : 'hidden'
 					}`}
 				>
@@ -98,7 +99,11 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 						fame={{ min: filters.fame_min, max: filters.fame_max }}
 					/>
 					<button
-						className="hover:cursor-pointer hover:opacity-80 underline w-full"
+						disabled={
+							JSON.stringify(filters) ===
+							JSON.stringify(initFilters)
+						}
+						className=" underline w-full"
 						onClick={resetFilters}
 					>
 						Reset

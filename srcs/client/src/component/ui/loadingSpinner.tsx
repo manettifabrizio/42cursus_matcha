@@ -3,7 +3,7 @@ type LoadingSpinnerProps = {
 };
 
 export default function LoadingSpinner({
-	message = 'Loading...',
+	message,
 }: LoadingSpinnerProps) {
 	return (
 		<>
@@ -23,7 +23,7 @@ export default function LoadingSpinner({
 					fill="currentFill"
 				/>
 			</svg>
-			<span className="text-white mt-2">{message}</span>
+			{message && <span className="text-white mt-2">{message}</span>}
 		</>
 	);
 }
