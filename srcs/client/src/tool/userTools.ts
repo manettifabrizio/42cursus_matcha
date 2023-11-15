@@ -26,6 +26,7 @@ export function isProfileCompleted(): boolean {
 export function getSearchStr(filters: UserFilters) {
 	const defined_filters = Object.keys(filters)
 		.filter((value) => {
+			if (value === 'smart_recommendation') return false;
 			let other_value = null;
 			if (value.includes('_min'))
 				other_value = value.replace('_min', '_max');
@@ -42,5 +43,8 @@ export function getSearchStr(filters: UserFilters) {
 		.map((key) => `${key}=${filters[key as keyof typeof filters]}`)
 		.join('&');
 
-	return defined_filters.length > 0 ? '?' + defined_filters : '';
+	return (
+		(filters.smart_recommendation ? '/recommandation' : '') +
+		(defined_filters.length > 0 ? '?' + defined_filters : '')
+	);
 }

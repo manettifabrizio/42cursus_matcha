@@ -190,7 +190,6 @@ export function Component() {
 
 	return (
 		<>
-			{console.log(submitting)}
 			<div className="flex justify-between flex-col items-center w-full h-full">
 				<MatchaLogo to="/home" />
 				<FormContainer>
