@@ -88,7 +88,12 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 					ref={dropdownBtnRef}
 				>
 					<div>
-						Sort by <strong>{value ?? value}</strong>
+						Sort by{' '}
+						<strong>
+							{value
+								? value.charAt(0).toUpperCase() + value.slice(1)
+								: ''}
+						</strong>
 					</div>
 					<div className="text-2xl transition">
 						{!show ? <IoMdArrowDropdown /> : <IoMdArrowDropup />}
@@ -122,7 +127,11 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 							</button>
 						))}
 						<button
-							className="underline w-full p-2"
+							disabled={value === null}
+							className={
+								'underline w-full p-2 ' +
+								(value === null ? 'opacity-50' : '')
+							}
 							onClick={() => {
 								setValue(null);
 								setFilters((f) => ({ ...f, sort: undefined }));

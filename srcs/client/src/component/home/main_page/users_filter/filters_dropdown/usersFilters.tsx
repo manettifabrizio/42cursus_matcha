@@ -35,6 +35,9 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 		setFame({ min: initFilters.fame_min, max: initFilters.fame_max });
 	};
 
+	const isResetDisabled = () =>
+		JSON.stringify(filters) === JSON.stringify(initFilters);
+
 	useEffect(() => {
 		setFilters((c) => ({
 			...c,
@@ -99,11 +102,11 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 						fame={{ min: filters.fame_min, max: filters.fame_max }}
 					/>
 					<button
-						disabled={
-							JSON.stringify(filters) ===
-							JSON.stringify(initFilters)
+						disabled={isResetDisabled()}
+						className={
+							'underline w-full ' +
+							(isResetDisabled() ? 'opacity-50' : '')
 						}
-						className=" underline w-full"
 						onClick={resetFilters}
 					>
 						Reset
