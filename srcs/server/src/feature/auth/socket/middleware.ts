@@ -14,6 +14,7 @@ export const middleware = (
 		client.data.user = jwt_svc.verifyToken(token, Config.JWT_ACCESS_SECRET);
 		return next();
 	} catch (err: unknown) {
+		console.error(err);
 		return next(new Error('Invalid credentials.'));
 	}
 };

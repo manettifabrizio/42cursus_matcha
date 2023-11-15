@@ -7,6 +7,7 @@ import { query as findBlock } from '@/feature/block/use-case/find/query';
 export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 	(client) =>
 	async ({ content, to }) => {
+		console.log('onMessageTo', content, to);
 		const io = socket_svc.io();
 
 		const likes = await Promise.all([

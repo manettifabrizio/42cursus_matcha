@@ -55,14 +55,24 @@ import { onPing } from '@/feature/auth/socket/event/on-ping';
 io.use(SocketAuthMiddleware);
 
 io.on('connection', (client) => {
+	console.log('User is connected');
 	onStateChange(client)();
 
 	client.join(`user-${client.data.user.id}`);
 
+	client.on('error', function (err) {
+		console.log(err);
+	});
 	client.on('ping', onPing);
 	client.on('message:to', onMessageTo);
 	client.on('disconnecting', onStateChange(client));
-	// client.on('disconnect', () => {});
+	client.on('disconnect', () => {
+		console.log('User is disconnected');
+	});
+});
+
+io.on('connect_error', (err) => {
+	console.log(`connect_error due to ${err.message}`);
 });
 
 // Export ----------------------------------------------------------------------

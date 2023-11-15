@@ -10,6 +10,10 @@ const enable: SocketService['enable'] = (http_server) => {
 	server ??= new io.Server(http_server, {
 		path: Config.SOCKET_URL,
 		serveClient: false,
+		// TODO: Add CSRF token to CORS
+		cors: {
+			origin: 'https://localhost',
+		},
 	});
 
 	return server;
