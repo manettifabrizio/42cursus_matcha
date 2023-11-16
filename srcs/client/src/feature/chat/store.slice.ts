@@ -16,25 +16,24 @@ const initialState: State = {
 
 const sendMessageToUser = (message: Message) => {
 	const ws = io('https://localhost', {
-		withCredentials: true,
 		auth: {
 			token: cookie('access-token'),
 		},
 	});
-	if (ws) {
-		ws.emit('message:to', { content: 'ciao mamma', to: 1 }, (res) => {
-            console.log('message_sent: ', res);
-        });
-		console.log('message_sent: ', message);
 
-        ws.on('error', function (err) {
-            console.log(err);
-        });
+	ws.emit('ping', 5002); // Target user id
+	ws.on('pong', (isOnline) => console.log(`isOnline: ${isOnline}`));
 
+	ws.emit('message:to', { content: 'ciao mamma', to: 1 });
+	ws.on('message:from', (msg) => console.log(`message:from: ${msg}`));
+	ws.on('message:error', (err) => console.error(`message:error: ${err}`));
+
+	ws.on('error', console.error);
+
+	// Just to avoid creating infite number of sockets while testing
+	setTimeout(() => {
 		ws.close();
-	} else {
-		console.error("Couldn't connect to the websocket");
-	}
+	}, 2000);
 };
 
 // Slice -----------------------------------------------------------------------

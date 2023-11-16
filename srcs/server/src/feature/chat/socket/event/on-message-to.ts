@@ -7,7 +7,6 @@ import { query as findBlock } from '@/feature/block/use-case/find/query';
 export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 	(client) =>
 	async ({ content, to }) => {
-		console.log('onMessageTo', content, to);
 		const io = socket_svc.io();
 
 		const likes = await Promise.all([
@@ -46,6 +45,7 @@ export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 		}
 
 		// Todo: Persistent message ?
+		console.log(`Chat::onMessageTo: Should implement message persistance.`);
 
 		let targets = io.to(`user-${client.data.user.id}`);
 
