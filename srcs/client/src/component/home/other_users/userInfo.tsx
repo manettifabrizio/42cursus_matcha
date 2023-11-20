@@ -8,7 +8,6 @@ type UserProfileProps = {
 };
 
 export default function UserInfo({ user, isOnline }: UserProfileProps) {
-	console.log(user);
 	const distance = Math.floor(user.location.distance);
 	const age = Math.floor(
 		(Date.now() - new Date(user.birthdate).getTime()) / 31536000000,
@@ -49,12 +48,12 @@ export default function UserInfo({ user, isOnline }: UserProfileProps) {
 				</div>
 			</div>
 
-			<div className="grid grid-cols-5 gap-2 text-sm mb-5 text-center">
+			<div className="flex flex-wrap flex-row auto-cols-auto gap-2 text-sm mb-5 text-center">
 				{user.tags.map((tag) => (
 					<span
 						className={
-							`rounded-md px-1                                                                                                                                                                                                                                                                                       ` +
-							(current_user_tags.includes(tag)
+							`rounded-xl px-2 text-lg                                                                                                                                                                                                                                                                                       ` +
+							(current_user_tags.some((t) => t.id === tag.id)
 								? 'bg-gradient-to-r from-red-600 to-amber-400 '
 								: 'border')
 						}

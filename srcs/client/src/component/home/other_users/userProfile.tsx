@@ -28,9 +28,9 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 			<div
 				// TODO: Better color when match
 				className={
-					'flex flex-row border-2 w-3/4 h-5/6 rounded-xl overflow-hidden ' +
+					'flex flex-row border-4 w-3/4 h-5/6 rounded-xl overflow-hidden ' +
 					(user.likes?.by_me && user.likes?.to_me
-						? 'border-red-500 border-4'
+						? 'border-red-500'
 						: '')
 				}
 			>
@@ -38,11 +38,13 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 					<img
 						src={`${location.origin}/api/pictures/${user.picture?.path}`}
 						className="inset-0 w-full h-full object-cover"
+						key={user.picture?.id}
 					/>
 					{user_pictures.map((picture) => (
 						<img
 							src={`${location.origin}/api/pictures/${picture.path}`}
 							className="inset-0 w-full"
+							key={picture.id}
 						/>
 					))}
 				</div>
@@ -53,7 +55,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 						</div>
 					)}
 					<UserInfo user={user} isOnline={isOnline} />
-					<UserActions user={user} />
+					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>
 		</div>
