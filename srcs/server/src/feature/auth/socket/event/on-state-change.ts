@@ -4,15 +4,11 @@ import { query as editUser } from '@/feature/user/use-case/edit/query';
 
 export const onStateChange: (client: Socket) => (...args: any[]) => void =
 	(client) => async () => {
-		try {
-			editUser(db_svc, {
-				id: client.data.user.id,
-				last_seen_at: new Date(),
-			});
-		} catch (err: unknown) {
-			console.log(
-				`Auth::Socket::onStateChange: Update last_seen_at failed.`,
-				err,
-			);
-		}
+		editUser(db_svc, {
+			id: client.data.user.id,
+			last_seen_at: new Date(),
+		})
+		.catch((err) => {
+			// console.error(err); // Todo: Remove
+		});
 	};

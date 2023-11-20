@@ -159,6 +159,25 @@
     	Send an Email with a Link to Confirm Edit, only if Email has been Edited
     ```
 
+-   EMIT `ping`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+    }
+    ```
+
+-   ON `pong`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        is_online: boolean;
+    }
+    ```
+
 ## User
 
 -   GET `/user/:user_id?`
@@ -438,4 +457,79 @@ Response: {
       - Every filter is optional
       - If `gender` and `orientation` are not defined, will search using recommendation algorithm.
       - `sort` can be defined multiple times
+    ```
+
+
+## Chat
+
+-   EMIT `message:list`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        page: number;
+    }
+    ```
+
+-   ON `message:list`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        messages: {
+            id: number;
+            id_user_from: number;
+            id_user_to: number;
+            content: string;
+            created_at: Date;
+        }[];
+    }
+    ```
+
+-   ON `message:list:error`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        error: string;
+    }
+    ```
+
+-   EMIT `message:to`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        content: string;
+    }
+    ```
+
+-   ON `message:to:error`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        error: string;
+    }
+    ```
+
+-   ON `message:from`
+
+    ```ts
+    Payload:
+    {
+        user: number;
+        message: {
+            id: number;
+            id_user_from: number;
+            id_user_to: number;
+            content: string;
+            created_at: Date;
+        };
+    }
     ```
