@@ -25,7 +25,8 @@ export const query = async (
 			users.id, id_picture, path, username,
 			firstname, lastname, birthdate,
 			gender, orientation, biography,
-			ST_Distance(location, (SELECT location FROM users WHERE id = $2)) / 1000 as distance
+			ST_Distance(location, (SELECT location FROM users WHERE id = $2)) / 1000 as distance,
+			last_seen_at
 		FROM
 			users
 		INNER JOIN

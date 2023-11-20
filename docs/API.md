@@ -85,6 +85,7 @@
     	gender: 'MALE'|'FEMALE';
     	orientation: 'HOMOSEXUAL'|'HETEROSEXUAL'|'BISEXUAL';
     	biography: string;
+        last_seen_at: Date;
     	picture: { id: number; path: string; } | null;
     	location: { latitude: number; longitude: number; } | null;
     	pictures: { id: number; path: string; }[];
@@ -175,6 +176,7 @@
     	gender: 'MALE'|'FEMALE';
     	orientation: 'HETEROSEXUAL'|'HOMOSEXUAL'|'BISEXUAL';
     	biography: string;
+        last_seen_at: Date;
     	picture: { id: number; path: string; };
     	location: { latitude: number; longitude: number; } | { distance: number; };
     }
@@ -195,6 +197,7 @@
     	gender: 'MALE'|'FEMALE';
     	orientation: 'HETEROSEXUAL'|'HOMOSEXUAL'|'BISEXUAL';
     	biography: string;
+        last_seen_at: Date;
     	picture: { id: number; path: string; };
     	location: { latitude: number; longitude: number; } | { distance: number; };
     	pictures: { id: number; path: string; }[];
