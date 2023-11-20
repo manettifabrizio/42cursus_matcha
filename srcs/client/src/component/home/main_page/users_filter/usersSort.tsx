@@ -2,6 +2,7 @@ import { UserFilters, UserSortCriteria } from '@/feature/user/types';
 import { useEffect, useRef, useState } from 'react';
 import { BsArrowDown, BsArrowUp, BsCheck } from 'react-icons/bs';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { FaWandMagic, FaWandMagicSparkles } from 'react-icons/fa6';
 
 export type UsersSortProps = {
 	setFilters: React.Dispatch<React.SetStateAction<UserFilters>>;
@@ -17,15 +18,25 @@ const Options: { value: UserSortCriteria; label: string }[] = [
 export default function UsersSort({ setFilters }: UsersSortProps) {
 	const [value, setValue] = useState<UserSortCriteria | null>(null);
 	const [show, setShow] = useState(false);
+	const [smart_recommendation, setSmartRecommendation] = useState(true);
 	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (value) {
-			setFilters((f) => ({ ...f, sort: `${value},${sortOrder}` }));
-		}
+		if (value)
+			setFilters((f) => ({
+				...f,
+				sort: `${value},${sortOrder}`,
+			}));
 	}, [value, sortOrder]);
+
+	useEffect(() => {
+		setFilters((f) => ({
+			...f,
+			smart_recommendation,
+		}));
+	}, [smart_recommendation]);
 
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
@@ -47,6 +58,20 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 
 	return (
 		<div className="relative flex me-6">
+			<button
+				title={
+					(!smart_recommendation ? 'Enable' : 'Disable') +
+					' Smart Recommendation: only 25 users picked for you are shown.'
+				}
+				className="border-2 rounded-md p-2 text-2xl hover:bg-white hover:text-black hover:border-black transition mb-2 me-2"
+				onClick={() => setSmartRecommendation((s) => !s)}
+			>
+				{smart_recommendation ? (
+					<FaWandMagicSparkles className="stroke-1" />
+				) : (
+					<FaWandMagic />
+				)}
+			</button>
 			<div
 				onMouseEnter={(e) => {
 					e.preventDefault();
@@ -63,7 +88,12 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 					ref={dropdownBtnRef}
 				>
 					<div>
-						Sort by <strong>{value ?? value}</strong>
+						Sort by{' '}
+						<strong>
+							{value
+								? value.charAt(0).toUpperCase() + value.slice(1)
+								: ''}
+						</strong>
 					</div>
 					<div className="text-2xl transition">
 						{!show ? <IoMdArrowDropdown /> : <IoMdArrowDropup />}
@@ -97,9 +127,14 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 							</button>
 						))}
 						<button
-							className="underline w-full p-2"
+							disabled={value === null}
+							className={
+								'underline w-full p-2 ' +
+								(value === null ? 'opacity-50' : '')
+							}
 							onClick={() => {
 								setValue(null);
+								setFilters((f) => ({ ...f, sort: undefined }));
 							}}
 						>
 							Reset
@@ -108,6 +143,9 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 				</div>
 			</div>
 			<button
+				title={`Change sort order to ${
+					sortOrder === 'asc' ? 'descending' : 'ascending'
+				}`}
 				className="border-2 rounded-md p-2 text-2xl hover:bg-white hover:text-black hover:border-black transition mb-2"
 				onClick={() =>
 					sortOrder === 'asc'

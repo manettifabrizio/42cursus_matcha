@@ -21,8 +21,8 @@ export default function MainPage() {
 	useEffect(
 		// On filter change reset page to 1 and users to empty array
 		() => {
-			console.log('setUsers');
 			setUsers([]);
+			setPage(1);
 			setFilterStr(getSearchStr({ ...filters, page: 1 }));
 		},
 		[filters],
@@ -32,12 +32,16 @@ export default function MainPage() {
 	}, [data.users]);
 
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-		const target = e.target as HTMLDivElement;
-		const bottom =
-			target.scrollHeight - target.scrollTop < target.clientHeight + 50;
-		if (bottom && !isFetching && data.users.length > 0) {
-			setPage((p) => p + 1);
-			setFilterStr(getSearchStr({ ...filters, page }));
+		// Infinite scroll works only if smart recommendation is of
+		if (!filters.smart_recommendation) {
+			const target = e.target as HTMLDivElement;
+			const bottom =
+				target.scrollHeight - target.scrollTop <
+				target.clientHeight + 50;
+			if (bottom && !isFetching && data.users.length > 0) {
+				setPage((p) => p + 1);
+				setFilterStr(getSearchStr({ ...filters, page }));
+			}
 		}
 	};
 
