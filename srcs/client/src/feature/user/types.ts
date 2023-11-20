@@ -17,8 +17,24 @@ export type User = {
 	age: number;
 };
 
+export const initUser: User = {
+	age: -1,
+	id: -1,
+	username: '',
+	firstname: '',
+	lastname: '',
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: '',
+	location: null,
+	tags: [],
+	picture: null,
+	pictures: [],
+};
+
 export type Profile = {
 	id: number;
+    fame: string;
 	username: string;
 	firstname: string;
 	lastname: string;
@@ -40,7 +56,7 @@ export type UserSortCriteria = 'age' | 'distance' | 'tags' | 'fame';
 type SortOption = `${UserSortCriteria},${'asc' | 'desc'}`;
 
 export interface UserFilters {
-    smart_recommendation: boolean;
+	smart_recommendation: boolean;
 	page: number;
 	age_min: number;
 	age_max: number;
@@ -54,7 +70,7 @@ export interface UserFilters {
 }
 
 export const initFilters: UserFilters = {
-    smart_recommendation: true,
+	smart_recommendation: true,
 	page: 1,
 	age_min: 18,
 	age_max: 80,

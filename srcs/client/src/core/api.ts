@@ -95,4 +95,5 @@ const fetchAuth: BaseQueryFn<
 export const api = createApi({
 	baseQuery: fetchAuth,
 	endpoints: () => ({}),
+    tagTypes: ['User',]
 });

@@ -1,5 +1,6 @@
 import { Profile } from '@/feature/user/types';
 import './user_card.scss';
+import { Link } from 'react-router-dom';
 
 type UserCardProps = {
 	user: Profile;
@@ -12,7 +13,11 @@ export default function UserCard({ user }: UserCardProps) {
 	);
 
 	return (
-		<div key={user.id} className="user-card relative w-52 h-72 rounded-xl">
+		<Link
+			key={user.id}
+			className="user-card relative w-52 h-72 rounded-xl"
+			to={`${location.href}/${user.id}`}
+		>
 			<img
 				src={`${location.origin}/api/pictures/${user.picture?.path}`}
 				className="absolute inset-0 w-full h-full object-cover rounded-xl"
@@ -25,6 +30,6 @@ export default function UserCard({ user }: UserCardProps) {
 				</div>
 				<div>{distance + ' km'}</div>
 			</div>
-		</div>
+		</Link>
 	);
 }

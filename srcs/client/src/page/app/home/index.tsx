@@ -1,12 +1,13 @@
-import MainPage from "@/component/home/main_page/mainPage";
-import SideBar from "@/component/home/sidebar/sideBar";
+import SideBar from '@/component/home/sidebar/sideBar';
+import { Outlet } from 'react-router-dom';
 
-export function Component() {
-
-    return (<>
-        <>
-            <SideBar />
-            <MainPage />
-        </>
-    </>);
+export default function Home() {
+	return (
+		<>
+			<SideBar />
+			<div className="ml-72 h-full">
+				<Outlet />
+			</div>
+		</>
+	);
 }

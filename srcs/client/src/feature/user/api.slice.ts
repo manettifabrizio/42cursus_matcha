@@ -2,8 +2,8 @@ import { api } from '@/core/api';
 import { Profile, User } from './types';
 
 // Type ------------------------------------------------------------------------
-type ProfileRequest = void;
-type ProfileResponse = User;
+type ProfileRequest = { id: number } | void;
+type ProfileResponse = Profile;
 
 type EditRequest = {
 	id_picture?: number;
@@ -49,10 +49,18 @@ type GetUsersResponse = { users: Profile[] };
 export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getProfile: builder.query<ProfileResponse, ProfileRequest>({
-			query: () => ({
-				url: `user/profile`,
+			query: (data) => ({
+				url: data ? `user/${data.id}/profile` : `user/profile`,
 				method: 'GET',
 			}),
+			providesTags: ['User'],
+		}),
+		getUsers: builder.query<GetUsersResponse, GetUsersRequest>({
+			query: (data) => ({
+				url: `search${data.filters}`,
+				method: 'GET',
+			}),
+			providesTags: ['User'],
 		}),
 		userEdit: builder.mutation<EditResponse, EditRequest>({
 			query: (data) => ({
@@ -67,6 +75,7 @@ export const userApi = api.injectEndpoints({
 				method: 'POST',
 				body: data,
 			}),
+			invalidatesTags: ['User'],
 		}),
 		uploadUserPicture: builder.mutation<
 			UploadUserPictureResponse,
@@ -77,12 +86,49 @@ export const userApi = api.injectEndpoints({
 				method: 'POST',
 				body: data,
 			}),
+			invalidatesTags: ['User'],
 		}),
-		getUsers: builder.query<GetUsersResponse, GetUsersRequest>({
+		likeUser: builder.mutation<{}, { id: number }>({
 			query: (data) => ({
-				url: `search${data.filters}`,
-				method: 'GET',
+				url: `user/${data.id}/like`,
+				method: 'POST',
 			}),
+			invalidatesTags: ['User'],
+		}),
+		unlikeUser: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `user/${data.id}/like`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['User'],
+		}),
+		blockUser: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `user/${data.id}/block`,
+				method: 'POST',
+			}),
+			invalidatesTags: ['User'],
+		}),
+		unblockUser: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `user/${data.id}/block`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['User'],
+		}),
+		reportUser: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `user/${data.id}/report`,
+				method: 'POST',
+			}),
+			invalidatesTags: ['User'],
+		}),
+		unreportUser: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `user/${data.id}/report`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['User'],
 		}),
 	}),
 });
@@ -96,4 +142,10 @@ export const {
 	useSetUserTagMutation,
 	useUploadUserPictureMutation,
 	useGetUsersQuery,
+	useLikeUserMutation,
+	useUnlikeUserMutation,
+	useBlockUserMutation,
+	useUnblockUserMutation,
+	useReportUserMutation,
+	useUnreportUserMutation,
 } = userApi;
