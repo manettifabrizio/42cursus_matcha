@@ -2,30 +2,15 @@ import type { StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { clearAuth } from '@/feature/auth/store.slice';
-import { User } from './types';
+import { Profile, initProfile } from './types';
 
 // State -----------------------------------------------------------------------
-type State = User;
-
-const initialState: State = {
-	age: -1,
-	id: -1,
-	username: '',
-	firstname: '',
-	lastname: '',
-	gender: 'MALE',
-	orientation: 'BISEXUAL',
-	biography: '',
-	location: null,
-	tags: [],
-	picture: null,
-	pictures: [],
-};
+type State = Profile;
 
 // Slice -----------------------------------------------------------------------
 const slice = createSlice({
 	name: 'user',
-	initialState,
+	initialState: initProfile,
 	reducers: {
 		setUser: (state, { payload }: PayloadAction<State>) => {
 			state.id = payload.id;
@@ -43,7 +28,7 @@ const slice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(clearAuth, (state) => {
-			state = initialState;
+			state = initProfile;
 		});
 	},
 });

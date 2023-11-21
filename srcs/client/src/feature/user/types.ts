@@ -52,6 +52,26 @@ export type Profile = {
 	reports?: { by_me: boolean };
 };
 
+export const initProfile: Profile = {
+	last_seen_at: '',
+	id: -1,
+	fame: '',
+	username: '',
+	firstname: '',
+	lastname: '',
+	birthdate: '',
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: '',
+	picture: { id: -1, path: '' },
+	location: { distance: -1 },
+	pictures: [],
+	tags: [],
+	likes: undefined,
+	blocks: undefined,
+	reports: undefined,
+};
+
 export type UserSortCriteria = 'age' | 'distance' | 'tags' | 'fame';
 
 type SortOption = `${UserSortCriteria},${'asc' | 'desc'}`;

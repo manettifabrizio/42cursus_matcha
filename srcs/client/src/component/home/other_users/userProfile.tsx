@@ -1,10 +1,9 @@
 import { Profile } from '@/feature/user/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import UserInfo from './userInfo';
 import UserActions from './userActions';
-import { toast } from 'react-toastify';
 
 type UserProfileProps = {
 	user: Profile;
