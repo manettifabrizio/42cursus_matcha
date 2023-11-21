@@ -45,6 +45,15 @@ CREATE TABLE IF NOT EXISTS "users"
 	"last_seen_at" TIMESTAMP              NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS "messages"
+(
+	"id"           INTEGER   PRIMARY KEY,
+	"id_user_from" INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"id_user_to"   INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,
+	"content"      TEXT      NOT NULL,
+	"created_at"   TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS "likes"
 (
 	"id_user_from" INTEGER   NOT NULL REFERENCES "users" ON DELETE CASCADE,

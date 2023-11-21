@@ -49,6 +49,7 @@ app.use(ErrorMiddleware); // Note: Must be last
 // =============================================================================
 import { middleware as SocketAuthMiddleware } from '@/feature/auth/socket/middleware';
 import { onMessageTo } from '@/feature/chat/socket/event/on-message-to';
+import { onMessageList } from '@/feature/chat/socket/event/on-message-list';
 import { onStateChange } from '@/feature/auth/socket/event/on-state-change';
 import { onPing } from '@/feature/auth/socket/event/on-ping';
 
@@ -61,7 +62,7 @@ io.on('connection', (client) => {
 
 	client.on('ping', onPing(client));
 	client.on('message:to', onMessageTo(client));
-
+	client.on('message:list', onMessageList(client));
 	client.on('disconnecting', onStateChange(client));
 	client.on('disconnect', () => console.log('User is disconnected'));
 });
