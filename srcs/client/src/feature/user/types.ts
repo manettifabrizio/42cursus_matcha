@@ -17,8 +17,25 @@ export type User = {
 	age: number;
 };
 
+export const initUser: User = {
+	age: -1,
+	id: -1,
+	username: '',
+	firstname: '',
+	lastname: '',
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: '',
+	location: null,
+	tags: [],
+	picture: null,
+	pictures: [],
+};
+
 export type Profile = {
+	last_seen_at: string;
 	id: number;
+	fame: string;
 	username: string;
 	firstname: string;
 	lastname: string;
@@ -35,12 +52,32 @@ export type Profile = {
 	reports?: { by_me: boolean };
 };
 
+export const initProfile: Profile = {
+	last_seen_at: '',
+	id: -1,
+	fame: '',
+	username: '',
+	firstname: '',
+	lastname: '',
+	birthdate: '',
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: '',
+	picture: { id: -1, path: '' },
+	location: { distance: -1 },
+	pictures: [],
+	tags: [],
+	likes: undefined,
+	blocks: undefined,
+	reports: undefined,
+};
+
 export type UserSortCriteria = 'age' | 'distance' | 'tags' | 'fame';
 
 type SortOption = `${UserSortCriteria},${'asc' | 'desc'}`;
 
 export interface UserFilters {
-    smart_recommendation: boolean;
+	smart_recommendation: boolean;
 	page: number;
 	age_min: number;
 	age_max: number;
@@ -54,7 +91,7 @@ export interface UserFilters {
 }
 
 export const initFilters: UserFilters = {
-    smart_recommendation: true,
+	smart_recommendation: true,
 	page: 1,
 	age_min: 18,
 	age_max: 80,

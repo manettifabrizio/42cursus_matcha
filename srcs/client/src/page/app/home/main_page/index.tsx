@@ -1,12 +1,12 @@
 import { Profile, UserFilters, initFilters } from '@/feature/user/types';
-import AvailableUsers from './availableUsers';
+import AvailableUsers from '../../../../component/home/main_page/availableUsers';
 import { useEffect, useState } from 'react';
 import MatchaLogo from '@/component/ui/matchaLogo';
-import SearchAndFilter from './users_filter/searchAndFIlter';
+import SearchAndFilter from '../../../../component/home/main_page/users_filter/searchAndFIlter';
 import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
 
-export default function MainPage() {
+export function Component() {
 	const [searchValue, setSearchValue] = useState('');
 	const [filters, setFilters] = useState<UserFilters>(initFilters);
 	const [filter_str, setFilterStr] = useState('');
@@ -32,7 +32,7 @@ export default function MainPage() {
 	}, [data.users]);
 
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-		// Infinite scroll works only if smart recommendation is of
+		// Infinite scroll works only if smart recommendation is off
 		if (!filters.smart_recommendation) {
 			const target = e.target as HTMLDivElement;
 			const bottom =
@@ -46,24 +46,22 @@ export default function MainPage() {
 	};
 
 	return (
-		<div className="ml-72 h-full">
-			<div className="flex justify-between flex-col w-full h-full">
-				<MatchaLogo to="/home" />
-				<SearchAndFilter
-					searchValue={searchValue}
-					setSearchValue={setSearchValue}
-					filters={filters}
-					setFilters={setFilters}
-				/>
-				<AvailableUsers
-					isFetching={isFetching}
-					isLoading={isLoading}
-					users={users.filter((u) =>
-						u.firstname.toLowerCase().includes(searchValue),
-					)}
-					handleScroll={handleScroll}
-				/>
-			</div>
+		<div className="flex justify-between flex-col w-full h-full">
+			<MatchaLogo to="/home" />
+			<SearchAndFilter
+				searchValue={searchValue}
+				setSearchValue={setSearchValue}
+				filters={filters}
+				setFilters={setFilters}
+			/>
+			<AvailableUsers
+				isFetching={isFetching}
+				isLoading={isLoading}
+				users={users.filter((u) =>
+					u.firstname.toLowerCase().includes(searchValue),
+				)}
+				handleScroll={handleScroll}
+			/>
 		</div>
 	);
 }

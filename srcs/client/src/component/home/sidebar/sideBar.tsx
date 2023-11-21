@@ -1,15 +1,9 @@
 import { store } from '@/core/store';
-import { useGetMessagesQuery } from '@/feature/chat/api.slice';
-import { sendMessage } from '@/feature/chat/store.slice';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Matches from './matches';
 
 export default function SideBar() {
 	const user = store.getState().user;
-	const dispatch = useDispatch();
-	const [message, setMessage] = useState('');
-	const { data = { messages: [] } } = useGetMessagesQuery({ to_id: user.id });
 
 	return (
 		<div className="w-72 h-screen fixed left-0 border-r ">
@@ -27,22 +21,7 @@ export default function SideBar() {
 				</Link>
 
 				{/* Your Matches section */}
-				<div className="mb-4">
-					<p className="font-bold mb-2 text-2xl">Your Matches</p>
-					<ul className="flex list-none p-0 flex-row">
-						{
-							<li className="mb-1">
-								<a href="#" className="flex items-center">
-									<img
-										src="https://via.placeholder.com/45"
-										alt="Match"
-										className="mr-2 rounded-full"
-									/>
-								</a>
-							</li>
-						}
-					</ul>
-				</div>
+					<Matches />
 
 				{/* Conversations section */}
 				<div className="flex-1 overflow-auto">
@@ -66,25 +45,6 @@ export default function SideBar() {
 							</li>
 						}
 					</ul>
-					<input
-						type="text"
-						onChange={(e) => setMessage(e.target.value)}
-					/>
-					<button
-						onClick={() => {
-							console.log('click');
-							dispatch(
-								sendMessage({
-									text: message,
-									to_id: 1,
-									from_id: 2,
-									time: Date.now(),
-								}),
-							);
-						}}
-					>
-						Send Message
-					</button>
 				</div>
 				<Link to="/auth/logout" className="text-center underline">
 					Logout

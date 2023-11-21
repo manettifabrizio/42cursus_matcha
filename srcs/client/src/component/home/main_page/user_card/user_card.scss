@@ -9,8 +9,8 @@
 	$border: 3px;
 	color: #fff;
 	background: #000;
-	background-clip: padding-box; /* !importanté */
-	border: solid $border white; /* !importanté */
+	background-clip: padding-box; /* !important */
+	border: solid $border white; /* !important */
 	border-radius: 1em;
 
 	&:hover:before {
@@ -20,11 +20,39 @@
 		right: 0;
 		bottom: 0;
 		left: 0;
-		margin: -$border; /* !importanté */
-		border-radius: inherit; /* !importanté */
+		margin: -$border; /* !important */
+		border-radius: inherit; /* !important */
 		background: linear-gradient(0deg, red, orange);
 		background-size: 200% 200%;
 		animation: rotate 1s linear infinite alternate;
+	}
+}
+
+.user-match {
+	display: flex;
+	align-items: center;
+	margin: auto;
+	padding: 1.48rem;
+	box-sizing: border-box;
+
+	$border: 3px;
+	color: #fff;
+	background: #000;
+	background-clip: padding-box; /* !important */
+	border: solid $border white; /* !important */
+	border-radius: 100%;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: -$border; /* !important */
+		border-radius: inherit; /* !important */
+		background: linear-gradient(to right, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+		background-size: 200% 200%;
 	}
 }
 

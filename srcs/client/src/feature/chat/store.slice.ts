@@ -24,8 +24,8 @@ const sendMessageToUser = (message: Message) => {
 	ws.emit('ping', 5002); // Target user id
 	ws.on('pong', (isOnline) => console.log(`isOnline: ${isOnline}`));
 
-	ws.emit('message:to', { content: 'ciao mamma', to: 1 });
-	ws.on('message:from', (msg) => console.log(`message:from: ${msg}`));
+	ws.emit('message:to', { content: 'ciao mamma', to: 5003 });
+	ws.on('message:from', (msg) => console.log(`message:from: ${msg.content}`));
 	ws.on('message:error', (err) => console.error(`message:error: ${err}`));
 
 	ws.on('error', console.error);

@@ -1,5 +1,7 @@
 import { Position } from '@/feature/user/types';
 
+// TODO: Check position accuracy
+
 export async function getGeolocation(): Promise<Position | undefined> {
 	const getPosition = (): Promise<GeolocationPosition> => {
 		return new Promise((res, rej) => {

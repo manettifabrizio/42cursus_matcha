@@ -209,6 +209,7 @@
     Response:
     {
     	id: number;
+        fame: string;
     	username: string;
     	firstname: string;
     	lastname: string;
