@@ -53,10 +53,9 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 		action: 'WATCHED_PROFILE',
 	});
 
-	socket_svc
-		.io()
+	socket_svc.io()
 		.to(`user-${profile.id}`)
-		.emit('profile:viewed', { from: req.user!.id });
+		.emit('profile:view', { id_user_from: req.user!.id });
 
 	return res.status(200).json(profile);
 };
