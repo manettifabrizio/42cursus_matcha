@@ -1,9 +1,10 @@
 import { Profile } from '@/feature/user/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import UserInfo from './userInfo';
 import UserActions from './userActions';
+import { toast } from 'react-toastify';
 
 type UserProfileProps = {
 	user: Profile;
@@ -11,7 +12,7 @@ type UserProfileProps = {
 };
 
 export default function UserProfile({ user, isFetching }: UserProfileProps) {
-	const [isOnline, setIsOnline] = useState(true);
+	const [isOnline, setIsOnline] = useState(false);
 
 	const user_pictures = user.pictures;
 

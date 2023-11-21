@@ -48,3 +48,17 @@ export function getSearchStr(filters: UserFilters) {
 		(defined_filters.length > 0 ? '?' + defined_filters : '')
 	);
 }
+
+export function formatDateTime(inputDate: Date) {
+	const date = new Date(inputDate);
+
+	const options: Intl.DateTimeFormatOptions = {
+		hour: '2-digit',
+		minute: '2-digit',
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+	};
+
+	return date.toLocaleString('en-GB', options);
+}

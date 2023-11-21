@@ -72,7 +72,6 @@ export default function SideBar() {
 					/>
 					<button
 						onClick={() => {
-							console.log('click');
 							dispatch(
 								sendMessage({
 									text: message,

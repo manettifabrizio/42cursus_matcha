@@ -32,6 +32,11 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
+	const LikeUser = async () => {
+		await likeUser({ id: user.id });
+		if (user.likes?.to_me) toast("It's a match !");
+	};
+
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
 			if (
@@ -87,10 +92,10 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 				<>
 					<button
 						className="flex flex-row justify-center items-center px-3 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-400 w-full me-4 hover:from-red-600/80 hover:to-amber-400/80"
-						onClick={() => {
+						onClick={async () => {
 							!user.likes?.by_me
-								? likeUser({ id: user.id })
-								: deleteLikeUser({ id: user.id });
+								? await LikeUser()
+								: await deleteLikeUser({ id: user.id });
 						}}
 					>
 						{!user.likes?.by_me ? (
@@ -101,7 +106,7 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 						) : (
 							<>
 								<IoMdHeartDislike className="me-2" />
-								Dislike
+								Unlike
 							</>
 						)}
 					</button>
@@ -124,10 +129,12 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 							<div className="flex flex-col">
 								<button
 									className="p-2 hover:bg-gray-600 w-full rounded-xl text-start"
-									onClick={() => {
+									onClick={async () => {
 										!user.blocks?.by_me
-											? blockUser({ id: user.id })
-											: unblockUser({ id: user.id });
+											? await blockUser({ id: user.id })
+											: await unblockUser({
+													id: user.id,
+											  });
 										setShow(false);
 									}}
 								>
@@ -135,10 +142,12 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 								</button>
 								<button
 									className="p-2 hover:bg-gray-600 w-full rounded-xl text-start"
-									onClick={() => {
+									onClick={async () => {
 										!user.reports?.by_me
-											? reportUser({ id: user.id })
-											: unreportUser({ id: user.id });
+											? await reportUser({ id: user.id })
+											: await unreportUser({
+													id: user.id,
+											  });
 										setShow(false);
 									}}
 								>

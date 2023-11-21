@@ -1,5 +1,6 @@
 import { store } from '@/core/store';
 import { Profile } from '@/feature/user/types';
+import { formatDateTime } from '@/tool/userTools';
 import { LuDot } from 'react-icons/lu';
 
 type UserProfileProps = {
@@ -25,7 +26,9 @@ export default function UserInfo({ user, isOnline }: UserProfileProps) {
 						(isOnline ? 'text-green-500' : 'text-gray-500')
 					}
 				>
-					{isOnline ? 'online' : ''}
+					{isOnline
+						? 'online'
+						: "last seen at " + formatDateTime(new Date(user.last_seen_at))}
 				</div>
 			</div>
 

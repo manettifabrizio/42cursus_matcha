@@ -33,8 +33,9 @@ export const initUser: User = {
 };
 
 export type Profile = {
+	last_seen_at: string;
 	id: number;
-    fame: string;
+	fame: string;
 	username: string;
 	firstname: string;
 	lastname: string;
