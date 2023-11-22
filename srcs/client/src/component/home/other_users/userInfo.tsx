@@ -5,7 +5,7 @@ import { LuDot } from 'react-icons/lu';
 
 type UserProfileProps = {
 	user: Profile;
-	isOnline: boolean;
+	isOnline: boolean | undefined;
 };
 
 export default function UserInfo({ user, isOnline }: UserProfileProps) {
@@ -20,16 +20,19 @@ export default function UserInfo({ user, isOnline }: UserProfileProps) {
 			<div className="mb-0 me-4 text-4xl">{user.firstname}</div>
 			<div className={`flex flex-row items-center mb-5`}>
 				<div className="text-xl">{age} yrs</div> <LuDot className="" />
-				<div
-					className={
-						`italic ` +
-						(isOnline ? 'text-green-500' : 'text-gray-500')
-					}
-				>
-					{isOnline
-						? 'online'
-						: "last seen at " + formatDateTime(new Date(user.last_seen_at))}
-				</div>
+				{isOnline != undefined ? (
+					<div
+						className={
+							`italic ` +
+							(isOnline ? 'text-green-500' : 'text-gray-300')
+						}
+					>
+						{isOnline
+							? 'online'
+							: 'last seen at ' +
+							  formatDateTime(new Date(user.last_seen_at))}
+					</div>
+				): <div className='italic text-gray-300'>loading...</div>}
 			</div>
 
 			<div className="flex flex-col mb-9 text-xl">

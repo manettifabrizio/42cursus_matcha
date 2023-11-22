@@ -4,6 +4,7 @@ import authReducers from '@/feature/auth/store.slice';
 import userReducers from '@/feature/user/store.slice';
 import securityReducers from '@/feature/security/store.slice';
 import chatReducers from '@/feature/chat/store.slice';
+import chatMiddleware from '../feature/chat/middleware';
 
 // Store -----------------------------------------------------------------------
 export const store = configureStore({
@@ -15,7 +16,7 @@ export const store = configureStore({
 		chat: chatReducers,
 	},
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(api.middleware),
+		getDefaultMiddleware().concat([api.middleware, chatMiddleware]),
 });
 
 // Type ------------------------------------------------------------------------

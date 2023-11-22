@@ -2,38 +2,22 @@ import type { StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { Message } from './types';
-import { io } from 'socket.io-client';
-import { cookie } from '@/tool/cookie';
 
 // State -----------------------------------------------------------------------
 type State = {
+	isEstablishingConnection: boolean;
+	isConnected: boolean;
 	messages: Message[];
+	matches: number[];
+	is_user_online: boolean | undefined;
 };
 
 const initialState: State = {
+	isEstablishingConnection: false,
+	isConnected: false,
 	messages: [],
-};
-
-const sendMessageToUser = (message: Message) => {
-	const ws = io('https://localhost', {
-		auth: {
-			token: cookie('access-token'),
-		},
-	});
-
-	ws.emit('ping', 5002); // Target user id
-	ws.on('pong', (isOnline) => console.log(`isOnline: ${isOnline}`));
-
-	ws.emit('message:to', { content: 'ciao mamma', to: 5003 });
-	ws.on('message:from', (msg) => console.log(`message:from: ${msg.content}`));
-	ws.on('message:error', (err) => console.error(`message:error: ${err}`));
-
-	ws.on('error', console.error);
-
-	// Just to avoid creating infite number of sockets while testing
-	setTimeout(() => {
-		ws.close();
-	}, 2000);
+	matches: [],
+	is_user_online: undefined,
 };
 
 // Slice -----------------------------------------------------------------------
@@ -41,17 +25,75 @@ const slice = createSlice({
 	name: 'chat',
 	initialState,
 	reducers: {
-		sendMessage: (state, { payload }: PayloadAction<Message>) => {
-			console.log('sendMessage');
-			const messages = state.messages;
-			sendMessageToUser(payload);
-			state.messages = [...messages, payload];
+		startConnecting: (state) => {
+			console.log('startConnecting');
+			state.isEstablishingConnection = true;
 		},
+		startDisconnecting: () => {},
+		connectionEstablished: (state) => {
+			state.isConnected = true;
+			state.isEstablishingConnection = true;
+		},
+		isUserOnline: (
+			_,
+			_action: PayloadAction<{
+				user: number;
+			}>,
+		) => {},
+		setUserOnline: (
+			state,
+			action: PayloadAction<{
+				user: number;
+				is_online: boolean;
+			}>,
+		) => {
+			return { ...state, is_user_online: action.payload.is_online };
+		},
+		resetIsUserOnline: (state) => {
+			return { ...state, is_user_online: undefined };
+		},
+		sendMessage: (
+			_,
+			_action: PayloadAction<{
+				user: number;
+				content: string;
+			}>,
+		) => {
+			return;
+		},
+		receiveAllMessages: (
+			state,
+			action: PayloadAction<{
+				messages: Message[];
+			}>,
+		) => {
+			state.messages = action.payload.messages;
+		},
+		receiveMessage: (
+			state,
+			action: PayloadAction<{
+				message: Message;
+			}>,
+		) => {
+			state.messages.push(action.payload.message);
+		},
+		likeUser: () => {},
+		unlikeUser: () => {},
 	},
 });
 
 // Action ----------------------------------------------------------------------
-export const { sendMessage } = slice.actions;
+export const {
+	startConnecting,
+	connectionEstablished,
+	startDisconnecting,
+	receiveAllMessages,
+	receiveMessage,
+	sendMessage,
+	isUserOnline,
+	setUserOnline,
+    resetIsUserOnline,
+} = slice.actions;
 
 // Selector --------------------------------------------------------------------
 export const selectAuth = (state: StoreState) => state.auth;

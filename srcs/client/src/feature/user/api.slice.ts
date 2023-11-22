@@ -1,5 +1,5 @@
 import { api } from '@/core/api';
-import { Profile, User } from './types';
+import { Profile } from './types';
 
 // Type ------------------------------------------------------------------------
 type ProfileRequest = { id: number } | void;
