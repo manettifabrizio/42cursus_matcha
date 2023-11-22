@@ -2,6 +2,7 @@ import type { RequestHandler } from 'express';
 import { service as validation_svc } from '@/core/validation/service';
 import { service as database_svc } from '@/core/database/service';
 import { service as socket_svc } from '@/core/socket/service';
+import { query as findBlock } from '@/feature/block/use-case/find/query';
 import { action as createLike } from '@/feature/like/use-case/create/action';
 
 // Type ------------------------------------------------------------------------
@@ -21,7 +22,16 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 		id_user_to: Number(req.params.id_user) || -1,
 	});
 
-	socket_svc.io().to(`user-${like.id_user_to}`).emit('like:from', like);
+	findBlock(database_svc, {
+		id_user_from: like.id_user_to,
+		id_user_to: like.id_user_from,
+	})
+	.then((block) => {
+		if (block !== null)
+			return;
+		socket_svc.io().to(`user-${like.id_user_to}`).emit('like:from', like);
+	})
+	.catch((err) => {});
 
 	return res.status(204).send();
 };

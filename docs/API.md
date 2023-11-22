@@ -164,7 +164,7 @@
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
     }
     ```
 
@@ -173,7 +173,7 @@
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
         is_online: boolean;
     }
     ```
@@ -251,6 +251,15 @@
     	orientation?: 'HETEROSEXUAL'|'HOMOSEXUAL'|'BISEXUAL';
     	biography?: string;
     	location?: { latitude: number; longitude: number; };
+    }
+    ```
+
+-   ON `profile:view`
+
+    ```ts
+    Payload:
+    {
+        id_user_from: number;
     }
     ```
 
@@ -364,6 +373,24 @@ Response: {
     	void
     ```
 
+-   ON `like:from`
+
+    ```ts
+    Payload:
+    {
+        id_user_from: number;
+    }
+    ```
+
+-   ON `unlike:from`
+
+    ```ts
+    Payload:
+    {
+        id_user_from: number;
+    }
+    ```
+
 ### Block
 
 -   GET `/user/blocks`
@@ -460,7 +487,6 @@ Response: {
       - `sort` can be defined multiple times
     ```
 
-
 ## Chat
 
 -   EMIT `message:list`
@@ -468,7 +494,7 @@ Response: {
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
         page: number;
     }
     ```
@@ -478,7 +504,7 @@ Response: {
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
         messages: {
             id: number;
             id_user_from: number;
@@ -494,7 +520,7 @@ Response: {
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
         error: string;
     }
     ```
@@ -504,7 +530,7 @@ Response: {
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
         content: string;
     }
     ```
@@ -514,7 +540,7 @@ Response: {
     ```ts
     Payload:
     {
-        user: number;
+        id_user: number;
         error: string;
     }
     ```
@@ -524,13 +550,10 @@ Response: {
     ```ts
     Payload:
     {
-        user: number;
-        message: {
-            id: number;
-            id_user_from: number;
-            id_user_to: number;
-            content: string;
-            created_at: Date;
-        };
+        id: number;
+        id_user_from: number;
+        id_user_to: number;
+        content: string;
+        created_at: Date;
     }
     ```
