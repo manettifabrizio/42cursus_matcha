@@ -174,7 +174,7 @@
     Payload:
     {
         id_user: number;
-        is_online: boolean;
+        online: boolean | Date;
     }
     ```
 
