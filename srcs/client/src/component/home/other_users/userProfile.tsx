@@ -16,9 +16,7 @@ type UserProfileProps = {
 
 export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	const dispatch = useStoreDispatch();
-	const isOnline = useSelector(
-		(state: StoreState) => state.chat.is_user_online,
-	);
+	const status = useSelector((state: StoreState) => state.chat.user_status);
 
 	const checkUserStatus = async () => {
 		dispatch(isUserOnline({ id_user: user.id }));
@@ -74,7 +72,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 							User is blocked
 						</div>
 					)}
-					<UserInfo user={user} isOnline={isOnline} />
+					<UserInfo user={user} status={status} />
 					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>

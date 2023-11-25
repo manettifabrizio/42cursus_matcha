@@ -1,6 +1,6 @@
 import type { StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { Message } from './types';
 import { Profile } from '../user/types';
 import { toast } from 'react-toastify';
@@ -10,11 +10,11 @@ type State = {
 	isEstablishingConnection: boolean;
 	isConnected: boolean;
 	messages: Message[];
-    // TODO: Maybe remove matches, could be done only with liked users
-    // the only critical usecase is ReceiveLike
+	// TODO: Maybe remove matches, could be done only with liked users
+	// the only critical usecase is ReceiveLike
 	matches: Profile[];
 	liked_users: Profile[];
-	is_user_online: boolean | undefined;
+	user_status: boolean | Date | undefined;
 };
 
 const initialState: State = {
@@ -23,7 +23,7 @@ const initialState: State = {
 	messages: [],
 	liked_users: [],
 	matches: [],
-	is_user_online: undefined,
+	user_status: undefined,
 };
 
 // Slice -----------------------------------------------------------------------
@@ -49,13 +49,13 @@ const slice = createSlice({
 			state,
 			action: PayloadAction<{
 				id_user: number;
-				is_online: boolean;
+				online: boolean | Date;
 			}>,
 		) => {
-			return { ...state, is_user_online: action.payload.is_online };
+			return { ...state, user_status: action.payload.online };
 		},
 		resetIsUserOnline: (state) => {
-			return { ...state, is_user_online: undefined };
+			return { ...state, user_status: undefined };
 		},
 		sendMessage: (
 			_,

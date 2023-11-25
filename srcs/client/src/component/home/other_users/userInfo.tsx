@@ -5,10 +5,10 @@ import { LuDot } from 'react-icons/lu';
 
 type UserProfileProps = {
 	user: Profile;
-	isOnline: boolean | undefined;
+	status: boolean | Date | undefined;
 };
 
-export default function UserInfo({ user, isOnline }: UserProfileProps) {
+export default function UserInfo({ user, status }: UserProfileProps) {
 	const distance = Math.floor(user.location.distance);
 	const age = Math.floor(
 		(Date.now() - new Date(user.birthdate).getTime()) / 31536000000,
@@ -20,19 +20,23 @@ export default function UserInfo({ user, isOnline }: UserProfileProps) {
 			<div className="mb-0 me-4 text-4xl">{user.firstname}</div>
 			<div className={`flex flex-row items-center mb-5`}>
 				<div className="text-xl">{age} yrs</div> <LuDot className="" />
-				{isOnline != undefined ? (
+				{status != undefined ? (
 					<div
 						className={
 							`italic ` +
-							(isOnline ? 'text-green-500' : 'text-gray-300')
+							(typeof status === 'boolean'
+								? 'text-green-500'
+								: 'text-gray-300')
 						}
 					>
-						{isOnline
+						{typeof status === 'boolean'
 							? 'online'
 							: 'last seen at ' +
-							  formatDateTime(new Date(user.last_seen_at))}
+							  formatDateTime(new Date(status))}
 					</div>
-				): <div className='italic text-gray-300'>loading...</div>}
+				) : (
+					<div className="italic text-gray-300">loading...</div>
+				)}
 			</div>
 
 			<div className="flex flex-col mb-9 text-xl">

@@ -81,7 +81,7 @@ const chatMiddleware: Middleware = (store) => {
 		if (isUserOnline.match(action) && isConnectionEstablished) {
 			const payload = await asyncEmit<{
 				id_user: number;
-				is_online: boolean;
+				online: boolean;
 			}>(socket, 'ping', 'pong', action.payload);
 			store.dispatch(setUserOnline(payload));
 		}
