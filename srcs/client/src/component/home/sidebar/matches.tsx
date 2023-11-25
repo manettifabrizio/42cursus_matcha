@@ -1,15 +1,18 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
+import { StoreState } from '@/core/store';
+import { setLikedUsers, setMatches } from '@/feature/chat/store.slice';
 import {
 	useGetLikesQuery,
 	useLazyGetProfileQuery,
 } from '@/feature/user/api.slice';
-import { Profile } from '@/feature/user/types';
 import { notEmpty } from '@/tool/userTools';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function Matches() {
-	const [matches, setMatches] = useState<Profile[]>([]);
+	const matches = useSelector((state: StoreState) => state.chat.matches);
+	const dispatch = useDispatch();
 	const {
 		data = { likes: { by_me: [], to_me: [] } },
 		isFetching: isFetchingLikes,
@@ -24,20 +27,12 @@ export default function Matches() {
 		if (!(isFetchingLikes || isLoadingLikes)) {
 			const likes = data.likes;
 
-			const matches_ids = likes.by_me
-				.map((like_by_me) =>
-					likes.to_me.filter(
-						(like_to_me) =>
-							like_to_me.id_user_from === like_by_me.id_user_to,
-					),
-				)
-				.filter((match) => match.length > 0)
-				.map((match) => match[0].id_user_from);
-
-			const getMatches = async () => {
-				const matchesPromises = matches_ids.map(async (id) => {
+			const getLikedUsers = async () => {
+				const matchesPromises = likes.by_me.map(async (like) => {
 					try {
-						const match = await getProfile({ id }).unwrap();
+						const match = await getProfile({
+							id: like.id_user_to,
+						}).unwrap();
 						return match;
 					} catch (error) {
 						console.error(error);
@@ -48,9 +43,16 @@ export default function Matches() {
 				return Promise.all(matchesPromises);
 			};
 
-			getMatches().then((matches) => {
-				console.log(matches);
-				setMatches(matches.filter(notEmpty));
+			getLikedUsers().then((res) => {
+				const liked_users = res.filter(notEmpty);
+				const matches = liked_users.filter((user) =>
+					likes.to_me
+						.map((like) => like.id_user_from)
+						.some((id) => user.id === id),
+				);
+
+				dispatch(setLikedUsers({ liked_users }));
+				dispatch(setMatches({ matches: matches.filter(notEmpty) }));
 			});
 		}
 	}, [data]);
@@ -65,8 +67,10 @@ export default function Matches() {
 				<div className="w-full flex justify-center items-center">
 					<LoadingSpinner size="sm" />
 				</div>
-			) : (matches.length === 0 ? (
-				<div className='italic text-gray-500 text-sm'>Start discovering people to get matches.</div>
+			) : matches.length === 0 ? (
+				<div className="italic text-gray-500 text-sm">
+					Start discovering people to get matches.
+				</div>
 			) : (
 				<ul className="flex list-none p-0 flex-row">
 					{matches.map((match) => (
@@ -87,7 +91,7 @@ export default function Matches() {
 						</li>
 					))}
 				</ul>
-			))}
+			)}
 		</div>
 	);
 }

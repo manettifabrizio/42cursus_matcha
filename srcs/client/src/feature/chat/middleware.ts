@@ -2,7 +2,9 @@ import {
 	connectionEstablished,
 	isUserOnline,
 	receiveAllMessages,
+	receiveLike,
 	receiveMessage,
+	receiveUnlike,
 	sendMessage,
 	setUserOnline,
 	startConnecting,
@@ -36,8 +38,6 @@ const chatMiddleware: Middleware = (store) => {
 		const isConnectionEstablished =
 			socket && store.getState().chat.isConnected;
 
-		console.log('chatMiddleware', action);
-
 		if (startConnecting.match(action)) {
 			socket = io('https://localhost', {
 				auth: {
@@ -65,6 +65,14 @@ const chatMiddleware: Middleware = (store) => {
 			socket.on('message:to:error', (err) => {
 				console.error(`message:error: ${err}`);
 			});
+
+			socket.on('like:from', (payload: { id_user_from: number }) => {
+				store.dispatch(receiveLike(payload));
+			});
+
+			socket.on('unlike:from', (payload: { id_user_from: number }) => {
+				store.dispatch(receiveUnlike(payload));
+			});
 		}
 
 		if (sendMessage.match(action) && isConnectionEstablished)
@@ -72,14 +80,13 @@ const chatMiddleware: Middleware = (store) => {
 
 		if (isUserOnline.match(action) && isConnectionEstablished) {
 			const payload = await asyncEmit<{
-				user: number;
+				id_user: number;
 				is_online: boolean;
 			}>(socket, 'ping', 'pong', action.payload);
 			store.dispatch(setUserOnline(payload));
 		}
 
 		if (startDisconnecting.match(action) && isConnectionEstablished) {
-            
 			socket.disconnect();
 		}
 

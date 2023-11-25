@@ -21,7 +21,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	);
 
 	const checkUserStatus = async () => {
-		dispatch(isUserOnline({ user: user.id }));
+		dispatch(isUserOnline({ id_user: user.id }));
 	};
 
 	useEffect(() => {
