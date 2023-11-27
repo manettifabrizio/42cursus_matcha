@@ -1,8 +1,8 @@
 import ImageSelector from '@/component/ui/imageSelector';
-import { CompleteProfile, CompleteProfileError } from '../types';
+import { CompleteProfile, CompleteProfileError } from '@/feature/user/types';
 
 export type PicturesInputProps = {
-    disabled: boolean,
+	disabled: boolean;
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>;
 	errors?: string[];
 	setProfile: React.Dispatch<React.SetStateAction<CompleteProfile>>;

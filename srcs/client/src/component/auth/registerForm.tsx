@@ -1,4 +1,4 @@
-import type { RegisterError } from './action';
+import type { RegisterError } from '@/feature/auth/register/action';
 import { useId } from 'react';
 import { Form, useNavigation } from 'react-router-dom';
 import { useActionData } from 'react-router-dom';

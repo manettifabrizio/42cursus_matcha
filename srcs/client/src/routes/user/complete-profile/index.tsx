@@ -8,12 +8,12 @@ import {
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
 import toast from 'react-hot-toast';
 import { getGeolocation } from '@/tool/getLocation';
-import BiographyInput from '@/feature/user/forms/biographyInputs';
-import BirthdayInput from '@/feature/user/forms/birthdayInput';
-import GenderInput from '@/feature/user/forms/genderInput';
-import OrientationInput from '@/feature/user/forms/orientationInput';
-import TagsInput from '@/feature/user/forms/tagsInput';
-import PicturesInput from '@/feature/user/forms/picturesInput';
+import BiographyInput from '@/component/user/biographyInputs';
+import BirthdayInput from '@/component/user/birthdayInput';
+import GenderInput from '@/component/user/genderInput';
+import OrientationInput from '@/component/user/orientationInput';
+import TagsInput from '@/component/user/tagsInput';
+import PicturesInput from '@/component/user/picturesInput';
 import {
 	CompleteProfile,
 	CompleteProfileError,

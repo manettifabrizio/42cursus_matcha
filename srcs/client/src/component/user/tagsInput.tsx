@@ -1,7 +1,7 @@
 import SelectDropdown, { Option } from '@/component/ui/selectDropdown';
-import { tagsOptions } from '@/page/user/tags_options';
+import { tagsOptions } from '@/routes/user/tags_options';
 import { useEffect, useState } from 'react';
-import { CompleteProfileInputProps } from '../types';
+import { CompleteProfileInputProps } from '@/feature/user/types';
 
 export default function TagsInput({
 	disabled,

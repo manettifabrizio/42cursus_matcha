@@ -1,8 +1,8 @@
 import { Profile, UserFilters, initFilters } from '@/feature/user/types';
-import AvailableUsers from '../../../../component/home/main_page/availableUsers';
+import AvailableUsers from '@/component/home/main_page/availableUsers';
 import { useEffect, useState } from 'react';
 import MatchaLogo from '@/component/ui/matchaLogo';
-import SearchAndFilter from '../../../../component/home/main_page/users_filter/searchAndFIlter';
+import SearchAndFilter from '@/component/home/main_page/users_filter/searchAndFIlter';
 import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
 

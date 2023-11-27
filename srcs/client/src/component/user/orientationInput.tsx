@@ -1,6 +1,6 @@
 import SelectDropdown, { Option } from '@/component/ui/selectDropdown';
 import { useEffect, useState } from 'react';
-import { CompleteProfileInputProps } from '../types';
+import { CompleteProfileInputProps } from '@/feature/user/types';
 
 const orientationOptions: Option[] = [
 	{ label: 'HETEROSEXUAL', value: 'HETEROSEXUAL' },

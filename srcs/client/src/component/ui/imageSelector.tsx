@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiFillCloseSquare } from 'react-icons/ai';
-import { PicturesInputProps } from '@/feature/user/forms/picturesInput';
+import { PicturesInputProps } from '@/component/user/picturesInput';
 
 export default function ImageSelector({
 	disabled,

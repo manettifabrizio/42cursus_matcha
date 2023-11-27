@@ -1,4 +1,4 @@
-import { CompleteProfileInputProps } from '../types';
+import { CompleteProfileInputProps } from '@/feature/user/types';
 
 export default function BirthdayInput({
 	disabled,
