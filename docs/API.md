@@ -254,15 +254,6 @@
     }
     ```
 
--   ON `profile:view`
-
-    ```ts
-    Payload:
-    {
-        id_user_from: number;
-    }
-    ```
-
 ### Activities
 
 -   GET `/user/activities`
@@ -273,6 +264,26 @@
     {
     	by_me: { id_user_to: number; action: 'WATCHED_PROFILE'; created_at: Date; }[];
     	to_me: { id_user_from: number; action: 'WATCHED_PROFILE'; created_at: Date; }[];
+    }
+    ```
+
+-   EMIT `profile:view`
+
+    ```ts
+    Payload:
+    {
+        id_user: number;
+        username: string;
+    }
+    ```
+
+-   ON `profile:view`
+
+    ```ts
+    Payload:
+    {
+        id_user_from: number;
+        username: string;
     }
     ```
 
