@@ -2,12 +2,13 @@ import { Profile } from '@/feature/user/types';
 import { useEffect } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
-import UserInfo from './userInfo';
-import UserActions from './userActions';
+import UserInfo from './userProfileTop';
+import UserActions from './userProfileBottom';
 import { useStoreDispatch } from '@/hook/useStore';
 import { isUserOnline, resetIsUserOnline } from '@/feature/chat/store.slice';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
+import UserBioDistance from './userProfileBio';
 
 type UserProfileProps = {
 	user: Profile;
@@ -46,7 +47,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 			<div
 				// TODO: Better color when match
 				className={
-					'flex flex-row border-4 w-3/4 h-5/6 rounded-xl overflow-hidden ' +
+					'flex flex-row border-4 w-3/4 h-5/6 rounded-xl overflow-hidden max-w-4xl max-h-[45rem] ' +
 					(user.likes?.by_me && user.likes?.to_me
 						? 'border-red-500'
 						: '')
@@ -73,6 +74,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 						</div>
 					)}
 					<UserInfo user={user} status={status} />
+                    <UserBioDistance user={user} />
 					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>

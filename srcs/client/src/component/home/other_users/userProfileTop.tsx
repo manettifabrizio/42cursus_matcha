@@ -9,14 +9,13 @@ type UserProfileProps = {
 };
 
 export default function UserInfo({ user, status }: UserProfileProps) {
-	const distance = Math.floor(user.location.distance);
 	const age = Math.floor(
 		(Date.now() - new Date(user.birthdate).getTime()) / 31536000000,
 	);
 	const current_user_tags = store.getState().user.tags;
 
 	return (
-		<div className="flex flex-col overflow-y-auto h-full pe-2">
+		<div className="flex flex-col pe-2 w-full mb-2">
 			<div className="mb-0 me-4 text-4xl">{user.firstname}</div>
 			<div className={`flex flex-row items-center mb-5`}>
 				<div className="text-xl">{age} yrs</div> <LuDot className="" />
@@ -73,8 +72,6 @@ export default function UserInfo({ user, status }: UserProfileProps) {
 					</span>
 				))}
 			</div>
-			<div>{user.biography}</div>
-			<div className="mb-4">Distance: {distance} km</div>
 		</div>
 	);
 }
