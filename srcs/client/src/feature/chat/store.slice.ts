@@ -3,7 +3,12 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { Message } from './types';
 import { Profile } from '../user/types';
-import { toast } from 'react-toastify';
+import {
+	likeToast,
+	matchToast,
+	unlikeToast,
+} from '@/component/ui/customToasts';
+import toast from 'react-hot-toast';
 
 // State -----------------------------------------------------------------------
 type State = {
@@ -53,6 +58,18 @@ const slice = createSlice({
 			}>,
 		) => {
 			return { ...state, user_status: action.payload.online };
+		},
+		profileViewed: (
+			_,
+			action: PayloadAction<{
+				id_user_from: number;
+			}>,
+		) => {
+			// TODO: Emit from server only when user that view profile is online
+			toast(
+				'Someone viewed your profile!' + action.payload.id_user_from,
+				{ icon: '👀' },
+			);
 		},
 		resetIsUserOnline: (state) => {
 			return { ...state, user_status: undefined };
@@ -141,11 +158,13 @@ const slice = createSlice({
 			);
 
 			if (matched_user) {
-				toast(`You matched with ${matched_user.firstname}!`);
+				matchToast(matched_user.firstname, matched_user.id);
 				return {
 					...state,
 					matches: [...state.matches, matched_user],
 				};
+			} else {
+				likeToast('username', action.payload.id_user_from);
 			}
 		},
 		receiveUnlike: (
@@ -158,13 +177,15 @@ const slice = createSlice({
 				state.matches.some(
 					(user) => user.id === action.payload.id_user_from,
 				)
-			)
+			) {
+				unlikeToast('mamma');
 				return {
 					...state,
 					matches: state.matches.filter(
 						(user) => user.id !== action.payload.id_user_from,
 					),
 				};
+			}
 		},
 	},
 });
@@ -174,6 +195,7 @@ export const {
 	startConnecting,
 	connectionEstablished,
 	startDisconnecting,
+	profileViewed,
 	receiveAllMessages,
 	receiveMessage,
 	sendMessage,

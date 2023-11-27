@@ -1,6 +1,6 @@
 import { ApiErrorResponse } from '@/core/api';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 /**
  * Type predicate to narrow an unknown error to `FetchBaseQueryError`

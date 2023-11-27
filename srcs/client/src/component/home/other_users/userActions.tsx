@@ -12,9 +12,10 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import { useEffect, useRef, useState } from 'react';
 import { Profile } from '@/feature/user/types';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { store } from '@/core/store';
 import { addLikedUser, rmLikedUser } from '@/feature/chat/store.slice';
+import { matchToast } from '@/component/ui/customToasts';
 
 type UserActionsProps = {
 	user: Profile;
@@ -36,7 +37,7 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 	const LikeUser = async () => {
 		await likeUser({ id: user.id });
 		store.dispatch(addLikedUser({ liked_user: user }));
-		if (user.likes?.to_me) toast(`You matched with ${user.firstname}!`);
+		if (user.likes?.to_me) matchToast(user.firstname, user.id);
 	};
 
 	const UnlikeUser = async () => {

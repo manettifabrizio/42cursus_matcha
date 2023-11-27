@@ -2,7 +2,7 @@ import UserProfile from '@/component/home/other_users/userProfile';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import { Navigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 export function Component() {
 	const { id } = useParams<{ id: string }>();

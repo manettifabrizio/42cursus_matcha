@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { AiFillCloseSquare } from 'react-icons/ai';
 import { PicturesInputProps } from '@/feature/user/forms/picturesInput';
 

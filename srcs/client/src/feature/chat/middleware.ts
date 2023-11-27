@@ -1,6 +1,7 @@
 import {
 	connectionEstablished,
 	isUserOnline,
+	profileViewed,
 	receiveAllMessages,
 	receiveLike,
 	receiveMessage,
@@ -48,6 +49,10 @@ const chatMiddleware: Middleware = (store) => {
 			socket.on('connect', () => {
 				console.log('Socket is connected');
 				store.dispatch(connectionEstablished());
+			});
+
+			socket.on('profile:view', () => {
+				store.dispatch(profileViewed({ id_user_from: 1 }));
 			});
 
 			socket.on('message:list', (messages: Message[]) => {
