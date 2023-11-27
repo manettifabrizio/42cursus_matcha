@@ -1,6 +1,7 @@
 export interface Message {
-	from_id: number;
-	to_id: number;
-	text: string;
-	time: number;
+	id: number;
+	id_user_from: number;
+	id_user_to: number;
+	content: string;
+	created_at: Date;
 }

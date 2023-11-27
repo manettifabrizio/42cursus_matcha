@@ -1,8 +1,10 @@
 import { store } from '@/core/store';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Matches from './matches';
+import { startDisconnecting } from '@/feature/chat/store.slice';
 
 export default function SideBar() {
+	const navigate = useNavigate();
 	const user = store.getState().user;
 
 	return (
@@ -21,7 +23,7 @@ export default function SideBar() {
 				</Link>
 
 				{/* Your Matches section */}
-					<Matches />
+				<Matches />
 
 				{/* Conversations section */}
 				<div className="flex-1 overflow-auto">
@@ -46,9 +48,15 @@ export default function SideBar() {
 						}
 					</ul>
 				</div>
-				<Link to="/auth/logout" className="text-center underline">
+				<button
+					onClick={() => {
+						store.dispatch(startDisconnecting());
+						navigate('/auth/logout', { replace: true });
+					}}
+					className="text-center underline"
+				>
 					Logout
-				</Link>
+				</button>
 			</div>
 		</div>
 	);

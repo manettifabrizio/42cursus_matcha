@@ -2,7 +2,7 @@ import type { ActionFunction } from 'react-router-dom';
 import { redirect } from 'react-router-dom';
 import { store } from '@/core/store';
 import { authApi } from '../api.slice';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
 
 // Type ------------------------------------------------------------------------

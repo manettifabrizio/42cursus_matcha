@@ -12,7 +12,10 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import { useEffect, useRef, useState } from 'react';
 import { Profile } from '@/feature/user/types';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
+import { store } from '@/core/store';
+import { addLikedUser, rmLikedUser } from '@/feature/chat/store.slice';
+import { matchToast } from '@/component/ui/customToasts';
 
 type UserActionsProps = {
 	user: Profile;
@@ -21,8 +24,7 @@ type UserActionsProps = {
 
 export default function UserActions({ user, isFetching }: UserActionsProps) {
 	const [likeUser, { error: likeUserError }] = useLikeUserMutation();
-	const [deleteLikeUser, { error: deleteLikeUserError }] =
-		useUnlikeUserMutation();
+	const [unlikeUser, { error: unlikeUserError }] = useUnlikeUserMutation();
 	const [blockUser, { error: blockUserError }] = useBlockUserMutation();
 	const [unblockUser, { error: unblockUserError }] = useUnblockUserMutation();
 	const [reportUser, { error: reportUserError }] = useReportUserMutation();
@@ -34,7 +36,13 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 
 	const LikeUser = async () => {
 		await likeUser({ id: user.id });
-		if (user.likes?.to_me) toast("It's a match !");
+		store.dispatch(addLikedUser({ liked_user: user }));
+		if (user.likes?.to_me) matchToast(user.firstname, user.id);
+	};
+
+	const UnlikeUser = async () => {
+		await unlikeUser({ id: user.id });
+		store.dispatch(rmLikedUser({ unliked_user_id: user.id }));
 	};
 
 	useEffect(() => {
@@ -57,7 +65,7 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 
 	const errorVariables = [
 		{ error: likeUserError, message: 'Error liking user' },
-		{ error: deleteLikeUserError, message: 'Error unliking user' },
+		{ error: unlikeUserError, message: 'Error unliking user' },
 		{ error: blockUserError, message: 'Error blocking user' },
 		{ error: unblockUserError, message: 'Error unblocking user' },
 		{ error: reportUserError, message: 'Error reporting user' },
@@ -77,7 +85,7 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 		}
 	}, [
 		likeUserError,
-		deleteLikeUserError,
+		unlikeUserError,
 		blockUserError,
 		unblockUserError,
 		reportUserError,
@@ -95,7 +103,7 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 						onClick={async () => {
 							!user.likes?.by_me
 								? await LikeUser()
-								: await deleteLikeUser({ id: user.id });
+								: await UnlikeUser();
 						}}
 					>
 						{!user.likes?.by_me ? (

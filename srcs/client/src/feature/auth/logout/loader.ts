@@ -2,7 +2,7 @@ import type { LoaderFunction } from 'react-router-dom';
 import { store } from '@/core/store';
 import { authApi } from '../api.slice';
 import { clearAuth } from '../store.slice';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 
 // Loader ----------------------------------------------------------------------
 export const loader: LoaderFunction = async () => {

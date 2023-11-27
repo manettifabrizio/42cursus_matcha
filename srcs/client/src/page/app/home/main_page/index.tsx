@@ -28,7 +28,13 @@ export function Component() {
 		[filters],
 	);
 	useEffect(() => {
-		if (!isFetching && !isLoading) setUsers(users.concat(data.users));
+		if (!isFetching && !isLoading) {
+			const concat_users = users.concat(data.users);
+			const users_no_duplicates = Array.from(
+				new Map(concat_users.map((user) => [user.id, user])).values(),
+			);
+			setUsers(users_no_duplicates);
+		}
 	}, [data.users]);
 
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {

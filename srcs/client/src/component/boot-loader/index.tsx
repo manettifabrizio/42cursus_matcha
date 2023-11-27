@@ -9,6 +9,7 @@ import { cookie } from '@/tool/cookie';
 import style from './style.module.scss';
 import MatchaLogo from '/matcha.svg';
 import { setCurrentUser } from '@/tool/userTools';
+import { startConnecting } from '@/feature/chat/store.slice';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -49,6 +50,7 @@ export default function BootLoader({ setBooting }: Props) {
 						await relog().unwrap();
 						dispatch(setAuthAccessToken(cookie('access-token')));
 						await setCurrentUser();
+						dispatch(startConnecting());
 					} catch (err: unknown) {
 						console.log(`Component::BootLoader::RELOG: Failed.`);
 					} finally {

@@ -1,5 +1,5 @@
 import { api } from '@/core/api';
-import { User } from '../user/types';
+import { Profile } from '../user/types';
 
 // Type ------------------------------------------------------------------------
 type RegisterRequest = {
@@ -18,7 +18,7 @@ type LoginRequest = {
 	username: string;
 	password: string;
 };
-type LoginResponse = User;
+type LoginResponse = Profile;
 
 type ConfirmRequest = {
 	id: string;

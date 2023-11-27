@@ -1,9 +1,13 @@
 import { Profile } from '@/feature/user/types';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import UserInfo from './userInfo';
 import UserActions from './userActions';
+import { useStoreDispatch } from '@/hook/useStore';
+import { isUserOnline, resetIsUserOnline } from '@/feature/chat/store.slice';
+import { StoreState } from '@/core/store';
+import { useSelector } from 'react-redux';
 
 type UserProfileProps = {
 	user: Profile;
@@ -11,7 +15,21 @@ type UserProfileProps = {
 };
 
 export default function UserProfile({ user, isFetching }: UserProfileProps) {
-	const [isOnline, setIsOnline] = useState(false);
+	const dispatch = useStoreDispatch();
+	const status = useSelector((state: StoreState) => state.chat.user_status);
+
+	const checkUserStatus = async () => {
+		dispatch(isUserOnline({ id_user: user.id }));
+	};
+
+	useEffect(() => {
+		const timer = setInterval(checkUserStatus, 1000);
+
+		return () => {
+			dispatch(resetIsUserOnline());
+			clearInterval(timer);
+		};
+	}, []);
 
 	const user_pictures = user.pictures;
 
@@ -54,7 +72,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 							User is blocked
 						</div>
 					)}
-					<UserInfo user={user} isOnline={isOnline} />
+					<UserInfo user={user} status={status} />
 					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>

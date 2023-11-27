@@ -6,7 +6,7 @@ import {
 	useUserEditMutation,
 } from '@/feature/user/api.slice';
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { getGeolocation } from '@/tool/getLocation';
 import BiographyInput from '@/feature/user/forms/biographyInputs';
 import BirthdayInput from '@/feature/user/forms/birthdayInput';
