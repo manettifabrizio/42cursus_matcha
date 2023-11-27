@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/core/router';
 import { store } from '@/core/store';
-import '@/asset/style/global.scss';
+import '@/style/global.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // Application -----------------------------------------------------------------
