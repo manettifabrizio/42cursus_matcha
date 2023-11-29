@@ -8,8 +8,13 @@ export default function TagsInput({
 	id,
 	errors,
 	setProfile,
+	profile,
 }: CompleteProfileInputProps) {
-	const [value, setValue] = useState<Option[]>([]);
+	const [value, setValue] = useState<Option[]>(
+		profile.tags.length > 0
+			? profile.tags.map((t) => ({ label: t, value: t }))
+			: [],
+	);
 
 	useEffect(() => {
 		if (value && value.length > 0)
@@ -32,6 +37,7 @@ export default function TagsInput({
 					multi_select={true}
 					id={id}
 					setValue={setValue}
+					value={value}
 				/>
 			</div>
 		</div>

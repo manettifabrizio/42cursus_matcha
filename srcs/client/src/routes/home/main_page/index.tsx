@@ -6,7 +6,8 @@ import SearchAndFilter from '@/component/home/main_page/users_filter/searchAndFI
 import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
 
-export function Component() {
+export default function MainPage() {
+	console.log('main_page');
 	const [searchValue, setSearchValue] = useState('');
 	const [filters, setFilters] = useState<UserFilters>(initFilters);
 	const [filter_str, setFilterStr] = useState('');

@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
 	useSetUserTagMutation,
 	useUploadUserPictureMutation,
@@ -8,12 +8,6 @@ import {
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
 import toast from 'react-hot-toast';
 import { getGeolocation } from '@/tool/getLocation';
-import BiographyInput from '@/component/user/inputs/biographyInputs';
-import BirthdayInput from '@/component/user/inputs/birthdayInput';
-import GenderInput from '@/component/user/inputs/genderInput';
-import OrientationInput from '@/component/user/inputs/orientationInput';
-import TagsInput from '@/component/user/inputs/tagsInput';
-import PicturesInput from '@/component/user/inputs/picturesInput';
 import {
 	CompleteProfile,
 	CompleteProfileError,
@@ -24,6 +18,7 @@ import {
 import { isProfileCompleted, setCurrentUser } from '@/tool/userTools';
 import FormContainer from '@/component/layout/form/formContainer';
 import MatchaLogo from '@/component/ui/matchaLogo';
+import CompleteProfileForm from '@/component/user/complete-profile/completeProfileForm';
 
 const initErrors: CompleteProfileError = {
 	birthday: [],
@@ -197,57 +192,15 @@ export function Component() {
 						Let's complete your profile to start matching with
 						people!
 					</h4>
-					<Form onSubmit={submit} className="w-full">
-						<BirthdayInput
-							disabled={submitting}
-							setProfile={setProfile}
-							id={id}
-							errors={errors?.birthday}
-						/>
-						<GenderInput
-							disabled={submitting}
-							setProfile={setProfile}
-							id={id}
-							errors={errors?.gender}
-						/>
-						<OrientationInput
-							disabled={submitting}
-							setProfile={setProfile}
-							id={id}
-							errors={errors?.orientation}
-						/>
-						<BiographyInput
-							disabled={submitting}
-							setProfile={setProfile}
-							id={id}
-							errors={errors?.biography}
-						/>
-						<TagsInput
-							disabled={submitting}
-							setProfile={setProfile}
-							id={id}
-							errors={errors?.tags}
-						/>
-						<PicturesInput
-							disabled={submitting}
-							setErrors={setErrors}
-							setProfile={setProfile}
-							errors={errors?.pictures}
-							pictures={profile.pictures}
-						/>
-						<div className="flex justify-center mt-5">
-							<button
-								disabled={submitting}
-								type="submit"
-								className={
-									'group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 border border-black hover:opacity-80 transition ' +
-									(submitting ? 'opacity-80' : '')
-								}
-							>
-								{submitting ? 'Submitting...' : 'Save'}
-							</button>
-						</div>
-					</Form>
+					<CompleteProfileForm
+						submit={submit}
+						submitting={submitting}
+						setProfile={setProfile}
+						setErrors={setErrors}
+						id={id}
+						errors={errors}
+						profile={profile}
+					/>
 				</FormContainer>
 			</div>
 		</>

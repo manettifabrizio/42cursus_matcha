@@ -12,8 +12,13 @@ export default function GenderInput({
 	id,
 	errors,
 	setProfile,
+	profile,
 }: CompleteProfileInputProps) {
-	const [value, setValue] = useState<Option[]>([]);
+	const [value, setValue] = useState<Option[]>(
+		profile.gender
+			? [{ label: profile.gender, value: profile.gender }]
+			: [],
+	);
 
 	useEffect(() => {
 		if (value && value.length === 1) {
@@ -34,6 +39,7 @@ export default function GenderInput({
 					multi_select={false}
 					id={id}
 					setValue={setValue}
+					value={value}
 				/>
 			</div>
 		</div>

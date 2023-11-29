@@ -13,8 +13,13 @@ export default function OrientationInput({
 	id,
 	errors,
 	setProfile,
+	profile,
 }: CompleteProfileInputProps) {
-	const [value, setValue] = useState<Option[]>([]);
+	const [value, setValue] = useState<Option[]>(
+		profile.orientation
+			? [{ label: profile.orientation, value: profile.orientation }]
+			: [],
+	);
 
 	useEffect(() => {
 		if (value && value.length === 1) {
@@ -39,6 +44,7 @@ export default function OrientationInput({
 					multi_select={false}
 					id={id}
 					setValue={setValue}
+					value={value}
 				/>
 			</div>
 		</div>

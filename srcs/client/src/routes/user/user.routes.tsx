@@ -1,5 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 import ProtectedLayout from '@/component/layout/protected';
+import SidebarMainContent from '../home';
 
 // Route -----------------------------------------------------------------------
 export const userRoutes: RouteObject[] = [
@@ -8,7 +9,17 @@ export const userRoutes: RouteObject[] = [
 		children: [
 			{
 				path: 'user/profile',
-				lazy: () => import('./profile'),
+				element: <SidebarMainContent/>,
+				children: [
+					{
+						path: 'edit',
+						lazy: () => import('./profile/edit'),
+					},
+                    {
+                        path: 'likes',
+                        lazy: () => import('./profile/views')
+                    }
+				],
 			},
 			{
 				path: 'user/complete-profile',

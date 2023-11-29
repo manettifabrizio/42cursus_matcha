@@ -13,6 +13,7 @@ interface Props {
 
 // Component -------------------------------------------------------------------
 export default function ProtectedLayout({ accepted, inverted }: Props) {
+	console.log('Protected');
 	const isAuthenticated = !!useStoreSelector(selectAuth).accessToken;
 	const location = useLocation();
 

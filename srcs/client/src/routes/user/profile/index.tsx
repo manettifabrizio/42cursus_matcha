@@ -2,7 +2,7 @@ import { selectUser } from '@/feature/user/store.slice';
 import { useStoreSelector } from '@/hook/useStore';
 
 // Component -------------------------------------------------------------------
-export function Component() {
+export default function Profile() {
 	const user = useStoreSelector(selectUser);
 
 	return (
@@ -14,5 +14,3 @@ export function Component() {
 		</>
 	);
 }
-
-Component.displayName = 'User::Profile';

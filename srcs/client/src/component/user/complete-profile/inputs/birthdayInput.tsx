@@ -5,6 +5,7 @@ export default function BirthdayInput({
 	id,
 	errors,
 	setProfile,
+	profile,
 }: CompleteProfileInputProps) {
 	let currentDate = new Date().toISOString().split('T')[0];
 
@@ -24,6 +25,7 @@ export default function BirthdayInput({
 					id={`${id}-year`}
 					type="date"
 					disabled={disabled}
+					value={profile.birthdate}
 				/>
 			</div>
 			{errors && (

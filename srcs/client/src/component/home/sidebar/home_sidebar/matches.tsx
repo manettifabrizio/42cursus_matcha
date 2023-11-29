@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-export default function Matches() {
+export default function MatchesList() {
 	const matches = useSelector((state: StoreState) => state.chat.matches);
 	const dispatch = useDispatch();
 	const {

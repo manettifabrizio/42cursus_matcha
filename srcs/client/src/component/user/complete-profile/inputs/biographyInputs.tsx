@@ -5,6 +5,7 @@ export default function BiographyInput({
 	id,
 	errors,
 	setProfile,
+	profile,
 }: CompleteProfileInputProps) {
 	const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setProfile((c) => ({ ...c, biography: e.target.value }));
@@ -21,6 +22,7 @@ export default function BiographyInput({
 					onChange={handleChange}
 					placeholder="About me..."
 					id={`${id}-biography`}
+					value={profile.biography}
 				/>
 				{errors && (
 					<ul className="pt-1">

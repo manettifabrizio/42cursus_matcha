@@ -105,11 +105,14 @@ export const initFilters: UserFilters = {
 };
 
 export type CompleteProfile = {
-	birthday: string | undefined;
+	firstname: string;
+	lastname: string;
+	mail: string;
+	birthdate: string | undefined;
 	gender: 'MALE' | 'FEMALE' | undefined;
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL' | undefined;
 	biography: string;
-	location: Position | undefined;
+	location: Position | { distance: number } | undefined;
 	tags: string[];
 	pictures: File[];
 };
@@ -119,6 +122,7 @@ export type CompleteProfileInputProps = {
 	errors?: string[];
 	setProfile: React.Dispatch<React.SetStateAction<CompleteProfile>>;
 	disabled: boolean;
+	profile: CompleteProfile;
 };
 
 /* ERRORS */

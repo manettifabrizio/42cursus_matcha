@@ -16,7 +16,7 @@ export default function UserCard({ user }: UserCardProps) {
 		<Link
 			key={user.id}
 			className="user-card relative w-52 h-72 rounded-xl"
-			to={`${location.href}/${user.id}`}
+			to={`${location.origin}/home/${user.id}`}
 		>
 			<img
 				src={`${location.origin}/api/pictures/${user.picture?.path}`}

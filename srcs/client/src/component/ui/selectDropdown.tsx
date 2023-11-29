@@ -16,6 +16,7 @@ type SelectDropdownProps = {
 	multi_select: boolean;
 	id: string;
 	setValue: React.Dispatch<React.SetStateAction<Option[]>>;
+    value?: Option[];
 };
 
 export default function SelectDropdown({
@@ -28,6 +29,7 @@ export default function SelectDropdown({
 	multi_select,
 	id,
 	setValue,
+    value
 }: SelectDropdownProps) {
 	const [length, setLength] = useState(0);
 
@@ -72,6 +74,7 @@ export default function SelectDropdown({
 				}
 				isMulti={multi_select}
 				onChange={handleChange}
+                value={value}
 			/>
 			{errors && (
 				<ul className="pt-1">

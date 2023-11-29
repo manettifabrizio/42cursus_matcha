@@ -18,11 +18,12 @@ export default function UserInfo({ user, status }: UserProfileProps) {
 		<div className="flex flex-col pe-2 w-full mb-2">
 			<div className="mb-0 me-4 text-4xl">{user.firstname}</div>
 			<div className={`flex flex-row items-center mb-5`}>
-				<div className="text-xl">{age} yrs</div> <LuDot className="" />
+				<div className="text-xl whitespace-nowrap">{age} yrs</div>{' '}
+				<LuDot className="" />
 				{status != undefined ? (
 					<div
 						className={
-							`italic ` +
+							`italic whitespace-nowrap` +
 							(typeof status === 'boolean'
 								? 'text-green-500'
 								: 'text-gray-300')
