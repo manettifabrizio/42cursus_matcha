@@ -25,7 +25,8 @@ export type ActionOutput =
 				pictures: Pick<Picture, 'id' | 'path'>[];
 				tags: Tag[];
 				fame: number;
-			} & Partial<{
+			} & Partial<Pick<Account, 'email'>>
+			& Partial<{
 				likes: { by_me: boolean; to_me: boolean };
 				blocks: { by_me: boolean };
 				reports: { by_me: boolean };
