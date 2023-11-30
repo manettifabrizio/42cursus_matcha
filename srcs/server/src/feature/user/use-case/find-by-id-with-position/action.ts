@@ -14,7 +14,7 @@ export type ActionInput = {
 
 export type ActionOutput =
   | (Omit<User, "id_picture" | "location"> &
-      Pick<Account, "username"> & { location: Position | null } & {
+      Pick<Account, "username" | "email"> & { location: Position | null } & {
         picture: Pick<Picture, "id" | "path"> | null;
       })
   | null;
