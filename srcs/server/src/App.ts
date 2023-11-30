@@ -52,6 +52,7 @@ import { onMessageTo } from '@/feature/chat/socket/event/on-message-to';
 import { onMessageList } from '@/feature/chat/socket/event/on-message-list';
 import { onStateChange } from '@/feature/auth/socket/event/on-state-change';
 import { onPing } from '@/feature/auth/socket/event/on-ping';
+import { onProfileView } from '@/feature/activity/socket/event/on-profile-view';
 
 io.use(SocketAuthMiddleware);
 
@@ -61,6 +62,7 @@ io.on('connection', (client) => {
 	onStateChange(client)();
 
 	client.on('ping', onPing(client));
+	client.on('profile:view', onProfileView(client));
 	client.on('message:to', onMessageTo(client));
 	client.on('message:list', onMessageList(client));
 	client.on('disconnecting', onStateChange(client));

@@ -53,6 +53,16 @@ export const checkBirthdate = () =>
         throw new Error(`Birthdate cannot be in the future.`);
       }
 
+      const age = (birthdate: Date) : number =>
+      {
+        const diff = Date.now() - birthdate.getTime();
+        return Math.abs((new Date(diff)).getUTCFullYear() - 1970);
+      };
+
+      if (age(new Date(value)) < 18) {
+        throw new Error(`You must be at least 18 years old.`);
+      }
+
       return true;
     });
 

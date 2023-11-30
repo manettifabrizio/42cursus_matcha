@@ -5,9 +5,7 @@ import type { Tag } from '@/feature/tag/entity';
 import type { User } from '../../entity';
 import { HttpException } from '@/core/exception';
 import { service as database_svc } from '@/core/database/service';
-import { service as socket_svc } from '@/core/socket/service';
 import { action as findProfileById } from '../../use-case/find-profile-by-id/action';
-import { query as createActivity } from '@/feature/activity/use-case/create/query';
 
 // Type ------------------------------------------------------------------------
 type RequestParams = {
@@ -46,16 +44,6 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 			cause: `User does not exist.`,
 		});
 	}
-
-	createActivity(database_svc, {
-		id_user_from: req.user!.id,
-		id_user_to: profile.id,
-		action: 'WATCHED_PROFILE',
-	});
-
-	socket_svc.io()
-		.to(`user-${profile.id}`)
-		.emit('profile:view', { id_user_from: req.user!.id });
 
 	return res.status(200).json(profile);
 };
