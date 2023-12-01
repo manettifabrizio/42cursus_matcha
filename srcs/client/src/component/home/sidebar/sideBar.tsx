@@ -36,7 +36,7 @@ export default function SideBar() {
 						</div>
 					)}
 					<Link
-						to="/user/profile"
+						to="/user/profile/edit"
 						className={
 							'flex items-center transition-all p-1 rounded-xl ' +
 							(url === 'home' ? '' : 'justify-center')

@@ -11,6 +11,10 @@ export const userRoutes: RouteObject[] = [
 				path: 'user/profile',
 				element: <SidebarMainContent/>,
 				children: [
+                    {
+                        path: 'auth',
+                        lazy: () => import('./profile/auth')
+                    },
 					{
 						path: 'edit',
 						lazy: () => import('./profile/edit'),

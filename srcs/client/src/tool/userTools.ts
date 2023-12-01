@@ -63,6 +63,14 @@ export function formatDateTime(inputDate: Date) {
 	return date.toLocaleString('en-GB', options);
 }
 
+export function formatDateTimeShort(inputDate: string) {
+	const date = new Date(inputDate);
+
+	return `${date.getFullYear()}-${(date.getMonth() + 1)
+		.toString()
+		.padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+}
+
 export function notEmpty<T>(value: T | null | undefined): value is T {
 	return value !== null && value !== undefined;
 }

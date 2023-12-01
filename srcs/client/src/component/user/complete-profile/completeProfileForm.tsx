@@ -1,4 +1,3 @@
-import { Form } from 'react-router-dom';
 import BiographyInput from './inputs/biographyInputs';
 import BirthdayInput from './inputs/birthdayInput';
 import GenderInput from './inputs/genderInput';
@@ -8,33 +7,35 @@ import TagsInput from './inputs/tagsInput';
 import { CompleteProfileError, CompleteProfile } from '@/feature/user/types';
 
 type CompleteProfileProps = {
-	submit: (e: React.FormEvent<HTMLFormElement>) => void;
 	submitting: boolean;
 	setProfile: React.Dispatch<React.SetStateAction<CompleteProfile>>;
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>;
 	id: string;
 	errors: CompleteProfileError;
 	profile: CompleteProfile;
+	complete?: boolean;
 };
 
 export default function CompleteProfileForm({
-	submit,
 	submitting,
 	setProfile,
 	setErrors,
 	id,
 	errors,
 	profile,
+	complete = true,
 }: CompleteProfileProps) {
 	return (
-		<Form onSubmit={submit} className="w-full">
-			<BirthdayInput
-				disabled={submitting}
-				setProfile={setProfile}
-				id={id}
-				errors={errors?.birthday}
-				profile={profile}
-			/>
+		<>
+			{complete && (
+				<BirthdayInput
+					disabled={submitting}
+					setProfile={setProfile}
+					id={id}
+					errors={errors?.birthdate}
+					profile={profile}
+				/>
+			)}
 			<GenderInput
 				disabled={submitting}
 				setProfile={setProfile}
@@ -82,6 +83,6 @@ export default function CompleteProfileForm({
 					{submitting ? 'Submitting...' : 'Save'}
 				</button>
 			</div>
-		</Form>
+		</>
 	);
 }

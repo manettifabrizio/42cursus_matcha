@@ -1,5 +1,12 @@
 import { api } from '@/core/api';
 import { Profile } from '../user/types';
+import {
+	MutationDefinition,
+	BaseQueryFn,
+	FetchArgs,
+	FetchBaseQueryError,
+} from '@reduxjs/toolkit/dist/query';
+import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 // Type ------------------------------------------------------------------------
 type RegisterRequest = {
@@ -31,6 +38,26 @@ type ResetPasswordRequest = {
 	email: string;
 };
 type ResetPasswordResponse = void;
+
+type EditProfileRequest = {
+	email?: string;
+	password?: string;
+	password_confirm?: string;
+};
+
+type EditProfileResponse = {
+	email: string;
+};
+
+export type EditAuthMutationType = MutationTrigger<
+	MutationDefinition<
+		EditProfileRequest,
+		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
+		'User' | 'Matches',
+		EditProfileResponse,
+		'api'
+	>
+>;
 
 type EditPasswordRequest = {
 	password: string;
@@ -68,7 +95,7 @@ export const authApi = api.injectEndpoints({
 				body: data,
 			}),
 		}),
-		reset_password: builder.mutation<
+		resetPassword: builder.mutation<
 			ResetPasswordResponse,
 			ResetPasswordRequest
 		>({
@@ -78,7 +105,14 @@ export const authApi = api.injectEndpoints({
 				body: data,
 			}),
 		}),
-		edit_password: builder.mutation<
+		editAuth: builder.mutation<EditProfileResponse, EditProfileRequest>({
+			query: (data) => ({
+				url: `auth/edit`,
+				method: 'PATCH',
+				body: data,
+			}),
+		}),
+		editPassword: builder.mutation<
 			EditPasswordResponse,
 			EditPasswordRequest
 		>({
@@ -109,4 +143,5 @@ export const {
 	useLoginMutation,
 	useRefreshMutation,
 	useLogoutMutation,
+	useEditAuthMutation,
 } = authApi;

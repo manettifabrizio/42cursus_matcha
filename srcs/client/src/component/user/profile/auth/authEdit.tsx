@@ -29,7 +29,7 @@ type ProfileEditProps = {
 	base_profile: CompleteProfile;
 };
 
-export default function ProfileEdit({ base_profile }: ProfileEditProps) {
+export default function AuthEdit({ base_profile }: ProfileEditProps) {
 	const [profile, setProfile] = useState<CompleteProfile>(base_profile);
 	const [submitting, setSubmitting] = useState(false);
 	const [editAuth] = useEditAuthMutation();

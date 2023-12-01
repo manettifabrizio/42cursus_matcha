@@ -39,6 +39,7 @@ export type Profile = {
 	username: string;
 	firstname: string;
 	lastname: string;
+	email?: string;
 	birthdate: string;
 	gender: 'MALE' | 'FEMALE';
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
@@ -58,6 +59,7 @@ export const initProfile: Profile = {
 	fame: '',
 	username: '',
 	firstname: '',
+	email: undefined,
 	lastname: '',
 	birthdate: '',
 	gender: 'MALE',
@@ -105,9 +107,11 @@ export const initFilters: UserFilters = {
 };
 
 export type CompleteProfile = {
-	firstname: string;
-	lastname: string;
-	mail: string;
+	firstname?: string;
+	lastname?: string;
+    password?: string;
+    password_confirm?: string;
+	email?: string;
 	birthdate: string | undefined;
 	gender: 'MALE' | 'FEMALE' | undefined;
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL' | undefined;
@@ -116,6 +120,19 @@ export type CompleteProfile = {
 	tags: string[];
 	pictures: File[];
 };
+
+export const initCompleteProfile: CompleteProfile = {
+    firstname: undefined,
+    lastname: undefined,
+    email: undefined,
+    birthdate: undefined,
+    gender: undefined,
+    orientation: undefined,
+    biography: '',
+    location: undefined,
+    pictures: [],
+    tags: [],
+}
 
 export type CompleteProfileInputProps = {
 	id: string;
@@ -128,7 +145,10 @@ export type CompleteProfileInputProps = {
 /* ERRORS */
 
 export type CompleteProfileError = {
-	birthday?: string[];
+    firstname?: string[];
+    lastname?: string[];
+    email?: string[];
+	birthdate?: string[];
 	gender?: string[];
 	orientation?: string[];
 	biography?: string[];
@@ -137,6 +157,14 @@ export type CompleteProfileError = {
 	pictures?: string[];
 };
 
-export type UserEditError = { birthday?: string[]; gender?: string[] };
+export const initCompleteProfileErrors: CompleteProfileError = {
+	birthdate: [],
+	gender: [],
+	pictures: [],
+	tags: [],
+};
+
+export type AuthEditError = { email?: string[]; password?: string[] };
+export type UserEditError = { birthdate?: string[]; gender?: string[] };
 export type TagsError = { name: string[] };
 export type PictureError = { picture: string[] };

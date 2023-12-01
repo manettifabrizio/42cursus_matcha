@@ -1,5 +1,12 @@
 import { api } from '@/core/api';
 import { Profile } from './types';
+import {
+	MutationDefinition,
+	BaseQueryFn,
+	FetchArgs,
+	FetchBaseQueryError,
+} from '@reduxjs/toolkit/dist/query';
+import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 // Type ------------------------------------------------------------------------
 type ProfileRequest = { id: number } | void;
@@ -26,6 +33,16 @@ type EditResponse = {
 	location?: { latitude: number; longitude: number };
 };
 
+export type EditUserMutationType = MutationTrigger<
+	MutationDefinition<
+		EditRequest,
+		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
+		'User' | 'Matches',
+		EditResponse,
+		'api'
+	>
+>;
+
 type UserTagRequest = {
 	name: string;
 };
@@ -34,11 +51,31 @@ type UserTagResponse = {
 	name: string;
 };
 
+export type UserTagMutationType = MutationTrigger<
+	MutationDefinition<
+		UserTagRequest,
+		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
+		'User' | 'Matches',
+		UserTagResponse,
+		'api'
+	>
+>;
+
 type UploadUserPictureRequest = FormData;
 type UploadUserPictureResponse = {
 	id: number;
 	path: string;
 };
+
+export type UploadUserPictureMutationType = MutationTrigger<
+	MutationDefinition<
+		FormData,
+		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
+		'User' | 'Matches',
+		UploadUserPictureResponse,
+		'api'
+	>
+>;
 
 type GetUsersRequest = {
 	filters: string;

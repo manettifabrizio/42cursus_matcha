@@ -10,7 +10,7 @@ export default function BirthdayInput({
 	let currentDate = new Date().toISOString().split('T')[0];
 
 	const onDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setProfile((c) => ({ ...c, birthday: e.target.value }));
+		setProfile((c) => ({ ...c, birthdate: e.target.value }));
 	};
 
 	return (
