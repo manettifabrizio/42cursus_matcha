@@ -6,7 +6,7 @@ const MenuItems = [
 		path: '/user/profile/edit',
 	},
 	{
-		name: 'Auth',
+		name: 'Sign In & security',
 		path: '/user/profile/auth',
 	},
 	{

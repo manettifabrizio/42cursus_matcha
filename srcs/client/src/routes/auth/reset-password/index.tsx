@@ -1,4 +1,4 @@
-import { Form, Link } from 'react-router-dom';
+import { Form, Link, useActionData } from 'react-router-dom';
 import LabelInput from '@/component/ui/labelInput';
 import { SlArrowLeft } from 'react-icons/sl';
 import MatchaLogo from '@/component/ui/matchaLogo';
@@ -9,6 +9,8 @@ export { action } from '@/feature/auth/reset-password/action';
 
 // Component -------------------------------------------------------------------
 export function Component() {
+	const data = useActionData() as string[] | undefined;
+
 	return (
 		<>
 			<div className="flex justify-between flex-col items-center w-full h-full">
@@ -18,7 +20,7 @@ export function Component() {
 						to="/auth/login"
 						className="w-full justify-start flex flex-row items-center"
 					>
-						<SlArrowLeft class="me-1" />
+						<SlArrowLeft className="me-1" />
 					</Link>
 					<div className="text-3xl m-3">Let's find your account</div>
 					<div className="text-sm opacity-80 my-2">
@@ -40,6 +42,7 @@ export function Component() {
 								id: 'username',
 							}}
 						/>
+
 						<LabelInput
 							input_props={{
 								required: true,
@@ -48,12 +51,13 @@ export function Component() {
 								placeholder: 'Email',
 								id: 'email',
 							}}
+							errors_props={data}
 						/>
 						<button
 							type="submit"
 							className="group relative w-full text-white font-semibold py-2 mt-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 "
 						>
-							Next
+							Send Reset Link
 						</button>
 					</Form>
 				</FormContainer>

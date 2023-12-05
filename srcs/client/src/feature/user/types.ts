@@ -109,8 +109,8 @@ export const initFilters: UserFilters = {
 export type CompleteProfile = {
 	firstname?: string;
 	lastname?: string;
-    password?: string;
-    password_confirm?: string;
+	password?: string;
+	password_confirm?: string;
 	email?: string;
 	birthdate: string | undefined;
 	gender: 'MALE' | 'FEMALE' | undefined;
@@ -122,17 +122,29 @@ export type CompleteProfile = {
 };
 
 export const initCompleteProfile: CompleteProfile = {
-    firstname: undefined,
-    lastname: undefined,
-    email: undefined,
-    birthdate: undefined,
-    gender: undefined,
-    orientation: undefined,
-    biography: '',
-    location: undefined,
-    pictures: [],
-    tags: [],
-}
+	firstname: undefined,
+	lastname: undefined,
+	email: undefined,
+	birthdate: undefined,
+	gender: undefined,
+	orientation: undefined,
+	biography: '',
+	location: undefined,
+	pictures: [],
+	tags: [],
+};
+
+export type AuthProfile = {
+	email?: string;
+	password?: string;
+	password_confirm?: string;
+};
+
+export const initAuthProfile: AuthProfile = {
+	email: undefined,
+	password: undefined,
+	password_confirm: undefined,
+};
 
 export type CompleteProfileInputProps = {
 	id: string;
@@ -145,9 +157,8 @@ export type CompleteProfileInputProps = {
 /* ERRORS */
 
 export type CompleteProfileError = {
-    firstname?: string[];
-    lastname?: string[];
-    email?: string[];
+	firstname?: string[];
+	lastname?: string[];
 	birthdate?: string[];
 	gender?: string[];
 	orientation?: string[];
@@ -164,7 +175,18 @@ export const initCompleteProfileErrors: CompleteProfileError = {
 	tags: [],
 };
 
-export type AuthEditError = { email?: string[]; password?: string[] };
+export type AuthProfileError = {
+	email?: string[];
+	password?: string[];
+	password_confirm?: string[];
+};
+
+export const initAuthProfileError: AuthProfileError = {
+	email: [],
+	password: [],
+	password_confirm: [],
+};
+
 export type UserEditError = { birthdate?: string[]; gender?: string[] };
 export type TagsError = { name: string[] };
 export type PictureError = { picture: string[] };

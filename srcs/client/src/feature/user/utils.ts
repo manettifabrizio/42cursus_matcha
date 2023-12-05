@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 import {
-	AuthEditError,
+	AuthProfile,
+	AuthProfileError,
 	CompleteProfile,
 	CompleteProfileError,
 	PictureError,
@@ -36,27 +37,36 @@ export function checkBeforeSubmitting(profile: CompleteProfile): boolean {
 }
 
 export async function editUserAuth(
-	profile: CompleteProfile,
+	profile: AuthProfile,
 	editAuth: EditAuthMutationType,
-	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
+	setErrors: React.Dispatch<React.SetStateAction<AuthProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<boolean> {
+	const id = toast.loading('Editing authentication details...', {
+		style: { minWidth: '350px' },
+	});
 	try {
 		await editAuth({
-			email: profile.email,
-			password: profile.password,
-			password_confirm: profile.password_confirm,
+			...profile,
 		}).unwrap();
+
+		toast.success('Authentication details updated!', {
+			id,
+		});
 
 		return true;
 	} catch (error: unknown) {
-		const editError = manageRTKQErrorDetails<AuthEditError>(error);
+		const editError = manageRTKQErrorDetails<AuthProfileError>(error);
 
 		setErrors((c) => ({
 			...c,
 			email: editError?.email,
 			password: editError?.password,
+			password_confirm: editError?.password_confirm,
 		}));
+
+		toast.error('An error occurred!', { id });
+
 		setSubmitting(false);
 
 		return false;

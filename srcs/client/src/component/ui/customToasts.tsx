@@ -4,6 +4,30 @@ import { Link } from 'react-router-dom';
 
 export const toastOptions: DefaultToastOptions = {};
 
+export function invalidLinkToast(link: string, toast_id?: string) {
+	toast.custom(
+		(t) => (
+			<div
+				className={`${
+					t.visible ? 'animate-enter' : 'animate-leave'
+				} flex flex-row items-center bg-white justify-center rounded-xl p-3 text-black`}
+			>
+				<div className="pe-3">❌</div>
+				<div>
+					Link is invalid.{' '}
+					<Link
+						to={`${location.origin}/${link}`}
+						className="underline font-bold"
+					>
+						Send a new one
+					</Link>
+				</div>
+			</div>
+		),
+		{ id: toast_id },
+	);
+}
+
 export function likeToast(firstname: string, id_user: number) {
 	toast.custom((t) => (
 		<div

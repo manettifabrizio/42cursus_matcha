@@ -15,7 +15,6 @@ import {
 } from '@/feature/user/utils';
 import FormContainer from '@/component/layout/form/formContainer';
 import MatchaLogo from '@/component/ui/matchaLogo';
-import AccountForm from './accountForm';
 import { Form } from 'react-router-dom';
 import { setCurrentUser } from '@/tool/userTools';
 import {
@@ -68,8 +67,16 @@ export default function ProfileEdit({ base_profile }: ProfileEditProps) {
 				<div className="text-3xl mb-3 text-center w-full font-bold">
 					Edit Profile
 				</div>
-				<Form onSubmit={submit} className="w-full">
-					<AccountForm profile={profile} errors={errors} />
+				<Form
+					onSubmit={(e) => {
+						toast.promise(submit(e), {
+							loading: 'Loading',
+							success: 'Profile saved successfully!',
+							error: 'An error occured',
+						});
+					}}
+					className="w-full"
+				>
 					<CompleteProfileForm
 						profile={profile}
 						setProfile={setProfile}
@@ -77,7 +84,7 @@ export default function ProfileEdit({ base_profile }: ProfileEditProps) {
 						errors={errors}
 						setErrors={setErrors}
 						id="profile-edit"
-                        complete={false}
+						complete={false}
 					/>
 				</Form>
 			</FormContainer>

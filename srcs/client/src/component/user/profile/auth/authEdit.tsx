@@ -1,64 +1,46 @@
 import {
-	CompleteProfile,
-	CompleteProfileError,
-	initCompleteProfileErrors,
+	AuthProfileError,
+	AuthProfile,
+	initAuthProfileError,
 } from '@/feature/user/types';
-import CompleteProfileForm from '../../complete-profile/completeProfileForm';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
-import {
-	checkBeforeSubmitting,
-	editProfile,
-	editUserAuth,
-	sendTags,
-	uploadImages,
-} from '@/feature/user/utils';
+import { editUserAuth } from '@/feature/user/utils';
 import FormContainer from '@/component/layout/form/formContainer';
 import MatchaLogo from '@/component/ui/matchaLogo';
-import AccountForm from './accountForm';
 import { Form } from 'react-router-dom';
 import { setCurrentUser } from '@/tool/userTools';
-import {
-	useUserEditMutation,
-	useSetUserTagMutation,
-	useUploadUserPictureMutation,
-} from '@/feature/user/api.slice';
 import { useEditAuthMutation } from '@/feature/auth/api.slice';
+import AuthForm from '../edit/authForm';
+import toast from 'react-hot-toast';
 
 type ProfileEditProps = {
-	base_profile: CompleteProfile;
+	base_profile: AuthProfile;
 };
 
 export default function AuthEdit({ base_profile }: ProfileEditProps) {
-	const [profile, setProfile] = useState<CompleteProfile>(base_profile);
+	const [profile, setProfile] = useState<AuthProfile>(base_profile);
 	const [submitting, setSubmitting] = useState(false);
 	const [editAuth] = useEditAuthMutation();
-	const [editUser] = useUserEditMutation();
-	const [setTag] = useSetUserTagMutation();
-	const [uploadUserPicture] = useUploadUserPictureMutation();
-	const [errors, setErrors] = useState<CompleteProfileError>(
-		initCompleteProfileErrors,
-	);
+	const [errors, setErrors] =
+		useState<AuthProfileError>(initAuthProfileError);
+
 	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!checkBeforeSubmitting(profile)) return null;
-		setErrors(initCompleteProfileErrors);
+		setErrors(initAuthProfileError);
 		setSubmitting(true);
-		if (await editUserAuth(profile, editAuth, setErrors, setSubmitting))
-			if (await editProfile(profile, editUser, setErrors, setSubmitting))
-				if (await sendTags(profile, setTag, setErrors, setSubmitting))
-					if (
-						await uploadImages(
-							profile,
-							editUser,
-							uploadUserPicture,
-							setErrors,
-							setSubmitting,
-						)
-					) {
-						await setCurrentUser();
-						toast.success('Profile saved successfully!');
-					}
+		if (await editUserAuth(profile, editAuth, setErrors, setSubmitting)) {
+			if (profile.email !== base_profile.email)
+				toast('Please confirm your new email to use Matcha', {
+					icon: '❗️',
+				});
+			await setCurrentUser();
+			setProfile((c) => ({
+				...c,
+				password: undefined,
+				password_confirm: undefined,
+			}));
+			setSubmitting(false);
+		}
 	};
 
 	return (
@@ -66,18 +48,15 @@ export default function AuthEdit({ base_profile }: ProfileEditProps) {
 			<MatchaLogo to="/home" />
 			<FormContainer size="sm">
 				<div className="text-3xl mb-3 text-center w-full font-bold">
-					Edit Profile
+					Edit Authentication
 				</div>
 				<Form onSubmit={submit} className="w-full">
-					<AccountForm profile={profile} errors={errors} />
-					<CompleteProfileForm
-						profile={profile}
+					<AuthForm
+						base_profile={base_profile}
 						setProfile={setProfile}
-						submitting={submitting}
+						profile={profile}
 						errors={errors}
-						setErrors={setErrors}
-						id="profile-edit"
-                        complete={false}
+						submitting={submitting}
 					/>
 				</Form>
 			</FormContainer>

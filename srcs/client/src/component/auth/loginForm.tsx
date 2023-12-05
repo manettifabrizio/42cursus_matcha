@@ -30,7 +30,7 @@ export default function LoginForm() {
 						placeholder: 'Password',
 						id: `${id}-password`,
 					}}
-					errors={data}
+					errors_props={data}
 				/>
 				<button
 					type="submit"

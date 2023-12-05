@@ -20,7 +20,7 @@ export default function RegisterForm() {
 					placeholder: 'Username',
 					id: `${id}-username`,
 				}}
-				errors={data?.username}
+				errors_props={data?.username}
 			/>
 			<LabelInput
 				input_props={{
@@ -30,7 +30,7 @@ export default function RegisterForm() {
 					placeholder: 'First Name',
 					id: `${id}-firstname`,
 				}}
-				errors={data?.firstname}
+				errors_props={data?.firstname}
 			/>
 			<LabelInput
 				input_props={{
@@ -40,7 +40,7 @@ export default function RegisterForm() {
 					placeholder: 'Last Name',
 					id: `${id}-lastname`,
 				}}
-				errors={data?.lastname}
+				errors_props={data?.lastname}
 			/>
 			<LabelInput
 				input_props={{
@@ -50,7 +50,7 @@ export default function RegisterForm() {
 					placeholder: 'Email',
 					id: `${id}-email`,
 				}}
-				errors={data?.email}
+				errors_props={data?.email}
 			/>
 			<LabelInput
 				input_props={{
@@ -60,7 +60,7 @@ export default function RegisterForm() {
 					placeholder: 'Password',
 					id: `${id}-password`,
 				}}
-				errors={data?.password}
+				errors_props={data?.password}
 			/>
 			<LabelInput
 				input_props={{
@@ -70,7 +70,7 @@ export default function RegisterForm() {
 					placeholder: 'Password Confirmation',
 					id: `${id}-password_confirm`,
 				}}
-				errors={data?.password_confirm}
+				errors_props={data?.password_confirm}
 			/>
 			<div className="flex justify-center mt-5">
 				<button
