@@ -3,6 +3,7 @@ import { service as validation_svc } from '@/core/validation/service';
 import { service as database_svc } from '@/core/database/service';
 import { service as socket_svc } from '@/core/socket/service';
 import { query as findBlock } from '@/feature/block/use-case/find/query';
+import { query as findUser } from '@/feature/user/use-case/find-by-id-with-position/query';
 import { action as createLike } from '@/feature/like/use-case/create/action';
 
 // Type ------------------------------------------------------------------------
@@ -24,14 +25,19 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 
 	findBlock(database_svc, {
 		id_user_from: like.id_user_to,
-		id_user_to: like.id_user_from,
-	})
-	.then((block) => {
+		id_user_to: req.user!.id,
+	}).then((block) => {
 		if (block !== null)
 			return;
-		socket_svc.io().to(`user-${like.id_user_to}`).emit('like:from', like);
-	})
-	.catch((err) => {});
+		findUser(database_svc, { id: req.user!.id }).then((user) => {
+			if (user === null)
+				return;
+			socket_svc.io().to(`user-${like.id_user_to}`).emit('like:from', {
+				id_user_from: like.id_user_from,
+				username: user.username,
+			});
+		}).catch(() => {});
+	}).catch(() => {});
 
 	return res.status(204).send();
 };

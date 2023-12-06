@@ -253,3 +253,45 @@ BEGIN
 	END IF;
 END
 $$ LANGUAGE plpgsql;
+
+--  Limit user's tags count
+CREATE OR REPLACE FUNCTION limit_user_tags_count() RETURNS trigger AS $$
+DECLARE
+	tags_count_max INTEGER := 8;
+	tags_count INTEGER := 0;
+	check_required BOOLEAN := false;
+BEGIN
+	IF TG_OP = 'INSERT' THEN
+		check_required := true;
+	END IF;
+
+	IF TG_OP = 'UPDATE' THEN
+		IF (NEW.id_user != OLD.id_user) THEN
+			check_required := true;
+		END IF;
+	END IF;
+
+	IF check_required THEN
+		-- prevent concurrent inserts from multiple transactions
+		LOCK TABLE users_tags IN EXCLUSIVE MODE;
+
+		SELECT INTO
+			tags_count COUNT(*)
+		FROM
+			users_tags
+		WHERE
+			id_user = NEW.id_user;
+
+		IF tags_count >= tags_count_max THEN
+			RAISE EXCEPTION 'Cannot have more than % tags.', tags_count_max
+			USING ERRCODE = '23001', DETAIL = '(tags)';
+		END IF;
+	END IF;
+
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER limit_user_tags_count
+	BEFORE INSERT OR UPDATE ON users_tags
+	FOR EACH ROW EXECUTE PROCEDURE limit_user_tags_count();

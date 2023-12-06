@@ -10,7 +10,7 @@ type QueryInput = Pick<User, 'id'>;
 
 type QueryOutput =
 	| (Omit<User, 'id_picture' | 'location'> &
-			Pick<Account, 'username' | 'email'>
+			Pick<Account, 'username' | 'email' | 'email_new'>
 			& { location: Position | null }
 			& { picture: Pick<Picture, 'id' | 'path'> | null;}
 		)
@@ -23,7 +23,7 @@ export const query = async (
 ): Promise<QueryOutput> => {
 	const query = `
 		SELECT
-			users.id, id_picture, path, username, email,
+			users.id, id_picture, path, username, email, email_new,
 			firstname, lastname, birthdate,
 			gender, orientation, biography,
 			ST_X(location::geometry) as longitude, ST_Y(location::geometry) as latitude,
@@ -47,7 +47,7 @@ export const query = async (
 	const result = await database_svc.query<
 		Omit<User, 'location'> &
 			NullableProperties<Position> &
-			Pick<Account, 'username' | 'email'> &
+			Pick<Account, 'username' | 'email' | 'email_new'> &
 			Pick<Picture, 'path'>
 	>(query, params);
 

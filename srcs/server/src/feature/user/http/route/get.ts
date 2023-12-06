@@ -14,7 +14,8 @@ type RequestParams = {
 };
 
 type ResponseBody = Omit<User, "id_picture"> &
-  Pick<Account, "username"> & { picture: Pick<Picture, "id" | "path"> | null };
+  Pick<Account, "username"> & { picture: Pick<Picture, "id" | "path"> | null }
+  & Partial<Pick<Account, 'email'|'email_new'>>;
 
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<RequestParams, ResponseBody> = async (

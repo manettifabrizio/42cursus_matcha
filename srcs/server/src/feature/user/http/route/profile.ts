@@ -22,7 +22,7 @@ type ResponseBody = Omit<User, 'id_picture'> &
 		likes: { by_me: boolean; to_me: boolean };
 		blocks: { by_me: boolean };
 		reports: { by_me: boolean };
-	}>;
+	}> & Partial<Pick<Account, 'email'|'email_new'>>;
 
 // Function --------------------------------------------------------------------
 export const route: RequestHandler<RequestParams, ResponseBody> = async (

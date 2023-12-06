@@ -73,7 +73,7 @@ BEGIN
 				now() - (INTERVAL '18 years') - (random() * (INTERVAL '50 years')),
 				('[0:1]={MALE,FEMALE}'::Gender[])[random_int(0, 1)],
 				('[0:2]={BISEXUAL,HOMOSEXUAL,HETEROSEXUAL}'::Orientation[])[random_int(0, 2)],
-				ST_SetSRID(ST_MakePoint(random_float(43.0, 49.0), random_float(46.0, 47.0)), 4326)
+				ST_SetSRID(ST_MakePoint(random_float(-2.0, 7.0), random_float(42.0, 49.0)), 4326)
 			);
 
 		-- Create Picture
@@ -93,7 +93,7 @@ BEGIN
 
 		-- Loop: User Tags
 		FOR t IN
-			SELECT "id" FROM tags ORDER BY random() LIMIT random_int(0, 20)
+			SELECT "id" FROM tags ORDER BY random() LIMIT random_int(0, 10)
 		LOOP
 			-- Add Tag to User
 			INSERT INTO users_tags
