@@ -93,7 +93,7 @@ BEGIN
 
 		-- Loop: User Tags
 		FOR t IN
-			SELECT "id" FROM tags ORDER BY random() LIMIT random_int(0, 10)
+			SELECT "id" FROM tags ORDER BY random() LIMIT random_int(0, 8)
 		LOOP
 			-- Add Tag to User
 			INSERT INTO users_tags
