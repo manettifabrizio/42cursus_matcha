@@ -260,16 +260,6 @@
     }
     ```
 
--   ON `profile:view`
-
-    ```ts
-    Payload:
-    {
-        id_user_from: number;
-        username: string;
-    }
-    ```
-
 ### Activities
 
 -   GET `/user/activities`
@@ -289,7 +279,6 @@
     Payload:
     {
         id_user: number;
-        username: string;
     }
     ```
 
