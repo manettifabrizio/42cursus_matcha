@@ -19,6 +19,9 @@ export const middleware: ErrorRequestHandler = async (
   if (err instanceof DatabaseException) {
     switch (err.data.cause) {
       case "Query:ConstraintsViolation:Unique":
+        if (err.data.details!.column === 'email_new') {
+          err.data.details!.column = 'email';
+        }
         err = new ValidationException({
           [err.data.details!.column]: [`Already in use.`],
         });

@@ -79,6 +79,8 @@
     {
     	id: number;
     	username: string;
+        email: string;
+        email_new: string;
     	firstname: string;
     	lastname: string;
     	birthdate: Date | null;
@@ -189,6 +191,8 @@
     {
     	id: number;
     	username: string;
+        email?: string;
+        email_new?: string;
     	firstname: string;
     	lastname: string;
     	birthdate: Date;
@@ -211,6 +215,8 @@
     	id: number;
         fame: string;
     	username: string;
+        email?: string;
+        email_new?: string;
     	firstname: string;
     	lastname: string;
     	birthdate: Date;
@@ -273,7 +279,6 @@
     Payload:
     {
         id_user: number;
-        username: string;
     }
     ```
 
@@ -390,6 +395,7 @@ Response: {
     Payload:
     {
         id_user_from: number;
+        username: string;
     }
     ```
 
@@ -399,6 +405,7 @@ Response: {
     Payload:
     {
         id_user_from: number;
+        username: string;
     }
     ```
 

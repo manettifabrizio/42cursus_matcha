@@ -30,7 +30,7 @@ export type ActionOutput =
 				likes: { by_me: boolean; to_me: boolean };
 				blocks: { by_me: boolean };
 				reports: { by_me: boolean };
-			}>)
+			}> & Partial<Pick<Account, 'email'|'email_new'>>)
 	| null;
 
 // Function --------------------------------------------------------------------

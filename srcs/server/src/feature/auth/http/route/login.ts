@@ -21,7 +21,7 @@ type RequestBody = {
 };
 
 type ResponseBody = Omit<User, "id_picture"> &
-  Pick<Account, "username"> & {
+  Pick<Account, "username"|"email"|"email_new"> & {
     picture: Pick<Picture, "id" | "path"> | null;
     pictures: Pick<Picture, "id" | "path">[];
     tags: Tag[];

@@ -43,7 +43,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) => {
       subject: "Reset Password",
       html: `
 			Please, click on the following link to update your password: <br>
-			<a href="https://${Config.FRONTEND_HOST}/auth/reset-password?id=${account.id}&secret=${account.secret}">
+			<a href="https://${Config.FRONTEND_HOST}/auth/new-password?id=${account.id}&secret=${account.secret}">
 				Update my password
 			</a>
 		`,

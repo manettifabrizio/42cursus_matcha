@@ -4,6 +4,7 @@ export type Account = {
   username: string;
   password: string;
   email: string;
+  email_new: string;
   secret: string | null;
   is_confirmed: boolean;
 };
