@@ -22,7 +22,7 @@ export default function CompleteProfileForm({
 	id,
 	errors,
 	profile,
-	base_profile,
+	base_profile = undefined,
 }: CompleteProfileProps) {
 	function hasSomethingChanged(profile: CompleteProfile): boolean {
 		return (
