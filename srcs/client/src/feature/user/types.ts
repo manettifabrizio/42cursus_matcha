@@ -118,7 +118,6 @@ export type CompleteProfile = {
 	biography: string;
 	location: Position | { distance: number } | undefined;
 	tags: string[];
-	pictures: File[];
 };
 
 export const initCompleteProfile: CompleteProfile = {
@@ -130,7 +129,6 @@ export const initCompleteProfile: CompleteProfile = {
 	orientation: undefined,
 	biography: '',
 	location: undefined,
-	pictures: [],
 	tags: [],
 };
 
@@ -146,6 +144,26 @@ export const initAuthProfile: AuthProfile = {
 	password_confirm: undefined,
 };
 
+export type PicturesProfile = {
+	pictures: FileWithId[];
+	profile_picture?: FileWithId;
+};
+
+export const initPicturesProfile: PicturesProfile = {
+	pictures: [],
+	profile_picture: undefined,
+};
+
+export type PicturesProfileError = {
+	pictures?: string[];
+	profile_picture?: string[];
+};
+
+export const initPicturesProfileError: PicturesProfileError = {
+	pictures: [],
+	profile_picture: [],
+};
+
 export type CompleteProfileInputProps = {
 	id: string;
 	errors?: string[];
@@ -154,9 +172,12 @@ export type CompleteProfileInputProps = {
 	profile: CompleteProfile;
 };
 
+export type FileWithId = { file: File; id?: number };
+
 /* ERRORS */
 
 export type CompleteProfileError = {
+	id_picture?: string[];
 	firstname?: string[];
 	lastname?: string[];
 	birthdate?: string[];

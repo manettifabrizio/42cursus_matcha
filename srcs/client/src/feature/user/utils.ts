@@ -4,7 +4,7 @@ import {
 	AuthProfileError,
 	CompleteProfile,
 	CompleteProfileError,
-	PictureError,
+	PicturesProfile,
 	TagsError,
 	UserEditError,
 } from './types';
@@ -12,24 +12,23 @@ import { getGeolocation } from '@/tool/getLocation';
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
 import {
 	EditUserMutationType,
-	UploadUserPictureMutationType,
 	UserTagMutationType,
+	userApi,
 } from './api.slice';
 import { EditAuthMutationType } from '../auth/api.slice';
+import { store } from '@/core/store';
 
-export function checkBeforeSubmitting(profile: CompleteProfile): boolean {
-	if (profile.pictures && profile.pictures.length < 2) {
-		toast.error('Select at least 2 images to start.');
-		return false;
-	}
-
+export function checkBeforeSubmitting(
+	profile: CompleteProfile,
+	toast_id: string,
+): boolean {
 	if (profile.tags.length > 4) {
-		toast.error('Too many tags selected. Max is 4.');
+		toast.error('Too many tags selected. Max is 4.', { id: toast_id });
 		return false;
 	}
 
 	if (profile.biography.trim().length === 0) {
-		toast.error("Biography can't be only spaces.");
+		toast.error("Biography can't be only spaces.", { id: toast_id });
 		return false;
 	}
 
@@ -56,7 +55,7 @@ export async function editUserAuth(
 
 		return true;
 	} catch (error: unknown) {
-		const editError = manageRTKQErrorDetails<AuthProfileError>(error);
+		const editError = manageRTKQErrorDetails<AuthProfileError>(error, id);
 
 		setErrors((c) => ({
 			...c,
@@ -65,12 +64,23 @@ export async function editUserAuth(
 			password_confirm: editError?.password_confirm,
 		}));
 
-		toast.error('An error occurred!', { id });
-
 		setSubmitting(false);
 
 		return false;
 	}
+}
+
+export function hasProfileChanged(
+	profile: CompleteProfile,
+	base: CompleteProfile,
+): boolean {
+	return (
+		profile.firstname !== base.firstname ||
+		profile.lastname !== base.lastname ||
+		profile.gender !== base.gender ||
+		profile.orientation !== base.orientation ||
+		profile.biography !== base.biography
+	);
 }
 
 export async function editProfile(
@@ -78,21 +88,28 @@ export async function editProfile(
 	editUser: EditUserMutationType,
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+	toast_id: string,
 ): Promise<boolean> {
 	const location = await getGeolocation();
 
 	try {
 		await editUser({
-			birthdate: profile.birthdate,
+			firstname: profile.firstname,
+			lastname: profile.lastname,
 			gender: profile.gender,
 			orientation: profile.orientation,
 			biography: profile.biography,
 			location,
 		}).unwrap();
 
+		console.log('editProfile', profile);
+
 		return true;
 	} catch (error: unknown) {
-		const editError = manageRTKQErrorDetails<UserEditError>(error);
+		const editError = manageRTKQErrorDetails<UserEditError>(
+			error,
+			toast_id,
+		);
 
 		setErrors((c) => ({
 			...c,
@@ -105,20 +122,49 @@ export async function editProfile(
 	}
 }
 
-export async function sendTags(
-	profile: CompleteProfile,
-	setTag: UserTagMutationType,
+export function hasTagsChanged(tags: string[], base: string[]): boolean {
+	return JSON.stringify(tags.sort()) !== JSON.stringify(base.sort());
+}
+
+async function deleteOldTags(
+	tags: string[],
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
-): Promise<boolean> {
-	const promises = profile.tags.map(
-		async (t) => await setTag({ name: t }).unwrap(),
-	);
+	toast_id: string,
+) {
+	const old_tags = store.getState().user.tags;
+
+	const to_delete = old_tags.filter((t) => {
+		return !tags.find((new_t) => t.name === new_t);
+	});
+
+	const promises = to_delete.map(async (p) => {
+		await store.dispatch(
+			userApi.endpoints.deleteUserTag.initiate({ id: p.id }),
+		);
+	});
+
 	const res = await Promise.allSettled(promises);
 
+	checkErrorsInPromises(res, setErrors, setSubmitting, toast_id);
+
+	return (
+		!res.length || res.find((r) => r.status === 'rejected') === undefined
+	);
+}
+
+function checkErrorsInPromises(
+	res: PromiseSettledResult<unknown>[],
+	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
+	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+	toast_id: string,
+) {
 	res.forEach((r) => {
 		if (r.status === 'rejected') {
-			const tagsError = manageRTKQErrorDetails<TagsError>(r.reason);
+			const tagsError = manageRTKQErrorDetails<TagsError>(
+				r.reason,
+				toast_id,
+			);
 
 			setErrors((c) => ({
 				...c,
@@ -127,49 +173,46 @@ export async function sendTags(
 			setSubmitting(false);
 		}
 	});
+}
+
+export async function sendTags(
+	profile: CompleteProfile,
+	setTag: UserTagMutationType,
+	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
+	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+	toast_id: string,
+): Promise<boolean> {
+	await deleteOldTags(profile.tags, setErrors, setSubmitting, toast_id);
+
+	const promises = profile.tags.map(
+		async (t) => await setTag({ name: t }).unwrap(),
+	);
+	const res = await Promise.allSettled(promises);
+
+	checkErrorsInPromises(res, setErrors, setSubmitting, toast_id);
+
+	console.log('sendTags', res);
 
 	return (
 		!res.length || res.find((r) => r.status === 'rejected') === undefined
 	);
 }
 
-export async function uploadImages(
-	profile: CompleteProfile,
-	editUser: EditUserMutationType,
-	uploadUserPicture: UploadUserPictureMutationType,
-	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
-	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
-): Promise<boolean> {
-	const promises = profile.pictures.map(async (p) => {
-		const formData = new FormData();
+export function hasImagesChanged(
+	profile: PicturesProfile,
+	base: PicturesProfile,
+): boolean {
+	const images = profile.pictures;
+	const base_images = base.pictures;
 
-		formData.append('picture', p);
+	if (images.length !== base_images.length) return true;
 
-		return await uploadUserPicture(formData).unwrap();
-	});
+	for (let i = 0; i < images.length; i++) {
+		if (images[i].file.name !== base_images[i].file.name) return true;
+	}
 
-	const res = await Promise.allSettled(promises);
+	if (profile.profile_picture?.file.name !== base.profile_picture?.file.name)
+		return true;
 
-	res.forEach((r) => {
-		if (r.status === 'rejected') {
-			const imageError = manageRTKQErrorDetails<PictureError>(r.reason);
-
-			setErrors((c) => ({
-				...c,
-				pictures: c.pictures?.concat(imageError?.picture ?? []),
-			}));
-			setSubmitting(false);
-		}
-	});
-
-	// Set first picture as profile picture
-
-	const first_picture = res.find((r) => r.status === 'fulfilled');
-
-	if (first_picture && first_picture.status === 'fulfilled')
-		await editUser({ id_picture: first_picture.value.id }).unwrap();
-
-	return (
-		!res.length || res.find((r) => r.status === 'rejected') === undefined
-	);
+	return false;
 }

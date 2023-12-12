@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { clearAuth } from '@/feature/auth/store.slice';
 import { Profile, initProfile } from './types';
-import { formatDateTime, formatDateTimeShort } from '@/tool/userTools';
+import { formatDateTimeShort } from '@/tool/userTools';
 
 // State -----------------------------------------------------------------------
 type State = Profile;

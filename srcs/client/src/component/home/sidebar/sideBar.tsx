@@ -1,4 +1,4 @@
-import { store } from '@/core/store';
+import { StoreState, store } from '@/core/store';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Matches from './home_sidebar/matches';
 import { startDisconnecting } from '@/feature/chat/store.slice';
@@ -6,12 +6,13 @@ import ChatsList from './home_sidebar/chats';
 import { useEffect, useState } from 'react';
 import ProfileMenu from './profile_sidebar/menu';
 import { FaChevronLeft } from 'react-icons/fa6';
+import { useSelector } from 'react-redux';
 
 export default function SideBar() {
 	const [url, setUrl] = useState<'home' | 'user'>('home');
 	const location_state = useLocation();
 	const navigate = useNavigate();
-	const user = store.getState().user;
+	const user = useSelector((state: StoreState) => state.user);
 
 	useEffect(() => {
 		if (location_state.pathname.startsWith('/home')) setUrl('home');
@@ -45,7 +46,9 @@ export default function SideBar() {
 						<img
 							src={`${location.origin}/api/pictures/${user.picture?.path}`}
 							alt="Profile"
-							className="rounded-full h-12 w-12"
+							className={`rounded-full inset-0 object-cover ${
+								url === 'home' ? 'h-12' : 'h-16'
+							} ${url === 'home' ? 'w-12' : 'w-16'}`}
 						/>
 						{url === 'home' && (
 							<div>

@@ -6,6 +6,10 @@ const MenuItems = [
 		path: '/user/profile/edit',
 	},
 	{
+		name: 'Pictures',
+		path: '/user/profile/pictures',
+	},
+	{
 		name: 'Sign In & security',
 		path: '/user/profile/auth',
 	},

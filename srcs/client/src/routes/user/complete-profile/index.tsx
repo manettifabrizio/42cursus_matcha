@@ -2,7 +2,6 @@ import { useEffect, useId, useState } from 'react';
 import { Form, useNavigate } from 'react-router-dom';
 import {
 	useSetUserTagMutation,
-	useUploadUserPictureMutation,
 	useUserEditMutation,
 } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
@@ -20,13 +19,12 @@ import {
 	checkBeforeSubmitting,
 	editProfile,
 	sendTags,
-	uploadImages,
 } from '@/feature/user/utils';
+import { uploadImages } from '@/feature/user/imagesUpload';
 
 export function Component() {
 	const [editUser] = useUserEditMutation();
 	const [setTag] = useSetUserTagMutation();
-	const [uploadUserPicture] = useUploadUserPictureMutation();
 	const navigate = useNavigate();
 
 	// TODO: move this in the route loader
@@ -45,25 +43,26 @@ export function Component() {
 
 	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-
-		if (!checkBeforeSubmitting(profile)) return null;
+		const id = toast.loading('Editing profile details...', {
+			style: { minWidth: '350px' },
+		});
+		if (!checkBeforeSubmitting(profile, id)) return null;
 
 		setErrors(initCompleteProfileErrors);
 		setSubmitting(true);
 
-		if (await editProfile(profile, editUser, setErrors, setSubmitting))
-			if (await sendTags(profile, setTag, setErrors, setSubmitting))
+		if (await editProfile(profile, editUser, setErrors, setSubmitting, id))
+			if (await sendTags(profile, setTag, setErrors, setSubmitting, id))
 				if (
 					await uploadImages(
 						profile,
 						editUser,
-						uploadUserPicture,
 						setErrors,
 						setSubmitting,
+						id,
 					)
 				) {
 					await setCurrentUser();
-
 					toast.success(
 						"Profile completed successfully! Let's start matching!!",
 					);

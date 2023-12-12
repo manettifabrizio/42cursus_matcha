@@ -48,22 +48,9 @@ export default function AuthForm({
 								email: e.target.value,
 							})),
 					}}
+                    // TODO: Manage the Already in use email error
 					errors_props={errors?.email}
 				/>
-				{/* <div className="mb-5 w-full">
-					<h5 className="mb-1">Old Password</h5>
-					<LabelInput
-						input_props={{
-							required: true,
-							type: 'password',
-							name: 'old_password',
-							placeholder: 'Old Password',
-							id: `${id}-old_password`,
-							value: profile.old_password,
-						}}
-						errors_props={errors?.old_password}
-					/>
-				</div> */}
 				<LabelInput
 					title={true}
 					input_props={{
