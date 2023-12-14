@@ -34,8 +34,6 @@ controller.patch('/edit', UserEdit);
 controller.post('/pictures', UploadService.single('picture'), PictureAdd);
 controller.post('/tags', TagAdd);
 
-controller.use(HasCompletedProfileMiddleware);
-
 controller.get('/:id_user(\\d+)?/profile', UserProfile);
 
 controller.get('/:id_user(\\d+)?', UserGet);
@@ -46,6 +44,8 @@ controller.get('/likes', Likes); // Todo: Pagination
 controller.get('/blocks', Blocks); // Todo: Pagination
 controller.get('/reports', Reports); // Todo: Pagination
 controller.get('/activities', Activities); // Todo: Pagination
+
+controller.use(HasCompletedProfileMiddleware);
 
 controller.post('/:id_user(\\d+)/block', Block);
 controller.post('/:id_user(\\d+)/report', Report);
