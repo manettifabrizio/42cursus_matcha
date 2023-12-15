@@ -9,9 +9,9 @@ type UserProfileProps = {
 };
 
 export default function UserInfo({ user, status }: UserProfileProps) {
-	const age = Math.floor(
+	const age = user.birthdate ? Math.floor(
 		(Date.now() - new Date(user.birthdate).getTime()) / 31536000000,
-	);
+	): undefined ;
 	const current_user_tags = store.getState().user.tags;
 
 	return (
@@ -23,7 +23,7 @@ export default function UserInfo({ user, status }: UserProfileProps) {
 				{status != undefined ? (
 					<div
 						className={
-							`italic whitespace-nowrap` +
+							`italic whitespace-nowrap ` +
 							(typeof status === 'boolean'
 								? 'text-green-500'
 								: 'text-gray-300')

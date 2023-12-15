@@ -1,12 +1,5 @@
 import { api } from '@/core/api';
 import { Profile } from '../user/types';
-import {
-	MutationDefinition,
-	BaseQueryFn,
-	FetchArgs,
-	FetchBaseQueryError,
-} from '@reduxjs/toolkit/dist/query';
-import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 // Type ------------------------------------------------------------------------
 type RegisterRequest = {
@@ -49,16 +42,6 @@ type EditProfileRequest = {
 type EditProfileResponse = {
 	email: string;
 };
-
-export type EditAuthMutationType = MutationTrigger<
-	MutationDefinition<
-		EditProfileRequest,
-		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
-		'User' | 'Matches',
-		EditProfileResponse,
-		'api'
-	>
->;
 
 type UpdatePasswordRequest = {
 	password: string;

@@ -1,12 +1,5 @@
 import { api } from '@/core/api';
 import { Profile } from './types';
-import {
-	MutationDefinition,
-	BaseQueryFn,
-	FetchArgs,
-	FetchBaseQueryError,
-} from '@reduxjs/toolkit/dist/query';
-import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 
 // Type ------------------------------------------------------------------------
 type ProfileRequest = { id: number } | void;
@@ -33,16 +26,6 @@ type EditResponse = {
 	location?: { latitude: number; longitude: number };
 };
 
-export type EditUserMutationType = MutationTrigger<
-	MutationDefinition<
-		EditRequest,
-		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
-		'User' | 'Matches',
-		EditResponse,
-		'api'
-	>
->;
-
 type UserTagRequest = {
 	name: string;
 };
@@ -50,16 +33,6 @@ type UserTagResponse = {
 	id: number;
 	name: string;
 };
-
-export type UserTagMutationType = MutationTrigger<
-	MutationDefinition<
-		UserTagRequest,
-		BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
-		'User' | 'Matches',
-		UserTagResponse,
-		'api'
-	>
->;
 
 type UploadUserPictureRequest = FormData;
 type UploadUserPictureResponse = {
@@ -135,6 +108,7 @@ export const userApi = api.injectEndpoints({
 				url: `user/pictures/${data.id}`,
 				method: 'DELETE',
 			}),
+            invalidatesTags: ['User'],
 		}),
 		getLikes: builder.query<GetLikesResponse, GetLikesRequest>({
 			query: () => ({

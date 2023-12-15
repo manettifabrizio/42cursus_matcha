@@ -3,7 +3,7 @@ import {
 	CompleteProfileError,
 	initCompleteProfileErrors,
 } from '@/feature/user/types';
-import CompleteProfileForm from '../../complete-profile/completeProfileForm';
+import CompleteProfileForm from '../../complete-profile/completeProfileInputs';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -17,10 +17,6 @@ import FormContainer from '@/component/layout/form/formContainer';
 import MatchaLogo from '@/component/ui/matchaLogo';
 import { Form } from 'react-router-dom';
 import { setCurrentUser } from '@/tool/userTools';
-import {
-	useUserEditMutation,
-	useSetUserTagMutation,
-} from '@/feature/user/api.slice';
 
 type ProfileEditProps = {
 	base_profile: CompleteProfile;
@@ -29,8 +25,6 @@ type ProfileEditProps = {
 export default function ProfileEdit({ base_profile }: ProfileEditProps) {
 	const [profile, setProfile] = useState<CompleteProfile>(base_profile);
 	const [submitting, setSubmitting] = useState(false);
-	const [editUser] = useUserEditMutation();
-	const [setTag] = useSetUserTagMutation();
 	const [errors, setErrors] = useState<CompleteProfileError>(
 		initCompleteProfileErrors,
 	);
@@ -45,11 +39,11 @@ export default function ProfileEdit({ base_profile }: ProfileEditProps) {
 		setSubmitting(true);
 		if (
 			!hasProfileChanged(profile, base_profile) ||
-			(await editProfile(profile, editUser, setErrors, setSubmitting, id))
+			(await editProfile(profile, setErrors, setSubmitting, id))
 		)
 			if (
 				!hasTagsChanged(profile.tags, base_profile.tags) ||
-				(await sendTags(profile, setTag, setErrors, setSubmitting, id))
+				(await sendTags(profile, setErrors, setSubmitting, id))
 			) {
 				toast.success('Profile saved successfully!', { id });
 				await setCurrentUser();

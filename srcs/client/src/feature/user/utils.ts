@@ -10,13 +10,9 @@ import {
 } from './types';
 import { getGeolocation } from '@/tool/getLocation';
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
-import {
-	EditUserMutationType,
-	UserTagMutationType,
-	userApi,
-} from './api.slice';
-import { EditAuthMutationType } from '../auth/api.slice';
+import { userApi } from './api.slice';
 import { store } from '@/core/store';
+import { authApi } from '../auth/api.slice';
 
 export function checkBeforeSubmitting(
 	profile: CompleteProfile,
@@ -27,7 +23,7 @@ export function checkBeforeSubmitting(
 		return false;
 	}
 
-	if (profile.biography.trim().length === 0) {
+	if (profile.biography && profile.biography.trim().length === 0) {
 		toast.error("Biography can't be only spaces.", { id: toast_id });
 		return false;
 	}
@@ -37,7 +33,6 @@ export function checkBeforeSubmitting(
 
 export async function editUserAuth(
 	profile: AuthProfile,
-	editAuth: EditAuthMutationType,
 	setErrors: React.Dispatch<React.SetStateAction<AuthProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<boolean> {
@@ -45,9 +40,13 @@ export async function editUserAuth(
 		style: { minWidth: '350px' },
 	});
 	try {
-		await editAuth({
-			...profile,
-		}).unwrap();
+		await store
+			.dispatch(
+				authApi.endpoints.editAuth.initiate({
+					...profile,
+				}),
+			)
+			.unwrap();
 
 		toast.success('Authentication details updated!', {
 			id,
@@ -85,7 +84,6 @@ export function hasProfileChanged(
 
 export async function editProfile(
 	profile: CompleteProfile,
-	editUser: EditUserMutationType,
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 	toast_id: string,
@@ -93,16 +91,18 @@ export async function editProfile(
 	const location = await getGeolocation();
 
 	try {
-		await editUser({
-			firstname: profile.firstname,
-			lastname: profile.lastname,
-			gender: profile.gender,
-			orientation: profile.orientation,
-			biography: profile.biography,
-			location,
-		}).unwrap();
-
-		console.log('editProfile', profile);
+		await store
+			.dispatch(
+				userApi.endpoints.userEdit.initiate({
+					firstname: profile.firstname,
+					lastname: profile.lastname,
+					gender: profile.gender,
+					orientation: profile.orientation,
+					biography: profile.biography,
+					location,
+				}),
+			)
+			.unwrap();
 
 		return true;
 	} catch (error: unknown) {
@@ -177,7 +177,6 @@ function checkErrorsInPromises(
 
 export async function sendTags(
 	profile: CompleteProfile,
-	setTag: UserTagMutationType,
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 	toast_id: string,
@@ -185,13 +184,14 @@ export async function sendTags(
 	await deleteOldTags(profile.tags, setErrors, setSubmitting, toast_id);
 
 	const promises = profile.tags.map(
-		async (t) => await setTag({ name: t }).unwrap(),
+		async (t) =>
+			await store
+				.dispatch(userApi.endpoints.setUserTag.initiate({ name: t }))
+				.unwrap(),
 	);
 	const res = await Promise.allSettled(promises);
 
 	checkErrorsInPromises(res, setErrors, setSubmitting, toast_id);
-
-	console.log('sendTags', res);
 
 	return (
 		!res.length || res.find((r) => r.status === 'rejected') === undefined

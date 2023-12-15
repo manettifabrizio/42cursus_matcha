@@ -1,7 +1,10 @@
-import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
+import {
+	manageRTKQErrorCause,
+	manageRTKQErrorDetails,
+} from '@/tool/isRTKQError';
 import toast from 'react-hot-toast';
-import { EditUserMutationType, userApi } from './api.slice';
-import { CompleteProfile, CompleteProfileError, PictureError } from './types';
+import { userApi } from './api.slice';
+import { PicturesProfileError, FileWithId, PictureError } from './types';
 import { store } from '@/core/store';
 
 async function uploadImage(picture: File) {
@@ -14,138 +17,129 @@ async function uploadImage(picture: File) {
 		.unwrap();
 }
 
-async function uploadProfilePicture(
-	profile: CompleteProfile,
-	editUser: EditUserMutationType,
-	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
+export async function uploadProfilePicture(
+	picture: FileWithId,
+	setErrors: React.Dispatch<React.SetStateAction<PicturesProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
-	toast_id: string,
 ) {
-	if (!profile?.profile_picture?.file) {
-		toast.error('No profile picture selected.', { id: toast_id });
-		return false;
-	}
+	const toast_id = toast.loading('Setting profile picture...');
 
-	return await uploadImage(profile.profile_picture.file)
-		.then((res) => {
-			if (res.id) {
-				editUser({ id_picture: res.id })
-					.then(() => {
-						return true;
-					})
-					.catch((error) => {
-						toast.error('Error while setting profile picture.', {
-							id: toast_id,
-						});
-						console.error(error);
-						return false;
-					});
-			}
-			return false;
+	const setProfilePicture = async (id: number) => {
+		return await store
+			.dispatch(userApi.endpoints.userEdit.initiate({ id_picture: id }))
+			.then(() => {
+				setSubmitting(false);
+				toast.success('Profile picture set.', { id: toast_id });
+				return true;
+			})
+			.catch((error) => {
+				checkErrorsInPromises(
+					error,
+					setErrors,
+					setSubmitting,
+					toast_id,
+				);
+				return false;
+			});
+	};
+
+	setSubmitting(true);
+
+	if (picture.id === undefined) {
+		await uploadImage(picture.file)
+			.then(async (res) => {
+				if (res.id) {
+					return await setProfilePicture(res.id);
+				}
+			})
+			.catch((error) => {
+				checkErrorsInPromises(
+					error,
+					setErrors,
+					setSubmitting,
+					toast_id,
+				);
+			});
+	} else {
+		return await setProfilePicture(picture.id);
+	}
+	return false;
+}
+
+export async function deletePicture(
+	picture_id: number,
+	setErrors: React.Dispatch<React.SetStateAction<PicturesProfileError>>,
+	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+	const toast_id = toast.loading('Deleting picture...');
+
+	setSubmitting(true);
+
+	const res = store.dispatch(
+		userApi.endpoints.deleteUserPicture.initiate({ id: picture_id }),
+	);
+
+	return await res
+		.unwrap()
+		.then(() => {
+			toast.success('Picture deleted.', { id: toast_id });
+			setSubmitting(false);
+			return true;
 		})
 		.catch((error) => {
-			checkErrorsInPromises(error, setErrors, setSubmitting, toast_id);
+			checkErrorsInPromises(
+				error,
+				setErrors,
+				setSubmitting,
+				toast_id,
+				true,
+			);
 			return false;
 		});
 }
 
-async function filterImages(
-	profile: CompleteProfile,
-	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
-	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
-	toast_id: string,
-) {
-	// Remove images that are already uploaded
-	const already_uploaded = store.getState().user.pictures;
-
-	const pictures = profile.pictures.filter((p) => {
-		if (p.id === undefined) return true;
-
-		return !already_uploaded.find((a) => a.id === p.id);
-	});
-
-	// Delete images that are not selected
-	const selected = profile.pictures.filter((p) => p.id !== undefined);
-
-	const to_delete = already_uploaded.filter((a) => {
-		return !selected.find((s) => s.id === a.id);
-	});
-
-	const promises = to_delete.map(async (p) => {
-		await store.dispatch(
-			userApi.endpoints.deleteUserPicture.initiate({ id: p.id }),
-		);
-	});
-
-	const res = await Promise.allSettled(promises);
-
-	checkErrorsInPromises(res, setErrors, setSubmitting, toast_id);
-
-	// Remove profile picture from pictures
-	const profile_picture = profile.profile_picture;
-
-	if (profile_picture && !profile_picture.id) {
-		const index = pictures.findIndex(
-			(p) => p.file.name === profile_picture.file.name,
-		);
-
-		if (index !== -1) pictures.splice(index, 1);
-	}
-
-	return pictures;
-}
-
 function checkErrorsInPromises(
 	error: unknown,
-	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
+	setErrors: React.Dispatch<React.SetStateAction<PicturesProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 	toast_id: string,
+	cause: boolean = false,
 ) {
-	const imageError = manageRTKQErrorDetails<PictureError>(error, toast_id);
+	if (cause) {
+		const imageError = manageRTKQErrorCause(error, toast_id);
 
-	setErrors((c) => ({
-		...c,
-		pictures: c.pictures?.concat(imageError?.picture ?? []),
-	}));
-	setSubmitting(false);
-}
-
-export async function uploadImages(
-	profile: CompleteProfile,
-	editUser: EditUserMutationType,
-	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
-	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
-	toast_id: string,
-): Promise<boolean> {
-	console.log('uploadImage profile', profile);
-	const pictures = await filterImages(
-		profile,
-		setErrors,
-		setSubmitting,
-		toast_id,
-	);
-
-	console.log('uploadImage filtered pictures', pictures);
-
-	if (!profile.profile_picture?.id)
-		await uploadProfilePicture(
-			profile,
-			editUser,
-			setErrors,
-			setSubmitting,
+		setErrors((c) => ({
+			...c,
+			pictures: c.pictures?.concat(imageError ?? []),
+		}));
+	} else {
+		const imageError = manageRTKQErrorDetails<PictureError>(
+			error,
 			toast_id,
 		);
 
-	const promises = pictures.map(async (p) => uploadImage(p.file));
+		setErrors((c) => ({
+			...c,
+			pictures: c.pictures?.concat(imageError?.picture ?? []),
+		}));
+	}
 
-	const res = await Promise.allSettled(promises);
-	res.forEach((r) => {
-		if (r.status === 'rejected') {
-			checkErrorsInPromises(r.reason, setErrors, setSubmitting, toast_id);
-		}
-	});
+	setSubmitting(false);
+}
 
-	return (
-		!res.length || res.find((r) => r.status === 'rejected') === undefined
-	);
+export async function uploadPicture(
+	picture: File,
+	setErrors: React.Dispatch<React.SetStateAction<PicturesProfileError>>,
+	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
+	toast_id: string,
+): Promise<number | undefined> {
+	return await uploadImage(picture)
+		.then(async (res) => {
+			console.log(res);
+			return res.id;
+		})
+		.catch((error) => {
+			checkErrorsInPromises(error, setErrors, setSubmitting, toast_id);
+			return undefined;
+		});
 }

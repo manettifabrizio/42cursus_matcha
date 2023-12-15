@@ -9,24 +9,24 @@ export const userRoutes: RouteObject[] = [
 		children: [
 			{
 				path: 'user/profile',
-				element: <SidebarMainContent/>,
+				element: <SidebarMainContent />,
 				children: [
 					{
 						path: 'edit',
 						lazy: () => import('./profile/edit'),
 					},
-                    {
-                        path: 'pictures',
-                        lazy: () => import('./profile/pictures')
-                    },
-                    {
-                        path: 'auth',
-                        lazy: () => import('./profile/auth')
-                    },
-                    {
-                        path: 'likes',
-                        lazy: () => import('./profile/views')
-                    }
+					{
+						path: 'pictures',
+						lazy: () => import('./profile/pictures'),
+					},
+					{
+						path: 'auth',
+						lazy: () => import('./profile/auth'),
+					},
+					{
+						path: 'likes',
+						lazy: () => import('./profile/views'),
+					},
 				],
 			},
 			{

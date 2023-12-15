@@ -5,7 +5,6 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from '@/core/router';
 import { store } from '@/core/store';
 import '@/style/global.scss';
-import 'react-datepicker/dist/react-datepicker.css';
 
 // Application -----------------------------------------------------------------
 ReactDOM.createRoot(document.getElementById('root')!).render(

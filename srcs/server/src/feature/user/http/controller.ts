@@ -45,6 +45,8 @@ controller.get('/blocks', Blocks); // Todo: Pagination
 controller.get('/reports', Reports); // Todo: Pagination
 controller.get('/activities', Activities); // Todo: Pagination
 
+controller.delete('/pictures/:id_picture(\\d+)', PictureRemove);
+
 controller.use(HasCompletedProfileMiddleware);
 
 controller.post('/:id_user(\\d+)/block', Block);
@@ -54,7 +56,6 @@ controller.delete('/:id_user(\\d+)/like', Unlike);
 controller.delete('/:id_user(\\d+)/block', Unblock);
 controller.delete('/:id_user(\\d+)/report', Unreport);
 
-controller.delete('/pictures/:id_picture(\\d+)', PictureRemove);
 controller.delete('/tags/:id_tag(\\d+)', TagRemove);
 
 controller.use(NotReportedMiddleware);

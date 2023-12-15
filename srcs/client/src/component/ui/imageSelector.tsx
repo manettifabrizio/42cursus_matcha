@@ -1,19 +1,36 @@
-import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiFillCloseSquare } from 'react-icons/ai';
-import { PicturesInputProps } from '@/component/user/complete-profile/inputs/picturesInput';
+
+import { useEffect, useState } from 'react';
+import { FileWithId } from '@/feature/user/types';
+import {
+	deletePicture,
+	uploadPicture,
+	uploadProfilePicture,
+} from '@/feature/user/imagesUpload';
+import { PicturesInputProps } from '../user/complete-profile/inputs/picturesInput';
+import LoadingSpinner from './loadingSpinner';
 
 export default function ImageSelector({
-	disabled,
 	errors,
-	setProfile,
-	pictures,
+	setErrors,
+	base_pictures,
+	profile_picture,
+	loading,
 }: PicturesInputProps) {
+	const [profilePicture, setProfilePicture] = useState<FileWithId>();
+	const [submitting, setSubmitting] = useState(false);
+	const [pictures, setPictures] = useState<FileWithId[]>(base_pictures ?? []);
+
 	const MAX_COUNT = 5;
 
-	const [inputValue, setInputValue] = useState<
-		string | number | readonly string[] | undefined
-	>('');
+	useEffect(() => {
+		setProfilePicture(profile_picture);
+	}, [profile_picture]);
+
+	useEffect(() => {
+		if (base_pictures) setPictures(base_pictures);
+	}, [base_pictures]);
 
 	const checkFile = (file: File): boolean => {
 		if (file.size > 2000000) {
@@ -28,27 +45,42 @@ export default function ImageSelector({
 		return true;
 	};
 
-	const handleUploadFiles = (files: File[]) => {
+	const handleUploadFiles = async (files: File[]) => {
 		if (files.length + pictures.length > MAX_COUNT) {
 			toast.error('You can upload a maximum of 5 photos.');
 			return;
 		}
-		files.forEach((file) => {
+
+		const toast_id = toast.loading('Uploading pictures...');
+
+		let pictures_uploaded = 0;
+
+		for (const file of files) {
 			if (checkFile(file)) {
 				const fileName = file.name.replace(/\-/g, '');
-				if (pictures.findIndex((p) => p.name === fileName) === -1) {
-					setProfile((c) => ({
-						...c,
-						pictures: [
-							...c.pictures,
-							new File([file], fileName, {
-								type: file.type,
-							}),
-						],
-					}));
+				if (
+					pictures.findIndex((p) => p.file.name === fileName) === -1
+				) {
+					const id = await uploadPicture(
+						file,
+						setErrors,
+						setSubmitting,
+						toast_id,
+					);
+
+					if (id) pictures_uploaded++;
 				}
 			}
-		});
+		}
+
+		if (pictures_uploaded > 0) {
+			toast.success(
+				`${pictures_uploaded} pictures uploaded successfully!`,
+				{
+					id: toast_id,
+				},
+			);
+		} else toast.dismiss(toast_id);
 	};
 
 	const resetInputOnClick = (
@@ -56,64 +88,116 @@ export default function ImageSelector({
 	) => ((e.target as HTMLInputElement).value = '');
 
 	const handleFileEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setInputValue(e.target.value);
 		const chosenFiles: File[] = Array.prototype.slice.call(e.target.files);
 		handleUploadFiles(chosenFiles);
 	};
 
-	const rmFile = (name: string) => {
-		if (pictures.length === 1) setInputValue('');
-		setProfile((c) => ({
-			...c,
-			pictures: c.pictures.filter((p) => p.name !== name),
-		}));
+	const handleImageClick = async (picture: FileWithId) => {
+		if (picture.file.name === profilePicture?.file.name || submitting)
+			return;
+
+		if (await uploadProfilePicture(picture, setErrors, setSubmitting)) {
+			setProfilePicture(picture);
+		}
+	};
+
+	const isProfilePicture = (picture: FileWithId) =>
+		picture.file.name === profilePicture?.file.name;
+
+	const rmFile = async (picture: FileWithId) => {
+		if (
+			picture.id === undefined ||
+			(await deletePicture(picture.id, setErrors, setSubmitting))
+		) {
+			setPictures((c) =>
+				c.filter((p) => p.file.name !== picture.file.name),
+			);
+		}
 	};
 
 	return (
 		<>
 			<div className="flex flex-col mb-2 w-full">
-				<div className="grid w-full grid-cols-3 gap-3">
-					{pictures.map((p) => (
-						<div className="relative" key={p.name}>
-							<button
-								type="button"
-								disabled={disabled}
-								onClick={() => rmFile(p.name)}
-								className="absolute right-1 top-3 text-red-500"
+				{loading ? (
+					<div className="w-full h-40 mt-2 mb-4 flex flex-col justify-center items-center">
+						<LoadingSpinner message="Loading Pictures..." />
+					</div>
+				) : (
+					<div className="grid w-full grid-cols-3 gap-3 mt-2 mb-4 justify-evenly">
+						{pictures.map((p) => (
+							<div
+								className="w-full h-full flex justify-evenly items-center"
+								key={p.file.name}
 							>
-								<AiFillCloseSquare />
-							</button>
-							<img
-								src={URL.createObjectURL(p)}
-								id={p.name}
-								className={
-									'border-2 rounded my-2 object-scale-down'
-								}
-							/>
-						</div>
-					))}
-				</div>
-
+								<div
+									className={
+										'relative w-full aspect-square ' +
+										(submitting && 'opacity-50')
+									}
+								>
+									{isProfilePicture(p) && (
+										<div className="absolute bottom-0 rounded-b-lg text-center text-white bg-red-500 w-full italic">
+											Profile Picture
+										</div>
+									)}
+									{!isProfilePicture(p) &&
+										pictures.length > 2 && (
+											<button
+												type="button"
+												disabled={submitting}
+												onClick={async () =>
+													await rmFile(p)
+												}
+												className="absolute right-1 top-1 text-red-500"
+											>
+												<AiFillCloseSquare />
+											</button>
+										)}
+									<img
+										src={URL.createObjectURL(p.file)}
+										id={p.file.name}
+										onClick={async () =>
+											await handleImageClick(p)
+										}
+										className={`border-2 rounded-lg object-cover w-full h-full ${
+											isProfilePicture(p)
+												? 'border-red-500 '
+												: ''
+										} ${
+											!submitting && !isProfilePicture(p)
+												? 'cursor-pointer'
+												: ''
+										}`}
+									/>
+								</div>
+							</div>
+						))}
+					</div>
+				)}
 				<>
 					{pictures.length < 5 && (
 						<label
 							htmlFor="files"
-							className={`group relative w-full text-white py-2 rounded-full border text-center cursor-pointer hover:text-gray-300`}
+							className={`group relative w-full text-white py-2 rounded-full border text-center ${
+								loading
+									? 'opacity-50'
+									: 'cursor-pointer hover:text-gray-300'
+							}`}
 						>
-							Select Images
+							Add Images
 						</label>
 					)}
 					<input
-						disabled={pictures.length === 5 || disabled}
+						disabled={
+							pictures.length === 5 || submitting || loading
+						}
 						id="files"
-						required
 						className="opacity-0 h-1"
 						type="file"
 						onChange={handleFileEvent}
 						onClick={resetInputOnClick}
 						accept="image/png, image/gif, image/jpeg"
 						multiple={true}
-						value={inputValue}
 					/>
 				</>
 				{errors && errors.length > 0 && (

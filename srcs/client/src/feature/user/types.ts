@@ -33,19 +33,19 @@ export const initUser: User = {
 };
 
 export type Profile = {
-	last_seen_at: string;
+	last_seen_at?: string;
 	id: number;
-	fame: string;
-	username: string;
-	firstname: string;
-	lastname: string;
+	fame?: string;
+	username?: string;
+	firstname?: string;
+	lastname?: string;
 	email?: string;
-	birthdate: string;
+	birthdate?: string;
 	gender: 'MALE' | 'FEMALE';
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
-	biography: string;
-	picture: { id: number; path: string };
-	location: { distance: number };
+	biography?: string;
+	picture?: { id: number; path: string };
+	location?: { distance: number };
 	pictures: { id: number; path: string }[];
 	tags: { id: number; name: string }[];
 	likes?: { by_me: boolean; to_me: boolean };
@@ -54,19 +54,19 @@ export type Profile = {
 };
 
 export const initProfile: Profile = {
-	last_seen_at: '',
+	last_seen_at: undefined,
 	id: -1,
-	fame: '',
-	username: '',
-	firstname: '',
+	fame: undefined,
+	username: undefined,
+	firstname: undefined,
 	email: undefined,
-	lastname: '',
-	birthdate: '',
+	lastname: undefined,
+	birthdate: undefined,
 	gender: 'MALE',
 	orientation: 'BISEXUAL',
-	biography: '',
+	biography: undefined,
 	picture: { id: -1, path: '' },
-	location: { distance: -1 },
+	location: undefined,
 	pictures: [],
 	tags: [],
 	likes: undefined,
@@ -109,25 +109,21 @@ export const initFilters: UserFilters = {
 export type CompleteProfile = {
 	firstname?: string;
 	lastname?: string;
-	password?: string;
-	password_confirm?: string;
-	email?: string;
-	birthdate: string | undefined;
-	gender: 'MALE' | 'FEMALE' | undefined;
-	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL' | undefined;
-	biography: string;
-	location: Position | { distance: number } | undefined;
+	birthdate?: string;
+	gender: 'MALE' | 'FEMALE';
+	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
+	biography?: string;
+	location?: Position | { distance: number };
 	tags: string[];
 };
 
 export const initCompleteProfile: CompleteProfile = {
 	firstname: undefined,
 	lastname: undefined,
-	email: undefined,
 	birthdate: undefined,
-	gender: undefined,
-	orientation: undefined,
-	biography: '',
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: undefined,
 	location: undefined,
 	tags: [],
 };

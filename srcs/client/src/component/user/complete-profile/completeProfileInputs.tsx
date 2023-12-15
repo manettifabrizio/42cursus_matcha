@@ -115,7 +115,11 @@ export default function CompleteProfileForm({
 							: '')
 					}
 				>
-					{submitting ? 'Submitting...' : 'Save'}
+					{submitting
+						? 'Submitting...'
+						: base_profile
+						? 'Save'
+						: 'Next'}
 				</button>
 			</div>
 		</>

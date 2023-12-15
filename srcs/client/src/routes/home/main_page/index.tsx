@@ -7,7 +7,6 @@ import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
 
 export default function MainPage() {
-	console.log('main_page');
 	const [searchValue, setSearchValue] = useState('');
 	const [filters, setFilters] = useState<UserFilters>(initFilters);
 	const [filter_str, setFilterStr] = useState('');
@@ -65,7 +64,7 @@ export default function MainPage() {
 				isFetching={isFetching}
 				isLoading={isLoading}
 				users={users.filter((u) =>
-					u.firstname.toLowerCase().includes(searchValue),
+					u.firstname?.toLowerCase().includes(searchValue),
 				)}
 				handleScroll={handleScroll}
 			/>
