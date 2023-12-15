@@ -33,18 +33,19 @@ export const initUser: User = {
 };
 
 export type Profile = {
-	last_seen_at: string;
+	last_seen_at?: string;
 	id: number;
-	fame: string;
-	username: string;
-	firstname: string;
-	lastname: string;
-	birthdate: string;
+	fame?: string;
+	username?: string;
+	firstname?: string;
+	lastname?: string;
+	email?: string;
+	birthdate?: string;
 	gender: 'MALE' | 'FEMALE';
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
-	biography: string;
-	picture: { id: number; path: string };
-	location: { distance: number };
+	biography?: string;
+	picture?: { id: number; path: string };
+	location?: { distance: number };
 	pictures: { id: number; path: string }[];
 	tags: { id: number; name: string }[];
 	likes?: { by_me: boolean; to_me: boolean };
@@ -53,18 +54,19 @@ export type Profile = {
 };
 
 export const initProfile: Profile = {
-	last_seen_at: '',
+	last_seen_at: undefined,
 	id: -1,
-	fame: '',
-	username: '',
-	firstname: '',
-	lastname: '',
-	birthdate: '',
+	fame: undefined,
+	username: undefined,
+	firstname: undefined,
+	email: undefined,
+	lastname: undefined,
+	birthdate: undefined,
 	gender: 'MALE',
 	orientation: 'BISEXUAL',
-	biography: '',
+	biography: undefined,
 	picture: { id: -1, path: '' },
-	location: { distance: -1 },
+	location: undefined,
 	pictures: [],
 	tags: [],
 	likes: undefined,
@@ -105,13 +107,57 @@ export const initFilters: UserFilters = {
 };
 
 export type CompleteProfile = {
-	birthday: string | undefined;
-	gender: 'MALE' | 'FEMALE' | undefined;
-	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL' | undefined;
-	biography: string;
-	location: Position | undefined;
+	firstname?: string;
+	lastname?: string;
+	birthdate?: string;
+	gender: 'MALE' | 'FEMALE';
+	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
+	biography?: string;
+	location?: Position | { distance: number };
 	tags: string[];
-	pictures: File[];
+};
+
+export const initCompleteProfile: CompleteProfile = {
+	firstname: undefined,
+	lastname: undefined,
+	birthdate: undefined,
+	gender: 'MALE',
+	orientation: 'BISEXUAL',
+	biography: undefined,
+	location: undefined,
+	tags: [],
+};
+
+export type AuthProfile = {
+	email?: string;
+	password?: string;
+	password_confirm?: string;
+};
+
+export const initAuthProfile: AuthProfile = {
+	email: undefined,
+	password: undefined,
+	password_confirm: undefined,
+};
+
+export type PicturesProfile = {
+	pictures: FileWithId[];
+	profile_picture?: FileWithId;
+};
+
+export const initPicturesProfile: PicturesProfile = {
+	pictures: [],
+	profile_picture: undefined,
+};
+
+export type PicturesProfileError = {
+	pictures?: string[];
+	profile_picture?: string[];
+};
+
+export const initPicturesProfileError: PicturesProfileError = {
+	pictures: [],
+	profile_picture: [],
 };
 
 export type CompleteProfileInputProps = {
@@ -119,12 +165,18 @@ export type CompleteProfileInputProps = {
 	errors?: string[];
 	setProfile: React.Dispatch<React.SetStateAction<CompleteProfile>>;
 	disabled: boolean;
+	profile: CompleteProfile;
 };
+
+export type FileWithId = { file: File; id?: number };
 
 /* ERRORS */
 
 export type CompleteProfileError = {
-	birthday?: string[];
+	id_picture?: string[];
+	firstname?: string[];
+	lastname?: string[];
+	birthdate?: string[];
 	gender?: string[];
 	orientation?: string[];
 	biography?: string[];
@@ -133,6 +185,25 @@ export type CompleteProfileError = {
 	pictures?: string[];
 };
 
-export type UserEditError = { birthday?: string[]; gender?: string[] };
+export const initCompleteProfileErrors: CompleteProfileError = {
+	birthdate: [],
+	gender: [],
+	pictures: [],
+	tags: [],
+};
+
+export type AuthProfileError = {
+	email?: string[];
+	password?: string[];
+	password_confirm?: string[];
+};
+
+export const initAuthProfileError: AuthProfileError = {
+	email: [],
+	password: [],
+	password_confirm: [],
+};
+
+export type UserEditError = { birthdate?: string[]; gender?: string[] };
 export type TagsError = { name: string[] };
 export type PictureError = { picture: string[] };

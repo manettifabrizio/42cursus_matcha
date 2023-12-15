@@ -26,8 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
 		store.dispatch(setUser(res));
         store.dispatch(startConnecting())
 
-		// Note: Doesn't work unless removed ProtectedLayout for the route (/auth/login)
-		return redirect(
+        return redirect(
 			new URL(request.url).searchParams.get('redirect') ?? `/`,
 		);
 	} catch (error: unknown) {

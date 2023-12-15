@@ -146,6 +146,7 @@
     ```
 
 -   PATCH `/auth/edit`
+
     ```ts
     Request:
     {
@@ -164,19 +165,17 @@
 -   EMIT `ping`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
+    Payload: {
+    	id_user: number;
     }
     ```
 
 -   ON `pong`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
-        online: boolean | Date;
+    Payload: {
+    	id_user: number;
+    	online: boolean | Date;
     }
     ```
 
@@ -219,6 +218,7 @@
         email_new?: string;
     	firstname: string;
     	lastname: string;
+        email: string;
     	birthdate: Date;
     	gender: 'MALE'|'FEMALE';
     	orientation: 'HETEROSEXUAL'|'HOMOSEXUAL'|'BISEXUAL';
@@ -263,6 +263,7 @@
 ### Activities
 
 -   GET `/user/activities`
+
     ```ts
     Request:
     	void
@@ -285,10 +286,9 @@
 -   ON `profile:view`
 
     ```ts
-    Payload:
-    {
-        id_user_from: number;
-        username: string;
+    Payload: {
+    	id_user_from: number;
+    	username: string;
     }
     ```
 
@@ -382,6 +382,7 @@ Response: {
     ```
 
 -   DELETE `/user/:user_id/like`
+
     ```ts
     Request:
     	void
@@ -510,68 +511,63 @@ Response: {
 -   EMIT `message:list`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
-        page: number;
+    Payload: {
+    	id_user: number;
+    	page: number;
     }
     ```
 
 -   ON `message:list`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
-        messages: {
-            id: number;
-            id_user_from: number;
-            id_user_to: number;
-            content: string;
-            created_at: Date;
-        }[];
+    Payload: {
+    	id_user: number;
+    	messages: {
+    		id: number;
+    		id_user_from: number;
+    		id_user_to: number;
+    		content: string;
+    		created_at: Date;
+    	}
+    	[];
     }
     ```
 
 -   ON `message:list:error`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
-        error: string;
+    Payload: {
+    	id_user: number;
+    	error: string;
     }
     ```
 
 -   EMIT `message:to`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
-        content: string;
+    Payload: {
+    	id_user: number;
+    	content: string;
     }
     ```
 
 -   ON `message:to:error`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
-        error: string;
+    Payload: {
+    	id_user: number;
+    	error: string;
     }
     ```
 
 -   ON `message:from`
 
     ```ts
-    Payload:
-    {
-        id: number;
-        id_user_from: number;
-        id_user_to: number;
-        content: string;
-        created_at: Date;
+    Payload: {
+    	id: number;
+    	id_user_from: number;
+    	id_user_to: number;
+    	content: string;
+    	created_at: Date;
     }
     ```

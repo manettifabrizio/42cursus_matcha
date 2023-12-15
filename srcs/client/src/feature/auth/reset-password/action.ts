@@ -1,47 +1,41 @@
 import type { ActionFunction } from 'react-router-dom';
-import type { ApiErrorResponse } from '@/core/api';
-import { redirect } from 'react-router-dom';
 import { store } from '@/core/store';
-import { isRTKQFetchBaseQueryError } from '@/tool/isRTKQError';
+import { manageRTKQErrorCause } from '@/tool/isRTKQError';
 import { authApi } from '../api.slice';
+import toast from 'react-hot-toast';
 
 // Type ------------------------------------------------------------------------
 export type ResetPasswordError = {
-    username?: string[];
+	username?: string[];
 };
 
 // Action ----------------------------------------------------------------------
 export const action: ActionFunction = async ({ request }) => {
-    const form = await request.formData();
+	const form = await request.formData();
 
-    const fields = {
-        username: form.get('username') as string,
-        email: form.get('email') as string
-    };
+	const fields = {
+		username: form.get('username') as string,
+		email: form.get('email') as string,
+	};
 
-    const req = store.dispatch(
-        authApi.endpoints.reset_password.initiate(fields)
-    );
+	const req = store.dispatch(
+		authApi.endpoints.resetPassword.initiate(fields),
+	);
 
-    try {
-        await req.unwrap();
+	const id = toast.loading('Searching your account...', {
+		style: { minWidth: '350px' },
+	});
 
-        // Note: Doesn't work unless removed ProtectedLayout for the route (/auth/login)
-        return redirect(
-            new URL(request.url).searchParams.get('redirect') ?? `/`
-        );
-    } catch (error: unknown) {
-        if (isRTKQFetchBaseQueryError(error)) {
-            const resetPasswordError =
-                error.data as ApiErrorResponse<ResetPasswordError>;
+	try {
+		await req.unwrap();
 
-            if ('cause' in resetPasswordError.error) {
-                return { password: [resetPasswordError.error.cause] };
-            }
+		toast.success(
+			`Account found. An email has been sent to ${fields.email}.`,
+			{ id },
+		);
 
-            return resetPasswordError.error;
-        }
-
-        return null; // Todo: Handle error ?
-    }
+        return null;
+	} catch (error: unknown) {
+		return manageRTKQErrorCause(error, id);
+	}
 };

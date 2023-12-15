@@ -20,29 +20,34 @@ type LoginRequest = {
 };
 type LoginResponse = Profile;
 
-type ConfirmRequest = {
+type UrlParams = {
 	id: string;
 	secret: string;
 };
-type ConfirmResponse = void;
+type ConfirmRequest = {};
+type ConfirmResponse = {};
 
 type ResetPasswordRequest = {
 	username: string;
 	email: string;
 };
-type ResetPasswordResponse = void;
+type ResetPasswordResponse = {};
 
-type EditPasswordRequest = {
+type EditProfileRequest = {
+	email?: string;
+	password?: string;
+	password_confirm?: string;
+};
+
+type EditProfileResponse = {
+	email: string;
+};
+
+type UpdatePasswordRequest = {
 	password: string;
 	password_confirm: string;
 };
-type EditPasswordResponse = void;
-
-type RefreshRequest = void;
-type RefreshResponse = void;
-
-type LogoutRequest = void;
-type LogoutResponse = void;
+type UpdatePasswordResponse = {};
 
 // Api -------------------------------------------------------------------------
 export const authApi = api.injectEndpoints({
@@ -61,14 +66,14 @@ export const authApi = api.injectEndpoints({
 				body: data,
 			}),
 		}),
-		confirm: builder.mutation<ConfirmResponse, ConfirmRequest>({
+		confirm: builder.mutation<ConfirmResponse, ConfirmRequest & UrlParams>({
 			query: (data) => ({
 				url: `auth/confirm?id=${data.id}&secret=${data.secret}`,
 				method: 'POST',
 				body: data,
 			}),
 		}),
-		reset_password: builder.mutation<
+		resetPassword: builder.mutation<
 			ResetPasswordResponse,
 			ResetPasswordRequest
 		>({
@@ -78,23 +83,30 @@ export const authApi = api.injectEndpoints({
 				body: data,
 			}),
 		}),
-		edit_password: builder.mutation<
-			EditPasswordResponse,
-			EditPasswordRequest
+		editAuth: builder.mutation<EditProfileResponse, EditProfileRequest>({
+			query: (data) => ({
+				url: `auth/edit`,
+				method: 'PATCH',
+				body: data,
+			}),
+		}),
+		updatePassword: builder.mutation<
+			UpdatePasswordResponse,
+			UpdatePasswordRequest & UrlParams
 		>({
 			query: (data) => ({
-				url: `auth/edit-password`,
+				url: `auth/update-password?id=${data.id}&secret=${data.secret}`,
 				method: 'POST',
 				body: data,
 			}),
 		}),
-		refresh: builder.mutation<RefreshResponse, RefreshRequest>({
+		refresh: builder.mutation({
 			query: () => ({
 				url: `auth/refresh`,
 				method: 'POST',
 			}),
 		}),
-		logout: builder.mutation<LogoutResponse, LogoutRequest>({
+		logout: builder.mutation({
 			query: () => ({
 				url: `auth/logout`,
 				method: 'POST',
@@ -109,4 +121,5 @@ export const {
 	useLoginMutation,
 	useRefreshMutation,
 	useLogoutMutation,
+	useEditAuthMutation,
 } = authApi;

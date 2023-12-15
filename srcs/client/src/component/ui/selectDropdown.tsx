@@ -16,6 +16,7 @@ type SelectDropdownProps = {
 	multi_select: boolean;
 	id: string;
 	setValue: React.Dispatch<React.SetStateAction<Option[]>>;
+	value?: Option[];
 };
 
 export default function SelectDropdown({
@@ -28,6 +29,7 @@ export default function SelectDropdown({
 	multi_select,
 	id,
 	setValue,
+	value,
 }: SelectDropdownProps) {
 	const [length, setLength] = useState(0);
 
@@ -42,19 +44,21 @@ export default function SelectDropdown({
 		} else setValue([]);
 	};
 
+	const px = `px-${size === 'md' ? '2' : '3'}`;
+
 	return (
-		<div className={'flex flex-col mb-2 w-full text-' + size}>
+		<div className={'relative flex flex-col mb-2 w-full text-' + size}>
 			<Select
 				closeMenuOnSelect={!multi_select || length === 3}
 				classNames={{
-					valueContainer: () => 'gap-1',
+					valueContainer: () => 'gap-1 ' + px,
+					indicatorsContainer: () => 'gap-1 ' + px,
 					multiValue: () =>
-						'bg-gray-700 rounded-sm px-1 hover:bg-gray-500',
+						'border rounded-xl px-2 hover:bg-gray-800',
 					option: () =>
-						'hover:bg-gray-700 px-1 rounded-sm hover:cursor-pointer',
-					menu: () => {
-						return 'flex border-2 rounded-md p-2 border-s-white bg-black hover:cursor-pointer mb-3 max-h-36 overflow-y-auto';
-					},
+						'hover:bg-gray-800 px-1 rounded-sm hover:cursor-pointer',
+					menu: () =>
+						'flex border-2 rounded-md p-2 border-s-white bg-black hover:cursor-pointer mb-3 max-h-36 ',
 					menuList: () => 'w-full',
 				}}
 				isSearchable={isSearchable ?? false}
@@ -65,13 +69,12 @@ export default function SelectDropdown({
 				required
 				isDisabled={disabled}
 				className={
-					`w-full border-2 rounded-md bg-inherit px-${
-						size === 'md' ? '1' : '2'
-					} py-1 border-s-` +
+					`w-full border-2 rounded-md bg-inherit py-1 border-s-` +
 					(errors && errors.length > 0 ? 'red-500' : 'white')
 				}
 				isMulti={multi_select}
 				onChange={handleChange}
+				value={value}
 			/>
 			{errors && (
 				<ul className="pt-1">

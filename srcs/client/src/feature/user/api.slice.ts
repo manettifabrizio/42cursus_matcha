@@ -76,6 +76,7 @@ export const userApi = api.injectEndpoints({
 				method: 'PATCH',
 				body: data,
 			}),
+			invalidatesTags: ['User'],
 		}),
 		setUserTag: builder.mutation<UserTagResponse, UserTagRequest>({
 			query: (data) => ({
@@ -84,6 +85,12 @@ export const userApi = api.injectEndpoints({
 				body: data,
 			}),
 			invalidatesTags: ['User'],
+		}),
+		deleteUserTag: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `/user/tags/${data.id}`,
+				method: 'DELETE',
+			}),
 		}),
 		uploadUserPicture: builder.mutation<
 			UploadUserPictureResponse,
@@ -95,6 +102,13 @@ export const userApi = api.injectEndpoints({
 				body: data,
 			}),
 			invalidatesTags: ['User'],
+		}),
+		deleteUserPicture: builder.mutation<{}, { id: number }>({
+			query: (data) => ({
+				url: `user/pictures/${data.id}`,
+				method: 'DELETE',
+			}),
+            invalidatesTags: ['User'],
 		}),
 		getLikes: builder.query<GetLikesResponse, GetLikesRequest>({
 			query: () => ({
@@ -148,7 +162,7 @@ export const userApi = api.injectEndpoints({
 	}),
 });
 
-export const { uploadUserPicture, userEdit, setUserTag } = userApi.endpoints;
+export const { uploadUserPicture, setUserTag } = userApi.endpoints;
 
 // Hook ------------------------------------------------------------------------
 export const {

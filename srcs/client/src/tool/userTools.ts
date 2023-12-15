@@ -1,7 +1,7 @@
 import { store } from '@/core/store';
 import { userApi } from '@/feature/user/api.slice';
 import { setUser } from '@/feature/user/store.slice';
-import { UserFilters, initFilters } from '@/feature/user/types';
+import { Profile, UserFilters, initFilters } from '@/feature/user/types';
 
 export async function setCurrentUser() {
 	try {
@@ -15,12 +15,19 @@ export async function setCurrentUser() {
 	}
 }
 
-export function isProfileCompleted(): boolean {
-	const userState = store.getState().user;
+export function isProfileCompleted(profile: Profile): number | undefined {
+	if (
+		profile.birthdate == undefined ||
+		profile.biography == undefined ||
+		profile.gender == undefined ||
+		profile.orientation == undefined ||
+		profile.tags.length === 0
+	)
+		return 1;
 
-	return (
-		Object.values(userState).filter((value) => value === null).length === 0
-	);
+	if (profile.pictures.length < 2 || profile.picture == null) return 2;
+
+	return undefined;
 }
 
 export function getSearchStr(filters: UserFilters) {
@@ -61,6 +68,14 @@ export function formatDateTime(inputDate: Date) {
 	};
 
 	return date.toLocaleString('en-GB', options);
+}
+
+export function formatDateTimeShort(inputDate: string | undefined) {
+	const date = inputDate ? new Date(inputDate) : new Date();
+
+	return `${date.getFullYear()}-${(date.getMonth() + 1)
+		.toString()
+		.padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 }
 
 export function notEmpty<T>(value: T | null | undefined): value is T {
