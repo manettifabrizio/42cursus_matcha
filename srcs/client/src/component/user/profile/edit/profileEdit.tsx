@@ -13,8 +13,6 @@ import {
 	hasTagsChanged,
 	sendTags,
 } from '@/feature/user/utils';
-import FormContainer from '@/component/layout/form/formContainer';
-import MatchaLogo from '@/component/ui/matchaLogo';
 import { Form } from 'react-router-dom';
 import { setCurrentUser } from '@/tool/userTools';
 
@@ -52,25 +50,20 @@ export default function ProfileEdit({ base_profile }: ProfileEditProps) {
 	};
 
 	return (
-		<div className="flex justify-between flex-col items-center w-full h-full">
-			<MatchaLogo to="/home" />
-			<FormContainer size="sm">
-				<>
-					<div className="text-3xl text-center w-full font-bold mb-3">
-						Edit Profile
-					</div>
-					<Form onSubmit={submit} className="w-full">
-						<CompleteProfileForm
-							profile={profile}
-							base_profile={base_profile}
-							setProfile={setProfile}
-							submitting={submitting}
-							errors={errors}
-							id="profile-edit"
-						/>
-					</Form>
-				</>
-			</FormContainer>
-		</div>
+		<>
+			<div className="text-3xl text-center w-full font-bold mb-3">
+				Edit Profile
+			</div>
+			<Form onSubmit={submit} className="w-full">
+				<CompleteProfileForm
+					profile={profile}
+					base_profile={base_profile}
+					setProfile={setProfile}
+					submitting={submitting}
+					errors={errors}
+					id="profile-edit"
+				/>
+			</Form>
+		</>
 	);
 }

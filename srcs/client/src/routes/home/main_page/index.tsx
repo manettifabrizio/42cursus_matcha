@@ -1,7 +1,6 @@
 import { Profile, UserFilters, initFilters } from '@/feature/user/types';
 import AvailableUsers from '@/component/home/main_page/availableUsers';
 import { useEffect, useState } from 'react';
-import MatchaLogo from '@/component/ui/matchaLogo';
 import SearchAndFilter from '@/component/home/main_page/users_filter/searchAndFIlter';
 import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
@@ -52,8 +51,7 @@ export default function MainPage() {
 	};
 
 	return (
-		<div className="flex justify-between flex-col w-full h-full">
-			<MatchaLogo to="/home" />
+		<>
 			<SearchAndFilter
 				searchValue={searchValue}
 				setSearchValue={setSearchValue}
@@ -68,6 +66,6 @@ export default function MainPage() {
 				)}
 				handleScroll={handleScroll}
 			/>
-		</div>
+		</>
 	);
 }

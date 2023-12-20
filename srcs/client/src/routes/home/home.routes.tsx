@@ -9,7 +9,7 @@ export const homeRoutes: RouteObject[] = [
 		element: <ProtectedLayout accepted="AUTHENTICATED" />,
 		children: [
 			{
-				element: <SidebarMainContent />,
+				element: <SidebarMainContent form={false} />,
 				children: [
 					{
 						path: 'home',
