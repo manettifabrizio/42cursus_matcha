@@ -135,7 +135,6 @@ export async function uploadPicture(
 ): Promise<number | undefined> {
 	return await uploadImage(picture)
 		.then(async (res) => {
-			console.log(res);
 			return res.id;
 		})
 		.catch((error) => {

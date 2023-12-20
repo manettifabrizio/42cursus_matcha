@@ -2,7 +2,7 @@ import type { StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { clearAuth } from '@/feature/auth/store.slice';
-import { CompleteProfile, Profile, initProfile } from './types';
+import { Profile, initProfile } from './types';
 import { formatDateTimeShort } from '@/tool/userTools';
 
 // State -----------------------------------------------------------------------
@@ -32,18 +32,6 @@ const slice = createSlice({
 			state.blocks = payload.blocks;
 			state.reports = payload.reports;
 		},
-		setCompleteUser: (
-			state,
-			{ payload }: PayloadAction<CompleteProfile>,
-		) => {
-			state.firstname = payload.firstname;
-			state.lastname = payload.lastname;
-			state.birthdate = payload.birthdate;
-			state.gender = payload.gender;
-			state.orientation = payload.orientation;
-			state.biography = payload.biography;
-			state.tags = payload.tags.map((tag) => ({ name: tag, id: -1 }));
-		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(clearAuth, (state) => {
@@ -53,7 +41,7 @@ const slice = createSlice({
 });
 
 // Action ----------------------------------------------------------------------
-export const { setUser, setCompleteUser } = slice.actions;
+export const { setUser } = slice.actions;
 
 // Selector --------------------------------------------------------------------
 export const selectUser = (state: StoreState) => state.user;

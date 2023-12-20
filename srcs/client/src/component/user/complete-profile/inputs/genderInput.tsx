@@ -10,7 +10,6 @@ const genderOptions: Option[] = [
 export default function GenderInput({
 	disabled,
 	id,
-	errors,
 	setProfile,
 	profile,
 }: CompleteProfileInputProps) {
@@ -22,7 +21,7 @@ export default function GenderInput({
 
 	useEffect(() => {
 		if (value && value.length === 1) {
-			const gender = value[0].value as 'MALE' | 'FEMALE' | undefined;
+			const gender = value[0].value as 'MALE' | 'FEMALE';
 			setProfile((current) => ({ ...current, gender }));
 		}
 	}, [value]);
@@ -35,7 +34,6 @@ export default function GenderInput({
 					disabled={disabled}
 					name="gender"
 					options={genderOptions}
-					errors={errors}
 					multi_select={false}
 					id={id}
 					setValue={setValue}

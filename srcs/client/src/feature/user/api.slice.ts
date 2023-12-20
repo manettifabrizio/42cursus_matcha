@@ -108,7 +108,7 @@ export const userApi = api.injectEndpoints({
 				url: `user/pictures/${data.id}`,
 				method: 'DELETE',
 			}),
-            invalidatesTags: ['User'],
+			invalidatesTags: ['User'],
 		}),
 		getLikes: builder.query<GetLikesResponse, GetLikesRequest>({
 			query: () => ({

@@ -49,6 +49,7 @@ export default function CompleteProfileForm({
 									firstname: e.target.value,
 								})),
 						}}
+						errors_props={errors.firstname}
 					/>
 					<LabelInput
 						title={true}
@@ -63,6 +64,7 @@ export default function CompleteProfileForm({
 									lastname: e.target.value,
 								})),
 						}}
+						errors_props={errors.lastname}
 					/>
 				</>
 			)}
@@ -80,14 +82,12 @@ export default function CompleteProfileForm({
 				disabled={submitting}
 				setProfile={setProfile}
 				id={id}
-				errors={errors?.gender}
 				profile={profile}
 			/>
 			<OrientationInput
 				disabled={submitting}
 				setProfile={setProfile}
 				id={id}
-				errors={errors?.orientation}
 				profile={profile}
 			/>
 			<TagsInput
