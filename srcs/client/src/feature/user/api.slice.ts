@@ -53,6 +53,10 @@ type GetLikesResponse = {
 	};
 };
 
+type GetBlockedUsersResponse = {
+	blocks: { by_me: { id_user_to: number; created_at: Date }[] };
+};
+
 // Api -------------------------------------------------------------------------
 export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
@@ -131,6 +135,13 @@ export const userApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['User', 'Matches'],
 		}),
+		blockedUsers: builder.query<GetBlockedUsersResponse, void>({
+			query: () => ({
+				url: `user/blocks`,
+				method: 'GET',
+			}),
+            providesTags: ['User', 'Matches']
+		}),
 		blockUser: builder.mutation<{}, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/block`,
@@ -175,6 +186,7 @@ export const {
 	useGetLikesQuery,
 	useLikeUserMutation,
 	useUnlikeUserMutation,
+	useBlockedUsersQuery,
 	useBlockUserMutation,
 	useUnblockUserMutation,
 	useReportUserMutation,

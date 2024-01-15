@@ -158,7 +158,12 @@ const slice = createSlice({
 			);
 
 			if (matched_user) {
-				matchToast(matched_user.firstname, matched_user.id);
+				if (matched_user.firstname)
+					matchToast(matched_user.firstname, matched_user.id);
+				else {
+					matchToast('unknown', matched_user.id);
+					console.error('Match user firstname is undefined');
+				}
 				return {
 					...state,
 					matches: [...state.matches, matched_user],

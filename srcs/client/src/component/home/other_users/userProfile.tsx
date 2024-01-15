@@ -39,7 +39,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 			<div className={`absolute top-0 left-0 `}>
 				<Link
 					to="/home"
-					className="w-full justify-start flex flex-row items-center m-3 text-xl"
+					className="w-full justify-start flex flex-row items-center m-2 text-xl"
 				>
 					<FaChevronLeft />
 				</Link>

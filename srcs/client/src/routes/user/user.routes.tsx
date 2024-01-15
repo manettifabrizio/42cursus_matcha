@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 import ProtectedLayout from '@/component/layout/protected';
 import SidebarMainContent from '../home';
 
@@ -12,6 +12,10 @@ export const userRoutes: RouteObject[] = [
 				element: <SidebarMainContent />,
 				children: [
 					{
+						index: true,
+						element: <Navigate to="edit" replace />,
+					},
+					{
 						path: 'edit',
 						lazy: () => import('./profile/edit'),
 					},
@@ -23,9 +27,23 @@ export const userRoutes: RouteObject[] = [
 						path: 'auth',
 						lazy: () => import('./profile/auth'),
 					},
+				],
+			},
+			{
+				path: 'user/profile',
+				element: <SidebarMainContent form={false} />,
+				children: [
 					{
 						path: 'likes',
+						lazy: () => import('./profile/likes'),
+					},
+					{
+						path: 'views',
 						lazy: () => import('./profile/views'),
+					},
+					{
+						path: 'blocked',
+						lazy: () => import('./profile/blocked'),
 					},
 				],
 			},

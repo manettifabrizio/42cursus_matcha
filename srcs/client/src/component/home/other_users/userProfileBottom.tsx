@@ -34,11 +34,13 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	const distance = Math.floor(user.location.distance);
+	const distance = user.location
+		? Math.floor(user.location?.distance)
+		: undefined;
 	const LikeUser = async () => {
 		await likeUser({ id: user.id });
 		store.dispatch(addLikedUser({ liked_user: user }));
-		if (user.likes?.to_me) matchToast(user.firstname, user.id);
+		if (user.likes?.to_me) matchToast(user.firstname ?? '', user.id);
 	};
 
 	const UnlikeUser = async () => {
@@ -95,14 +97,20 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 
 	return (
 		<>
-			<div className="my-3 text-xl">{distance} km away</div>
+			{distance && <div className="my-3 text-xl">{distance} km away</div>}
 			<div className="flex flex-row w-full justify-center mt-2">
 				{isFetching ? (
 					<LoadingSpinner size="sm" />
 				) : (
 					<>
 						<button
-							className="flex flex-row justify-center items-center px-3 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-400 w-full me-4 hover:from-red-600/80 hover:to-amber-400/80"
+							disabled={user.blocks?.by_me}
+							className={
+								'flex flex-row justify-center items-center px-3 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-400 w-full me-4 ' +
+								(!user.blocks?.by_me
+									? 'hover:from-red-600/80 hover:to-amber-400/80'
+									: 'opacity-50')
+							}
 							onClick={async () => {
 								!user.likes?.by_me
 									? await LikeUser()
