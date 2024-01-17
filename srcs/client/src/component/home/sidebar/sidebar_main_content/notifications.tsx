@@ -16,7 +16,7 @@ export default function Notifications() {
 
 	useEffect(() => {
 		dispatch(readNotifications());
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<>
@@ -25,7 +25,8 @@ export default function Notifications() {
 				<div
 					className={
 						'flex flex-col h-full no-scrollbar' +
-						(notifications.length === 0 && ' justify-center items-center')
+						(notifications.length === 0 &&
+							' justify-center items-center')
 					}
 				>
 					{notifications.length === 0 ? (

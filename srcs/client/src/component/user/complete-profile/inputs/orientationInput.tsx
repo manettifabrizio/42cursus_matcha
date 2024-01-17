@@ -28,7 +28,7 @@ export default function OrientationInput({
 				| 'BISEXUAL';
 			setProfile((current) => ({ ...current, orientation }));
 		}
-	}, [value]);
+	}, [value, setProfile]);
 
 	return (
 		<div className="mb-5">

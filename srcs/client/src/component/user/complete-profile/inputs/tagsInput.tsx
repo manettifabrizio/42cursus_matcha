@@ -22,7 +22,7 @@ export default function TagsInput({
 				...current,
 				tags: value.map((v) => v.value),
 			}));
-	}, [value]);
+	}, [value, setProfile]);
 	return (
 		<div className="mb-5">
 			<h5 className="mb-1">

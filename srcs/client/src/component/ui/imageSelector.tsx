@@ -57,7 +57,7 @@ export default function ImageSelector({
 
 		for (const file of files) {
 			if (checkFile(file)) {
-				const fileName = file.name.replace(/\-/g, '');
+				const fileName = file.name.replace(/-/g, '');
 				if (
 					pictures.findIndex((p) => p.file.name === fileName) === -1
 				) {

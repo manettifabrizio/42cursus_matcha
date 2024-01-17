@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import LoginForm from '@/component/auth/loginForm';
 import { Link } from 'react-router-dom';
 import FormContainer from '@/component/layout/form/formContainer';
@@ -11,7 +12,7 @@ export function Component() {
 	return (
 		<>
 			<div className="flex justify-between flex-col items-center w-full h-full">
-				<MatchaLogo/>
+				<MatchaLogo />
 				<FormContainer>
 					<div className="text-3xl">Welcome back!</div>
 					<LoginForm />

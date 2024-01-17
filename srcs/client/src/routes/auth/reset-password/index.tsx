@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Form, Link, useActionData } from 'react-router-dom';
 import LabelInput from '@/component/ui/labelInput';
 import { SlArrowLeft } from 'react-icons/sl';

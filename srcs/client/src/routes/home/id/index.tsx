@@ -7,13 +7,13 @@ import toast from 'react-hot-toast';
 export function Component() {
 	const { id } = useParams<{ id: string }>();
 
-	if (id) {
-		const {
-			data = undefined,
-			isFetching,
-			isLoading,
-		} = useGetProfileQuery({ id: parseInt(id) });
+	const {
+		data = undefined,
+		isFetching,
+		isLoading,
+	} = useGetProfileQuery({ id: id ? parseInt(id) : undefined });
 
+	if (id) {
 		if (isLoading) {
 			return (
 				<div className="w-full h-full flex flex-col justify-center items-center">

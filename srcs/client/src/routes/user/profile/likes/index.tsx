@@ -1,14 +1,10 @@
 import AvailableUsers from '@/component/home/main_page/availableUsers';
 import { useGetUsersQuery } from '@/feature/user/api.slice';
-import { Profile, UserFilters, initFilters } from '@/feature/user/types';
-import { getSearchStr } from '@/tool/userTools';
+import { Profile } from '@/feature/user/types';
 import { useEffect, useState } from 'react';
 
 export function Component() {
 	const [users, setUsers] = useState<Profile[]>([]);
-	const [filters, setFilters] = useState<UserFilters>(initFilters);
-	const [filter_str, setFilterStr] = useState('');
-	const [page, setPage] = useState(1);
 	const {
 		data = { users: [] },
 		isFetching,
@@ -23,18 +19,7 @@ export function Component() {
 			);
 			setUsers(users_no_duplicates);
 		}
-	}, [data.users]);
-
-	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-		// Infinite scroll works only if smart recommendation is off
-		const target = e.target as HTMLDivElement;
-		const bottom =
-			target.scrollHeight - target.scrollTop < target.clientHeight + 50;
-		if (bottom && !isFetching && data.users.length > 0) {
-			setPage((p) => p + 1);
-			setFilterStr(getSearchStr({ ...filters, page }));
-		}
-	};
+	}, [data.users, isFetching, isLoading, users]);
 
 	return (
 		<>
@@ -45,7 +30,6 @@ export function Component() {
 				isFetching={isFetching}
 				isLoading={isLoading}
 				users={users}
-				handleScroll={handleScroll}
 			/>
 		</>
 	);

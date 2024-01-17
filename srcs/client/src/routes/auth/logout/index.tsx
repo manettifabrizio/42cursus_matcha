@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import FormContainer from '@/component/layout/form/formContainer';
 
 // Loader ----------------------------------------------------------------------

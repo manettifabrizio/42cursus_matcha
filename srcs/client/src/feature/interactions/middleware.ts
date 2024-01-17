@@ -17,11 +17,11 @@ import { cookie } from '@/tool/cookie';
 import { Middleware } from 'redux';
 import { io, Socket } from 'socket.io-client';
 
-function asyncEmit<T>(
+function asyncEmit<T, U>(
 	socket: Socket,
 	emitEventName: string,
 	onEventName: string,
-	data: any,
+	data: U,
 ): Promise<T> {
 	return new Promise(function (resolve, reject) {
 		socket.emit(emitEventName, data);
@@ -87,10 +87,15 @@ const chatMiddleware: Middleware = (store) => {
 			socket.emit('message:to', action.payload.content);
 
 		if (isUserOnline.match(action) && isConnectionEstablished) {
-			const payload = await asyncEmit<{
-				id_user: number;
-				online: boolean;
-			}>(socket, 'ping', 'pong', action.payload);
+			const payload = await asyncEmit<
+				{
+					id_user: number;
+					online: boolean;
+				},
+				{
+					id_user: number;
+				}
+			>(socket, 'ping', 'pong', action.payload);
 			store.dispatch(setUserOnline(payload));
 		}
 

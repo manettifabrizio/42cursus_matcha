@@ -44,6 +44,14 @@ export function Component() {
 		initCompleteProfileErrors,
 	);
 
+	useEffect(() => {
+		if (data) {
+			if (!isProfileCompleted(data)) {
+				navigate('/home');
+			}
+		}
+	}, [data, navigate]);
+
 	const submitCompleteProfile = async (
 		e: React.FormEvent<HTMLFormElement>,
 	) => {
@@ -80,14 +88,6 @@ export function Component() {
 		toast.error(`Error: User not found`);
 		return <Navigate to="/" />;
 	}
-
-	useEffect(() => {
-		if (data) {
-			if (!isProfileCompleted(data)) {
-				navigate('/home');
-			}
-		}
-	}, []);
 
 	return (
 		<div className="flex justify-between flex-col items-center w-full h-full">

@@ -3,15 +3,12 @@ import {
 	useBlockedUsersQuery,
 	useLazyGetProfileQuery,
 } from '@/feature/user/api.slice';
-import { Profile, UserFilters, initFilters } from '@/feature/user/types';
-import { getSearchStr, notEmpty } from '@/tool/userTools';
+import { Profile } from '@/feature/user/types';
+import { notEmpty } from '@/tool/userTools';
 import { useEffect, useState } from 'react';
 
 export function Component() {
 	const [users, setUsers] = useState<Profile[]>([]);
-	const [filters, setFilters] = useState<UserFilters>(initFilters);
-	const [filter_str, setFilterStr] = useState('');
-	const [page, setPage] = useState(1);
 	const {
 		data = { blocks: { by_me: [] } },
 		isLoading: isLoadingBlocks,
@@ -47,20 +44,9 @@ export function Component() {
 				setUsers(liked_users);
 			});
 		}
-	}, [data]);
+	}, [data, getProfile, isLoadingBlocks, isFetchingBlocks]);
 
-	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-		// Infinite scroll works only if smart recommendation is off
-		const target = e.target as HTMLDivElement;
-		const bottom =
-			target.scrollHeight - target.scrollTop < target.clientHeight + 50;
-		if (bottom && !isFetchingProfiles && data.blocks.by_me.length > 0) {
-			setPage((p) => p + 1);
-			setFilterStr(getSearchStr({ ...filters, page }));
-		}
-	};
-
-    console.log('blocked', data.blocks);
+	console.log('blocked', data.blocks);
 
 	return (
 		<>
@@ -71,7 +57,6 @@ export function Component() {
 				isFetching={isFetchingProfiles || isFetchingBlocks}
 				isLoading={isLoadingProfiles || isLoadingBlocks}
 				users={users}
-				handleScroll={handleScroll}
 			/>
 		</>
 	);

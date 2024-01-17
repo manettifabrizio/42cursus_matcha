@@ -50,7 +50,7 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 			fame_min: fame.min,
 			fame_max: fame.max,
 		}));
-	}, [age, distance, tags, fame]);
+	}, [age, distance, tags, fame, setFilters]);
 
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
