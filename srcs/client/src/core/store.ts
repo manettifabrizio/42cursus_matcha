@@ -3,8 +3,8 @@ import { api } from '@/core/api';
 import authReducers from '@/feature/auth/store.slice';
 import userReducers from '@/feature/user/store.slice';
 import securityReducers from '@/feature/security/store.slice';
-import chatReducers from '@/feature/chat/store.slice';
-import chatMiddleware from '@/feature/chat/middleware';
+import interactionsReducers from '@/feature/interactions/store.slice';
+import chatMiddleware from '@/feature/interactions/middleware';
 
 // Store -----------------------------------------------------------------------
 export const store = configureStore({
@@ -13,7 +13,7 @@ export const store = configureStore({
 		auth: authReducers,
 		user: userReducers,
 		security: securityReducers,
-		chat: chatReducers,
+		interactions: interactionsReducers,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat([api.middleware, chatMiddleware]),

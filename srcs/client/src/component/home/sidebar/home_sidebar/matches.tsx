@@ -1,6 +1,6 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { StoreState } from '@/core/store';
-import { setLikedUsers, setMatches } from '@/feature/chat/store.slice';
+import { setLikedUsers, setMatches } from '@/feature/interactions/store.slice';
 import {
 	useGetLikesQuery,
 	useLazyGetProfileQuery,
@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function MatchesList() {
-	const matches = useSelector((state: StoreState) => state.chat.matches);
+	const matches = useSelector(
+		(state: StoreState) => state.interactions.matches,
+	);
 	const dispatch = useDispatch();
 	const {
 		data = { likes: { by_me: [], to_me: [] } },

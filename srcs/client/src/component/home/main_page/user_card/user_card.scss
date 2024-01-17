@@ -40,7 +40,7 @@
 	background: #000;
 	background-clip: padding-box; /* !important */
 	border: solid $border white; /* !important */
-	border-radius: 0.75em;
+	border-radius: 100%;
 
 	&:before {
 		content: '';

@@ -13,9 +13,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Profile } from '@/feature/user/types';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import toast from 'react-hot-toast';
-import { store } from '@/core/store';
-import { addLikedUser, rmLikedUser } from '@/feature/chat/store.slice';
+import { StoreState, store } from '@/core/store';
+import {
+	addLikedUser,
+	addNotification,
+	rmLikedUser,
+} from '@/feature/interactions/store.slice';
 import { matchToast } from '@/component/ui/customToasts';
+import { createNotification } from '@/feature/interactions/notificationsContent';
+import { useDispatch, useSelector } from 'react-redux';
 
 type UserActionsProps = {
 	user: Profile;
@@ -33,14 +39,32 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 	const [show, setShow] = useState(false);
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	const interactionsState = useSelector(
+		(state: StoreState) => state.interactions,
+	);
+	const dispatch = useDispatch();
 
 	const distance = user.location
 		? Math.floor(user.location?.distance)
 		: undefined;
 	const LikeUser = async () => {
 		await likeUser({ id: user.id });
-		store.dispatch(addLikedUser({ liked_user: user }));
-		if (user.likes?.to_me) matchToast(user.firstname ?? '', user.id);
+		dispatch(addLikedUser({ liked_user: user }));
+		if (user.likes?.to_me) {
+			matchToast(user.firstname ?? '', user.id);
+
+			dispatch(
+				addNotification(
+					createNotification(
+						interactionsState.notifications.length,
+						'match',
+						user.firstname ?? '',
+						user.id,
+						interactionsState.notifications_opened,
+					),
+				),
+			);
+		}
 	};
 
 	const UnlikeUser = async () => {

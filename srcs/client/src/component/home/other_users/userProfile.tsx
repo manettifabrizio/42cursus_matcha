@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom';
 import UserInfo from './userProfileTop';
 import UserActions from './userProfileBottom';
 import { useStoreDispatch } from '@/hook/useStore';
-import { isUserOnline, resetIsUserOnline } from '@/feature/chat/store.slice';
+import {
+	isUserOnline,
+	resetIsUserOnline,
+} from '@/feature/interactions/store.slice';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import UserBioDistance from './userProfileBio';
@@ -17,7 +20,9 @@ type UserProfileProps = {
 
 export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	const dispatch = useStoreDispatch();
-	const status = useSelector((state: StoreState) => state.chat.user_status);
+	const status = useSelector(
+		(state: StoreState) => state.interactions.user_status,
+	);
 
 	const checkUserStatus = async () => {
 		dispatch(isUserOnline({ id_user: user.id }));
@@ -74,7 +79,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 						</div>
 					)}
 					<UserInfo user={user} status={status} />
-                    <UserBioDistance user={user} />
+					<UserBioDistance user={user} />
 					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>

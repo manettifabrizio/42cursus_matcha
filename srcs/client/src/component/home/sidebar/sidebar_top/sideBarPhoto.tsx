@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 type SideBarPhotoProps = {
 	url: 'home' | 'user';
 	user: Profile;
+	show_notifications: boolean;
 };
 
 export default function SideBarPhoto({ url, user }: SideBarPhotoProps) {
+	const center = !(url === 'user');
+
 	return (
 		<>
 			{url === 'user' && (
@@ -21,17 +24,17 @@ export default function SideBarPhoto({ url, user }: SideBarPhotoProps) {
 				to="/user/profile/edit"
 				className={
 					'flex items-center transition-all p-1 rounded-xl ' +
-					(url === 'home' ? '' : 'justify-center')
+					(center ? '' : 'justify-center')
 				}
 			>
 				<img
 					src={`${location.origin}/api/pictures/${user.picture?.path}`}
 					alt="Profile"
 					className={`rounded-full inset-0 object-cover ${
-						url === 'home' ? 'h-12' : 'h-16'
-					} ${url === 'home' ? 'w-12' : 'w-16'}`}
+						center ? 'h-12' : 'h-16'
+					} ${center ? 'w-12' : 'w-16'}`}
 				/>
-				{url === 'home' && (
+				{center && (
 					<div>
 						<p className="font-bold ms-2">{user.firstname}</p>
 					</div>

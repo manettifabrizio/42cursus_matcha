@@ -68,14 +68,12 @@ export default function PicturesEdit({
 					res_pictures.push(res.value!);
 			});
 		} finally {
-			console.log('faffa');
 			setPictures(res_pictures);
 			setLoading(false);
 		}
 	};
 
 	useEffect(() => {
-		console.log('profile', profile);
 		if (profile) {
 			getPictures(profile);
 		}

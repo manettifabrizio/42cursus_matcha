@@ -10,8 +10,8 @@ import {
 	setUserOnline,
 	startConnecting,
 	startDisconnecting,
-} from '@/feature/chat/store.slice';
-import { Message } from '@/feature/chat/types';
+} from '@/feature/interactions/store.slice';
+import { Message } from '@/feature/interactions/types';
 import { cookie } from '@/tool/cookie';
 import { Middleware } from 'redux';
 import { io, Socket } from 'socket.io-client';
@@ -32,12 +32,14 @@ function asyncEmit<T>(
 	});
 }
 
+type FromPayload = { id_user_from: number; username: string };
+
 const chatMiddleware: Middleware = (store) => {
 	let socket: Socket;
 
 	return (next) => async (action) => {
 		const isConnectionEstablished =
-			socket && store.getState().chat.isConnected;
+			socket && store.getState().interactions.isConnected;
 
 		if (startConnecting.match(action)) {
 			socket = io('https://localhost', {
@@ -51,8 +53,8 @@ const chatMiddleware: Middleware = (store) => {
 				store.dispatch(connectionEstablished());
 			});
 
-			socket.on('profile:view', () => {
-				store.dispatch(profileViewed({ id_user_from: 1 }));
+			socket.on('profile:view', (payload: FromPayload) => {
+				store.dispatch(profileViewed(payload));
 			});
 
 			socket.on('message:list', (messages: Message[]) => {
@@ -71,11 +73,11 @@ const chatMiddleware: Middleware = (store) => {
 				console.error(`message:error: ${err}`);
 			});
 
-			socket.on('like:from', (payload: { id_user_from: number }) => {
+			socket.on('like:from', (payload: FromPayload) => {
 				store.dispatch(receiveLike(payload));
 			});
 
-			socket.on('unlike:from', (payload: { id_user_from: number }) => {
+			socket.on('unlike:from', (payload: FromPayload) => {
 				store.dispatch(receiveUnlike(payload));
 			});
 		}
