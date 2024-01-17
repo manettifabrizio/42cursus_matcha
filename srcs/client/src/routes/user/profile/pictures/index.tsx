@@ -1,30 +1,32 @@
-import FormContainer from '@/component/layout/form/formContainer';
-import MatchaLogo from '@/component/ui/matchaLogo';
+import LoadingSpinner from '@/component/ui/loadingSpinner';
 import PicturesEdit from '@/component/user/profile/pictures/picturesEdit';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
 
 export function Component() {
-	const { data = undefined, isFetching, isLoading } = useGetProfileQuery();
+	const {
+		data = undefined,
+		isFetching,
+		isLoading,
+		isError,
+	} = useGetProfileQuery();
 
-	if (!data) {
+	if (isError) {
 		toast.error(`Error: User not found`);
-		return <Navigate to="/home" />;
+		return <Navigate to="/" />;
 	}
 
-	return (
-		<div className="flex justify-between flex-col items-center w-full h-full">
-			<MatchaLogo to="/home" />
-			<FormContainer size="sm">
-				<div className="text-3xl mb-3 text-center w-full font-bold">
-					Edit Pictures
-				</div>
-				<PicturesEdit
-					profile={data}
-					submitting={isFetching || isLoading}
-				/>
-			</FormContainer>
+	return data ? (
+		<>
+			<div className="text-3xl mb-3 text-center w-full font-bold">
+				Edit Pictures
+			</div>
+			<PicturesEdit profile={data} submitting={isFetching || isLoading} />
+		</>
+	) : (
+		<div className="w-full h-full flex flex-col justify-center items-center">
+			<LoadingSpinner message="Loading user..." />
 		</div>
 	);
 }

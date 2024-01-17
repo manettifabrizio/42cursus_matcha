@@ -1,7 +1,12 @@
 import { store } from '@/core/store';
 import { userApi } from '@/feature/user/api.slice';
 import { setUser } from '@/feature/user/store.slice';
-import { Profile, UserFilters, initFilters } from '@/feature/user/types';
+import {
+	CompleteProfile,
+	Profile,
+	UserFilters,
+	initFilters,
+} from '@/feature/user/types';
 
 export async function setCurrentUser() {
 	try {
@@ -71,7 +76,9 @@ export function formatDateTime(inputDate: Date) {
 }
 
 export function formatDateTimeShort(inputDate: string | undefined) {
-	const date = inputDate ? new Date(inputDate) : new Date();
+	if (!inputDate) return undefined;
+
+	const date = new Date(inputDate);
 
 	return `${date.getFullYear()}-${(date.getMonth() + 1)
 		.toString()
@@ -80,4 +87,17 @@ export function formatDateTimeShort(inputDate: string | undefined) {
 
 export function notEmpty<T>(value: T | null | undefined): value is T {
 	return value !== null && value !== undefined;
+}
+
+export function profileToCompleteProfile(profile: Profile): CompleteProfile {
+	return {
+		firstname: profile.firstname,
+		lastname: profile.lastname,
+		birthdate: profile.birthdate,
+		gender: profile.gender,
+		orientation: profile.orientation,
+		biography: profile.biography,
+		location: profile.location,
+		tags: profile.tags.map((tag) => tag.name),
+	};
 }

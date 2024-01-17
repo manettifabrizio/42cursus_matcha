@@ -9,7 +9,7 @@ import { cookie } from '@/tool/cookie';
 import style from './style.module.scss';
 import MatchaLogo from '/matcha.svg';
 import { setCurrentUser } from '@/tool/userTools';
-import { startConnecting } from '@/feature/chat/store.slice';
+import { startConnecting } from '@/feature/interactions/store.slice';
 
 // Type ------------------------------------------------------------------------
 interface Props {

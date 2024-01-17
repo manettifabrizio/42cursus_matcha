@@ -9,9 +9,11 @@ type UserProfileProps = {
 };
 
 export default function UserInfo({ user, status }: UserProfileProps) {
-	const age = user.birthdate ? Math.floor(
-		(Date.now() - new Date(user.birthdate).getTime()) / 31536000000,
-	): undefined ;
+	const age = user.birthdate
+		? Math.floor(
+				(Date.now() - new Date(user.birthdate).getTime()) / 31536000000,
+		  )
+		: undefined;
 	const current_user_tags = store.getState().user.tags;
 
 	return (
@@ -19,11 +21,11 @@ export default function UserInfo({ user, status }: UserProfileProps) {
 			<div className="mb-0 me-4 text-4xl">{user.firstname}</div>
 			<div className={`flex flex-row items-center mb-5`}>
 				<div className="text-xl whitespace-nowrap">{age} yrs</div>{' '}
-				<LuDot className="" />
+				<LuDot className="m-1" />
 				{status != undefined ? (
 					<div
 						className={
-							`italic whitespace-nowrap ` +
+							`no-scrollbar h-full w-full italic whitespace-nowrap overflow-x-scroll ` +
 							(typeof status === 'boolean'
 								? 'text-green-500'
 								: 'text-gray-300')

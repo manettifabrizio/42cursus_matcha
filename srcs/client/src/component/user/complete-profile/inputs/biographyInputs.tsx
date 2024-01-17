@@ -1,4 +1,5 @@
 import { CompleteProfileInputProps } from '@/feature/user/types';
+import { useState } from 'react';
 
 export default function BiographyInput({
 	disabled,
@@ -7,8 +8,11 @@ export default function BiographyInput({
 	setProfile,
 	profile,
 }: CompleteProfileInputProps) {
+	const [value, setValue] = useState<string>(profile.biography ?? '');
+
 	const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setProfile((c) => ({ ...c, biography: e.target.value }));
+		setValue(e.target.value);
 	};
 
 	return (
@@ -22,7 +26,7 @@ export default function BiographyInput({
 					onChange={handleChange}
 					placeholder="About me..."
 					id={`${id}-biography`}
-					value={profile.biography}
+					value={value}
 				/>
 				{errors && (
 					<ul className="pt-1">

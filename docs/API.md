@@ -277,9 +277,8 @@
 -   EMIT `profile:view`
 
     ```ts
-    Payload:
-    {
-        id_user: number;
+    Payload: {
+    	id_user: number;
     }
     ```
 
@@ -393,20 +392,18 @@ Response: {
 -   ON `like:from`
 
     ```ts
-    Payload:
-    {
-        id_user_from: number;
-        username: string;
+    Payload: {
+    	id_user_from: number;
+    	username: string;
     }
     ```
 
 -   ON `unlike:from`
 
     ```ts
-    Payload:
-    {
-        id_user_from: number;
-        username: string;
+    Payload: {
+    	id_user_from: number;
+    	username: string;
     }
     ```
 
@@ -419,7 +416,7 @@ Response: {
     	void
     Response:
     {
-    	blocks: { id_user_to: number; created_at: Date; }[];
+    	blocks: { by_me: { id_user_to: number; created_at: Date; }[]};
     }
     ```
 

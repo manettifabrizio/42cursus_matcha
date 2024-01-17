@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 // Loader ----------------------------------------------------------------------
 export const loader: LoaderFunction = async () => {
-	const req = store.dispatch(authApi.endpoints.logout.initiate());
+	const req = store.dispatch(authApi.endpoints.logout.initiate({}));
 
 	try {
 		await req.unwrap();
@@ -16,4 +16,6 @@ export const loader: LoaderFunction = async () => {
 		toast.error(`Error: logout failed.`);
 		console.error(`Error logout failed: ${JSON.stringify(error)}`);
 	}
+
+	return null;
 };

@@ -6,7 +6,6 @@ import {
 	CompleteProfileError,
 	PicturesProfile,
 	TagsError,
-	UserEditError,
 } from './types';
 import { getGeolocation } from '@/tool/getLocation';
 import { manageRTKQErrorDetails } from '@/tool/isRTKQError';
@@ -24,7 +23,7 @@ export function checkBeforeSubmitting(
 	}
 
 	if (profile.biography && profile.biography.trim().length === 0) {
-		toast.error("Biography can't be only spaces.", { id: toast_id });
+		toast.error("Biography can't be empty.", { id: toast_id });
 		return false;
 	}
 
@@ -94,6 +93,7 @@ export async function editProfile(
 		await store
 			.dispatch(
 				userApi.endpoints.userEdit.initiate({
+					birthdate: profile.birthdate?.split('T')[0],
 					firstname: profile.firstname,
 					lastname: profile.lastname,
 					gender: profile.gender,
@@ -106,7 +106,7 @@ export async function editProfile(
 
 		return true;
 	} catch (error: unknown) {
-		const editError = manageRTKQErrorDetails<UserEditError>(
+		const editError = manageRTKQErrorDetails<CompleteProfileError>(
 			error,
 			toast_id,
 		);
@@ -114,7 +114,9 @@ export async function editProfile(
 		setErrors((c) => ({
 			...c,
 			birthdate: editError?.birthdate,
-			gender: editError?.gender,
+			firstname: editError?.firstname,
+			lastname: editError?.lastname,
+			biography: editError?.biography,
 		}));
 		setSubmitting(false);
 
@@ -146,14 +148,14 @@ async function deleteOldTags(
 
 	const res = await Promise.allSettled(promises);
 
-	checkErrorsInPromises(res, setErrors, setSubmitting, toast_id);
+	checkTagsErrorsInPromises(res, setErrors, setSubmitting, toast_id);
 
 	return (
 		!res.length || res.find((r) => r.status === 'rejected') === undefined
 	);
 }
 
-function checkErrorsInPromises(
+function checkTagsErrorsInPromises(
 	res: PromiseSettledResult<unknown>[],
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
@@ -191,7 +193,7 @@ export async function sendTags(
 	);
 	const res = await Promise.allSettled(promises);
 
-	checkErrorsInPromises(res, setErrors, setSubmitting, toast_id);
+	checkTagsErrorsInPromises(res, setErrors, setSubmitting, toast_id);
 
 	return (
 		!res.length || res.find((r) => r.status === 'rejected') === undefined

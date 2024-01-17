@@ -6,7 +6,7 @@ import { authApi } from '../api.slice';
 import { setAuthAccessToken } from '../store.slice';
 import { cookie } from '@/tool/cookie';
 import { setUser } from '@/feature/user/store.slice';
-import { startConnecting } from '@/feature/chat/store.slice';
+import { startConnecting } from '@/feature/interactions/store.slice';
 
 // Action ----------------------------------------------------------------------
 export const action: ActionFunction = async ({ request }) => {
@@ -24,9 +24,9 @@ export const action: ActionFunction = async ({ request }) => {
 
 		store.dispatch(setAuthAccessToken(cookie('access-token')));
 		store.dispatch(setUser(res));
-        store.dispatch(startConnecting())
+		store.dispatch(startConnecting());
 
-        return redirect(
+		return redirect(
 			new URL(request.url).searchParams.get('redirect') ?? `/`,
 		);
 	} catch (error: unknown) {

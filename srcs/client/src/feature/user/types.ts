@@ -173,23 +173,19 @@ export type FileWithId = { file: File; id?: number };
 /* ERRORS */
 
 export type CompleteProfileError = {
-	id_picture?: string[];
 	firstname?: string[];
 	lastname?: string[];
 	birthdate?: string[];
-	gender?: string[];
-	orientation?: string[];
 	biography?: string[];
-	location?: string[];
 	tags?: string[];
-	pictures?: string[];
 };
 
 export const initCompleteProfileErrors: CompleteProfileError = {
 	birthdate: [],
-	gender: [],
-	pictures: [],
 	tags: [],
+	firstname: [],
+	lastname: [],
+	biography: [],
 };
 
 export type AuthProfileError = {
@@ -204,6 +200,5 @@ export const initAuthProfileError: AuthProfileError = {
 	password_confirm: [],
 };
 
-export type UserEditError = { birthdate?: string[]; gender?: string[] };
 export type TagsError = { name: string[] };
 export type PictureError = { picture: string[] };

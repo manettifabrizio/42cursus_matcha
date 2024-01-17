@@ -11,7 +11,6 @@ const orientationOptions: Option[] = [
 export default function OrientationInput({
 	disabled,
 	id,
-	errors,
 	setProfile,
 	profile,
 }: CompleteProfileInputProps) {
@@ -26,8 +25,7 @@ export default function OrientationInput({
 			const orientation = value[0].value as
 				| 'HETEROSEXUAL'
 				| 'HOMOSEXUAL'
-				| 'BISEXUAL'
-				| undefined;
+				| 'BISEXUAL';
 			setProfile((current) => ({ ...current, orientation }));
 		}
 	}, [value]);
@@ -40,7 +38,6 @@ export default function OrientationInput({
 					disabled={disabled}
 					name="gender"
 					options={orientationOptions}
-					errors={errors}
 					multi_select={false}
 					id={id}
 					setValue={setValue}

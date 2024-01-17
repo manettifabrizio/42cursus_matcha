@@ -11,7 +11,7 @@
 	background: #000;
 	background-clip: padding-box; /* !important */
 	border: solid $border white; /* !important */
-	border-radius: 1em;
+	border-radius: 0.75em;
 
 	&:hover:before {
 		content: '';
@@ -51,7 +51,14 @@
 		left: 0;
 		margin: -$border; /* !important */
 		border-radius: inherit; /* !important */
-		background: linear-gradient(to right, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+		background: linear-gradient(
+			to right,
+			#feda75,
+			#fa7e1e,
+			#d62976,
+			#962fbf,
+			#4f5bd5
+		);
 		background-size: 200% 200%;
 	}
 }

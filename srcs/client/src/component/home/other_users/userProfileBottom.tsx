@@ -13,9 +13,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Profile } from '@/feature/user/types';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import toast from 'react-hot-toast';
-import { store } from '@/core/store';
-import { addLikedUser, rmLikedUser } from '@/feature/chat/store.slice';
+import { StoreState, store } from '@/core/store';
+import {
+	addLikedUser,
+	addNotification,
+	rmLikedUser,
+} from '@/feature/interactions/store.slice';
 import { matchToast } from '@/component/ui/customToasts';
+import { createNotification } from '@/feature/interactions/notificationsContent';
+import { useDispatch, useSelector } from 'react-redux';
 
 type UserActionsProps = {
 	user: Profile;
@@ -33,12 +39,32 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 	const [show, setShow] = useState(false);
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	const interactionsState = useSelector(
+		(state: StoreState) => state.interactions,
+	);
+	const dispatch = useDispatch();
 
-	const distance = Math.floor(user.location.distance);
+	const distance = user.location
+		? Math.floor(user.location?.distance)
+		: undefined;
 	const LikeUser = async () => {
 		await likeUser({ id: user.id });
-		store.dispatch(addLikedUser({ liked_user: user }));
-		if (user.likes?.to_me) matchToast(user.firstname, user.id);
+		dispatch(addLikedUser({ liked_user: user }));
+		if (user.likes?.to_me) {
+			matchToast(user.firstname ?? '', user.id);
+
+			dispatch(
+				addNotification(
+					createNotification(
+						interactionsState.notifications.length,
+						'match',
+						user.firstname ?? '',
+						user.id,
+						interactionsState.notifications_opened,
+					),
+				),
+			);
+		}
 	};
 
 	const UnlikeUser = async () => {
@@ -95,14 +121,20 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 
 	return (
 		<>
-			<div className="my-3 text-xl">{distance} km away</div>
+			{distance && <div className="my-3 text-xl">{distance} km away</div>}
 			<div className="flex flex-row w-full justify-center mt-2">
 				{isFetching ? (
 					<LoadingSpinner size="sm" />
 				) : (
 					<>
 						<button
-							className="flex flex-row justify-center items-center px-3 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-400 w-full me-4 hover:from-red-600/80 hover:to-amber-400/80"
+							disabled={user.blocks?.by_me}
+							className={
+								'flex flex-row justify-center items-center px-3 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-400 w-full me-4 ' +
+								(!user.blocks?.by_me
+									? 'hover:from-red-600/80 hover:to-amber-400/80'
+									: 'opacity-50')
+							}
 							onClick={async () => {
 								!user.likes?.by_me
 									? await LikeUser()

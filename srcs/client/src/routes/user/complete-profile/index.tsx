@@ -8,7 +8,11 @@ import {
 	initCompleteProfile,
 	initCompleteProfileErrors,
 } from '@/feature/user/types';
-import { isProfileCompleted, setCurrentUser } from '@/tool/userTools';
+import {
+	isProfileCompleted,
+	profileToCompleteProfile,
+	setCurrentUser,
+} from '@/tool/userTools';
 import FormContainer from '@/component/layout/form/formContainer';
 import MatchaLogo from '@/component/ui/matchaLogo';
 import CompleteProfileInputs from '@/component/user/complete-profile/completeProfileInputs';
@@ -19,10 +23,16 @@ import {
 } from '@/feature/user/utils';
 import PicturesEdit from '@/component/user/profile/pictures/picturesEdit';
 import UserCard from '@/component/home/main_page/user_card/userCard';
+import LoadingSpinner from '@/component/ui/loadingSpinner';
 
 export function Component() {
 	const navigate = useNavigate();
-	const { data = undefined, isFetching, isLoading } = useGetProfileQuery();
+	const {
+		data = undefined,
+		isFetching,
+		isLoading,
+		isError,
+	} = useGetProfileQuery();
 
 	const [submitting, setSubmitting] = useState(false);
 	const [page, setPage] = useState(
@@ -41,7 +51,7 @@ export function Component() {
 		const id = toast.loading('Editing profile details...', {
 			style: { minWidth: '350px' },
 		});
-		if (!checkBeforeSubmitting(profile, id)) return null;
+		if (!profile || !checkBeforeSubmitting(profile, id)) return null;
 
 		setErrors(initCompleteProfileErrors);
 		setSubmitting(true);
@@ -66,14 +76,16 @@ export function Component() {
 
 	const id = useId();
 
-	if (!data) {
+	if (isError) {
 		toast.error(`Error: User not found`);
-		return <Navigate to="/home" />;
+		return <Navigate to="/" />;
 	}
 
 	useEffect(() => {
-		if (data && !isProfileCompleted(data)) {
-			navigate('/home');
+		if (data) {
+			if (!isProfileCompleted(data)) {
+				navigate('/home');
+			}
 		}
 	}, []);
 
@@ -81,61 +93,67 @@ export function Component() {
 		<div className="flex justify-between flex-col items-center w-full h-full">
 			<MatchaLogo />
 			<FormContainer>
-				{page === 1 ? (
-					<>
-						<h4 className="font-bold">
-							Let's add some details to your profile!
-						</h4>
-						<Form
-							onSubmit={submitCompleteProfile}
-							className="w-full"
-						>
-							<CompleteProfileInputs
-								submitting={submitting}
-								setProfile={setProfile}
-								id={id}
-								errors={errors}
-								profile={profile}
+				{!isLoading && !isFetching && data != undefined ? (
+					page === 1 ? (
+						<>
+							<h4 className="font-bold">
+								Let's add some details to your profile!
+							</h4>
+							<Form
+								onSubmit={submitCompleteProfile}
+								className="w-full"
+							>
+								<CompleteProfileInputs
+									submitting={submitting}
+									setProfile={setProfile}
+									id={id}
+									errors={errors}
+									profile={profileToCompleteProfile(data)}
+								/>
+							</Form>
+						</>
+					) : (
+						<div className="flex flex-col">
+							<div className="flex flex-row w-full justify-center items-center">
+								<div className="mb-5">
+									<UserCard user={data} preview={true} />
+								</div>
+							</div>
+							<h4 className="font-bold text-center">
+								Let's complete your profile with some pictures
+								to start matching with people!
+							</h4>
+							<PicturesEdit
+								profile={data}
+								submitting={isLoading || isFetching}
 							/>
-						</Form>
-					</>
-				) : (
-					<div className="flex flex-col">
-						<div className="flex flex-row w-full justify-center items-center">
-							<div className="mb-5">
-								<UserCard user={data} preview={true} />
+							<div className="flex justify-center w-full">
+								<button
+									form="complete-pictures-form"
+									disabled={
+										isLoading ||
+										isFetching ||
+										!!isProfileCompleted(data)
+									}
+									type="submit"
+									onClick={submitPictures}
+									className={
+										'group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 ' +
+										(isLoading ||
+										isFetching ||
+										!!isProfileCompleted(data)
+											? 'opacity-60'
+											: 'hover:opacity-80')
+									}
+								>
+									Save
+								</button>
 							</div>
 						</div>
-						<h4 className="font-bold text-center">
-							Let's complete your profile with some pictures to
-							start matching with people!
-						</h4>
-						<PicturesEdit
-							profile={data}
-							submitting={isLoading || isFetching}
-						/>
-						<div className="flex justify-center w-full">
-							<button
-								form="complete-pictures-form"
-								disabled={
-									isLoading ||
-									isFetching ||
-									!!isProfileCompleted(data)
-								}
-								type="submit"
-								onClick={submitPictures}
-								className={
-									'group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 ' +
-									(isLoading ||
-									isFetching ||
-									!!isProfileCompleted(data)
-										? 'opacity-60'
-										: 'hover:opacity-80')
-								}
-							>
-								Save
-							</button>
-						</div>
+					)
+				) : (
+					<div className="w-full h-full flex flex-col justify-center items-center">
+						<LoadingSpinner message="Loading..." />
 					</div>
 				)}
 			</FormContainer>

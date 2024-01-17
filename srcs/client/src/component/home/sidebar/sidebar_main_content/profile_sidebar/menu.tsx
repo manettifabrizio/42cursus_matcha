@@ -14,7 +14,7 @@ const MenuItems = [
 		path: '/user/profile/auth',
 	},
 	{
-		name: 'Likes',
+		name: 'Liked',
 		path: '/user/profile/likes',
 	},
 	{
@@ -22,7 +22,7 @@ const MenuItems = [
 		path: '/user/profile/views',
 	},
 	{
-		name: 'Block',
+		name: 'Blocked Users',
 		path: '/user/profile/blocked',
 	},
 ];
