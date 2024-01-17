@@ -25,11 +25,11 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 		(state: StoreState) => state.interactions.user_status,
 	);
 
-	const checkUserStatus = async () => {
-		dispatch(isUserOnline({ id_user: user.id }));
-	};
-
 	useEffect(() => {
+		const checkUserStatus = async () => {
+			dispatch(isUserOnline({ id_user: user.id }));
+		};
+
 		// Double view notification because of react.Strict mode
 		const timer = setInterval(checkUserStatus, 1000);
 
@@ -39,7 +39,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 			dispatch(resetIsUserOnline());
 			clearInterval(timer);
 		};
-	}, []);
+	}, [dispatch, user.id]);
 
 	const user_pictures = user.pictures;
 

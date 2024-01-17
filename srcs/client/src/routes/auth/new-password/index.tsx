@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Form, useActionData } from 'react-router-dom';
 import LabelInput from '@/component/ui/labelInput';
 import { useId } from 'react';

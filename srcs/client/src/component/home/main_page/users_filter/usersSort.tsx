@@ -29,14 +29,14 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 				...f,
 				sort: `${value},${sortOrder}`,
 			}));
-	}, [value, sortOrder]);
+	}, [value, sortOrder, setFilters]);
 
 	useEffect(() => {
 		setFilters((f) => ({
 			...f,
 			smart_recommendation,
 		}));
-	}, [smart_recommendation]);
+	}, [smart_recommendation, setFilters]);
 
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 type MultiRangeSliderProps = {
 	currentValue: { min: number; max: number };
 	limits: { min: number; max: number };
-	onChange: ({}: { min: number; max: number }) => void;
+	onChange: ({ min, max }: { min: number; max: number }) => void;
 	disabled?: boolean;
 };
 
@@ -35,7 +35,7 @@ export default function MultiRangeSlider({
 			range.current.style.left = `${minPercent}%`;
 			range.current.style.width = `${maxPercent - minPercent}%`;
 		}
-	}, [currentValue.min, getPercent]);
+	}, [currentValue.min, currentValue.max, getPercent]);
 
 	// Set width of the range to decrease from the right side
 	useEffect(() => {
@@ -45,7 +45,7 @@ export default function MultiRangeSlider({
 		if (range.current) {
 			range.current.style.width = `${maxPercent - minPercent}%`;
 		}
-	}, [currentValue.max, getPercent]);
+	}, [currentValue.max, currentValue.min, getPercent]);
 
 	return (
 		<div className="relative w-full">

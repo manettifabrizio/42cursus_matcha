@@ -57,7 +57,7 @@ export default function MatchesList() {
 				dispatch(setMatches({ matches: matches.filter(notEmpty) }));
 			});
 		}
-	}, [data]);
+	}, [data, dispatch, getProfile, isFetchingLikes, isLoadingLikes]);
 
 	return (
 		<div className="mb-4 flex flex-col">

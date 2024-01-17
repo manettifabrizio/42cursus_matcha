@@ -24,7 +24,7 @@ export default function GenderInput({
 			const gender = value[0].value as 'MALE' | 'FEMALE';
 			setProfile((current) => ({ ...current, gender }));
 		}
-	}, [value]);
+	}, [value, setProfile]);
 
 	return (
 		<div className="mb-5">

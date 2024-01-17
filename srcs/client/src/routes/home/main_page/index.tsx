@@ -34,7 +34,7 @@ export default function MainPage() {
 			);
 			setUsers(users_no_duplicates);
 		}
-	}, [data.users]);
+	}, [data.users, isFetching, isLoading, users]);
 
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		// Infinite scroll works only if smart recommendation is off

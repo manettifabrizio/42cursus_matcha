@@ -34,8 +34,8 @@ const slice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(clearAuth, (state) => {
-			state = initProfile;
+		builder.addCase(clearAuth, () => {
+			return initProfile;
 		});
 	},
 });

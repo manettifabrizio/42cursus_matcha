@@ -2,7 +2,7 @@ import { api } from '@/core/api';
 import { Profile } from './types';
 
 // Type ------------------------------------------------------------------------
-type ProfileRequest = { id: number } | void;
+type ProfileRequest = { id?: number } | void;
 type ProfileResponse = Profile;
 
 type EditRequest = {
@@ -77,7 +77,7 @@ export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getProfile: builder.query<ProfileResponse, ProfileRequest>({
 			query: (data) => ({
-				url: data ? `user/${data.id}/profile` : `user/profile`,
+				url: data && data.id ? `user/${data.id}/profile` : `user/profile`,
 				method: 'GET',
 			}),
 			providesTags: ['User'],
@@ -105,7 +105,7 @@ export const userApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['User'],
 		}),
-		deleteUserTag: builder.mutation<{}, { id: number }>({
+		deleteUserTag: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `/user/tags/${data.id}`,
 				method: 'DELETE',
@@ -122,7 +122,7 @@ export const userApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['User'],
 		}),
-		deleteUserPicture: builder.mutation<{}, { id: number }>({
+		deleteUserPicture: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/pictures/${data.id}`,
 				method: 'DELETE',
@@ -136,14 +136,14 @@ export const userApi = api.injectEndpoints({
 			}),
 			providesTags: ['Matches'],
 		}),
-		likeUser: builder.mutation<{}, { id: number }>({
+		likeUser: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/like`,
 				method: 'POST',
 			}),
 			invalidatesTags: ['User', 'Matches'],
 		}),
-		unlikeUser: builder.mutation<{}, { id: number }>({
+		unlikeUser: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/like`,
 				method: 'DELETE',
@@ -157,28 +157,28 @@ export const userApi = api.injectEndpoints({
 			}),
 			providesTags: ['User', 'Matches'],
 		}),
-		blockUser: builder.mutation<{}, { id: number }>({
+		blockUser: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/block`,
 				method: 'POST',
 			}),
 			invalidatesTags: ['User', 'Matches'],
 		}),
-		unblockUser: builder.mutation<{}, { id: number }>({
+		unblockUser: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/block`,
 				method: 'DELETE',
 			}),
 			invalidatesTags: ['User', 'Matches'],
 		}),
-		reportUser: builder.mutation<{}, { id: number }>({
+		reportUser: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/report`,
 				method: 'POST',
 			}),
 			invalidatesTags: ['User', 'Matches'],
 		}),
-		unreportUser: builder.mutation<{}, { id: number }>({
+		unreportUser: builder.mutation<object, { id: number }>({
 			query: (data) => ({
 				url: `user/${data.id}/report`,
 				method: 'DELETE',

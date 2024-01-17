@@ -22,6 +22,7 @@ import {
 import { matchToast } from '@/component/ui/customToasts';
 import { createNotification } from '@/feature/interactions/notificationsContent';
 import { useDispatch, useSelector } from 'react-redux';
+import { manageRTKQErrorCause } from '@/tool/isRTKQError';
 
 type UserActionsProps = {
 	user: Profile;
@@ -90,23 +91,20 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 		};
 	});
 
-	const errorVariables = [
-		{ error: likeUserError, message: 'Error liking user' },
-		{ error: unlikeUserError, message: 'Error unliking user' },
-		{ error: blockUserError, message: 'Error blocking user' },
-		{ error: unblockUserError, message: 'Error unblocking user' },
-		{ error: reportUserError, message: 'Error reporting user' },
-		{ error: unreportUserError, message: 'Error unreporting user' },
-	];
-
 	useEffect(() => {
+		const errorVariables = [
+			{ error: likeUserError, message: 'Error liking user' },
+			{ error: unlikeUserError, message: 'Error unliking user' },
+			{ error: blockUserError, message: 'Error blocking user' },
+			{ error: unblockUserError, message: 'Error unblocking user' },
+			{ error: reportUserError, message: 'Error reporting user' },
+			{ error: unreportUserError, message: 'Error unreporting user' },
+		];
+
 		for (const { error, message } of errorVariables) {
 			if (error) {
 				toast.error(message);
-				if ('status' in error) {
-					const anyError: any = error;
-					console.error(anyError.data.error.cause);
-				}
+				manageRTKQErrorCause(error);
 				break;
 			}
 		}

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import RegisterForm from '@/component/auth/registerForm';
 import { Link } from 'react-router-dom';
 import FormContainer from '@/component/layout/form/formContainer';

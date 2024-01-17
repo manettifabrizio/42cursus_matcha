@@ -52,7 +52,7 @@ export function Component() {
 				setUsers(views);
 			});
 		}
-	}, [data]);
+	}, [data, getProfile, isLoadingActivities, isFetchingActivities]);
 
 	return (
 		<>

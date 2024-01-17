@@ -24,14 +24,14 @@ type UrlParams = {
 	id: string;
 	secret: string;
 };
-type ConfirmRequest = {};
-type ConfirmResponse = {};
+type ConfirmRequest = object;
+type ConfirmResponse = object;
 
 type ResetPasswordRequest = {
 	username: string;
 	email: string;
 };
-type ResetPasswordResponse = {};
+type ResetPasswordResponse = object;
 
 type EditProfileRequest = {
 	email?: string;
@@ -47,7 +47,7 @@ type UpdatePasswordRequest = {
 	password: string;
 	password_confirm: string;
 };
-type UpdatePasswordResponse = {};
+type UpdatePasswordResponse = object;
 
 // Api -------------------------------------------------------------------------
 export const authApi = api.injectEndpoints({
