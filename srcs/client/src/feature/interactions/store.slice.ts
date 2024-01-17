@@ -66,6 +66,12 @@ const slice = createSlice({
 		) => {
 			return { ...state, user_status: action.payload.online };
 		},
+		viewProfile: (
+			_,
+			_action: PayloadAction<{
+				id_user: number;
+			}>,
+		) => {},
 		profileViewed: (
 			state,
 			action: PayloadAction<{
@@ -289,6 +295,7 @@ export const {
 	startConnecting,
 	connectionEstablished,
 	startDisconnecting,
+	viewProfile,
 	profileViewed,
 	receiveAllMessages,
 	receiveMessage,

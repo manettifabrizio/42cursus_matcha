@@ -57,6 +57,21 @@ type GetBlockedUsersResponse = {
 	blocks: { by_me: { id_user_to: number; created_at: Date }[] };
 };
 
+type GetActivitiesResponse = {
+	activities: {
+		by_me: {
+			id_user_to: number;
+			action: 'WATCHED_PROFILE';
+			created_at: Date;
+		}[];
+		to_me: {
+			id_user_from: number;
+			action: 'WATCHED_PROFILE';
+			created_at: Date;
+		}[];
+	};
+};
+
 // Api -------------------------------------------------------------------------
 export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
@@ -140,7 +155,7 @@ export const userApi = api.injectEndpoints({
 				url: `user/blocks`,
 				method: 'GET',
 			}),
-            providesTags: ['User', 'Matches']
+			providesTags: ['User', 'Matches'],
 		}),
 		blockUser: builder.mutation<{}, { id: number }>({
 			query: (data) => ({
@@ -170,6 +185,12 @@ export const userApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['User', 'Matches'],
 		}),
+		getActivities: builder.query<GetActivitiesResponse, void>({
+			query: () => ({
+				url: `user/activities`,
+				method: 'GET',
+			}),
+		}),
 	}),
 });
 
@@ -191,4 +212,5 @@ export const {
 	useUnblockUserMutation,
 	useReportUserMutation,
 	useUnreportUserMutation,
+	useGetActivitiesQuery,
 } = userApi;

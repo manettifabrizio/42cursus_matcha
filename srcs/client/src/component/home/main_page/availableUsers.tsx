@@ -6,7 +6,7 @@ type AvailableUsersProps = {
 	users: Profile[];
 	isLoading: boolean;
 	isFetching: boolean;
-	handleScroll: (e: React.UIEvent<HTMLDivElement>) => void;
+	handleScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 };
 
 export default function AvailableUsers({

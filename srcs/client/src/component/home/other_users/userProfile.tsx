@@ -8,6 +8,7 @@ import { useStoreDispatch } from '@/hook/useStore';
 import {
 	isUserOnline,
 	resetIsUserOnline,
+	viewProfile,
 } from '@/feature/interactions/store.slice';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
@@ -29,7 +30,10 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	};
 
 	useEffect(() => {
+		// Double view notification because of react.Strict mode
 		const timer = setInterval(checkUserStatus, 1000);
+
+		dispatch(viewProfile({ id_user: user.id }));
 
 		return () => {
 			dispatch(resetIsUserOnline());

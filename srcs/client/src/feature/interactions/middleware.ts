@@ -10,6 +10,7 @@ import {
 	setUserOnline,
 	startConnecting,
 	startDisconnecting,
+	viewProfile,
 } from '@/feature/interactions/store.slice';
 import { Message } from '@/feature/interactions/types';
 import { cookie } from '@/tool/cookie';
@@ -95,6 +96,10 @@ const chatMiddleware: Middleware = (store) => {
 
 		if (startDisconnecting.match(action) && isConnectionEstablished) {
 			socket.disconnect();
+		}
+
+		if (viewProfile.match(action) && isConnectionEstablished) {
+			socket.emit('profile:view', action.payload);
 		}
 
 		next(action);

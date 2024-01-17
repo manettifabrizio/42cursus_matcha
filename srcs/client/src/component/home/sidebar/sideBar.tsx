@@ -1,6 +1,5 @@
 import { StoreState, store } from '@/core/store';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { startDisconnecting } from '@/feature/interactions/store.slice';
 import { useEffect, useState } from 'react';
 import SidebarMainContent from './sideBarMainContent';

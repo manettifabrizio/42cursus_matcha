@@ -5,7 +5,8 @@ import { query as createActivity } from '@/feature/activity/use-case/create/quer
 import { query as findUserById } from '@/feature/user/use-case/find-by-id-with-position/query';
 
 export const onProfileView: (client: Socket) => (...args: any[]) => void =
-	(client) => async ({ id_user }) => {
+	(client) =>
+	async ({ id_user }) => {
 		if (typeof id_user !== 'number' || id_user <= 0) {
 			client.emit('profile:view:error', {
 				id_user,
@@ -21,23 +22,19 @@ export const onProfileView: (client: Socket) => (...args: any[]) => void =
 				action: 'WATCHED_PROFILE',
 			});
 
-			if (!is_created)
-				return;
+			if (!is_created) return;
 
 			const user = await findUserById(db_svc, {
 				id: client.data.user.id,
 			});
 
-			if (user === null)
-				return;
+			if (user === null) return;
 
 			socket_svc.io().to(`user-${id_user}`).emit(`profile:view`, {
 				id_user_from: user.id,
 				username: user.username,
 			});
-
-		}
-		catch (err: unknown) {
+		} catch (err: unknown) {
 			// console.error(`Activity::Socket::onProfileView`, err);
 		}
 	};
