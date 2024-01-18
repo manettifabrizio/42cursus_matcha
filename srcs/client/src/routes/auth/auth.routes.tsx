@@ -10,7 +10,6 @@ export const authRoutes: RouteObject[] = [
 			{
 				path: 'auth/login',
 				lazy: () => import('./login'),
-				action: () => import('@/feature/auth/login/action'),
 			},
 			{
 				path: 'auth/reset-password',

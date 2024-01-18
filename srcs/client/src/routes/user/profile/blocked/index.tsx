@@ -46,8 +46,6 @@ export function Component() {
 		}
 	}, [data, getProfile, isLoadingBlocks, isFetchingBlocks]);
 
-	console.log('blocked', data.blocks);
-
 	return (
 		<>
 			<div className="text-3xl mb-3 text-center w-full font-bold">
