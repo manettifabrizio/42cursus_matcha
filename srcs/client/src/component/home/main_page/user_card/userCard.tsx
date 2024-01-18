@@ -54,7 +54,7 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 		<Link
 			key={user.id}
 			className="user-card relative w-52 h-72 rounded-xl"
-			to={`${location.origin}/home/${user.id}`}
+			to={`${location.origin}/user/${user.id}`}
 		>
 			{userCardContent()}
 		</Link>

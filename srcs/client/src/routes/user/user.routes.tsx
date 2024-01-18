@@ -8,6 +8,11 @@ export const userRoutes: RouteObject[] = [
 		element: <ProtectedLayout accepted="AUTHENTICATED" />,
 		children: [
 			{
+				path: 'user',
+				element: <SidebarMainContent form={false}/>,
+				children: [{ path: ':id', lazy: () => import('./id') }],
+			},
+			{
 				path: 'user/profile',
 				element: <SidebarMainContent />,
 				children: [

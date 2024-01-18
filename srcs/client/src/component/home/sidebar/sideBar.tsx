@@ -16,7 +16,8 @@ export default function SideBar() {
 
 	useEffect(() => {
 		if (location_state.pathname.startsWith('/home')) setUrl('home');
-		else if (location_state.pathname.startsWith('/user')) setUrl('user');
+		else if (location_state.pathname.startsWith('/user/profile'))
+			setUrl('user');
 	}, [location_state]);
 
 	return (

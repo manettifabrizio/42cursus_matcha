@@ -15,10 +15,6 @@ export const homeRoutes: RouteObject[] = [
 						path: 'home',
 						element: <MainPage />,
 					},
-					{
-						path: 'home/:id',
-						lazy: () => import('./id'),
-					},
 				],
 			},
 		],
