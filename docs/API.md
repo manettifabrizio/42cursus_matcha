@@ -287,7 +287,8 @@
     ```ts
     Payload: {
     	id_user_from: number;
-    	username: string;
+    	firstname: string;
+    	lastname: string;
     }
     ```
 
@@ -394,7 +395,8 @@ Response: {
     ```ts
     Payload: {
     	id_user_from: number;
-    	username: string;
+    	firstname: string;
+    	lastname: string;
     }
     ```
 
@@ -403,7 +405,8 @@ Response: {
     ```ts
     Payload: {
     	id_user_from: number;
-    	username: string;
+    	firstname: string;
+    	lastname: string;
     }
     ```
 

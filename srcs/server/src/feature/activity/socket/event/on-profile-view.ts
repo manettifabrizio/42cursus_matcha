@@ -32,7 +32,8 @@ export const onProfileView: (client: Socket) => (...args: any[]) => void =
 
 			socket_svc.io().to(`user-${id_user}`).emit(`profile:view`, {
 				id_user_from: user.id,
-				username: user.username,
+				firstname: user.firstname,
+				lastname: user.lastname,
 			});
 		} catch (err: unknown) {
 			// console.error(`Activity::Socket::onProfileView`, err);

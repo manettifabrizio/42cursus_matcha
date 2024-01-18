@@ -34,7 +34,8 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 				return;
 			socket_svc.io().to(`user-${like.id_user_to}`).emit('like:from', {
 				id_user_from: like.id_user_from,
-				username: user.username,
+				firstname: user.firstname,
+				lastname: user.lastname,
 			});
 		}).catch(() => {});
 	}).catch(() => {});
