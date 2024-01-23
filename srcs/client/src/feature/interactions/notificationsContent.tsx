@@ -23,6 +23,8 @@ export function chooseNotificationContent(
 	type: string,
 	firstname: string,
 	id_user: number,
+	message_content?: string,
+	picture?: string,
 	created_at?: string,
 ) {
 	switch (type) {
@@ -34,6 +36,14 @@ export function chooseNotificationContent(
 			return unlikeContent(firstname, id_user, created_at);
 		case 'match':
 			return matchContent(firstname, id_user, created_at);
+		case 'message':
+			return messageContent(
+				firstname,
+				id_user,
+				message_content,
+				picture,
+				created_at,
+			);
 		default:
 			return null;
 	}
@@ -118,6 +128,41 @@ function matchContent(firstname: string, id_user: number, created_at?: string) {
 				<div className="text-xs opacity-70">
 					{created_at && getTimeElapsedString(created_at)}
 				</div>
+			</div>
+		</>
+	);
+}
+
+function messageContent(
+	firstname: string,
+	id_user: number,
+	content?: string,
+	picture?: string,
+	created_at?: string,
+) {
+	return (
+		<>
+			<div className="text-2xl pe-3">
+				<img
+					src={`${location.origin}/api/pictures/${picture}`}
+					alt="Chat"
+					className="mr-2 inset-0 h-12 w-12 object-cover rounded-full"
+				/>
+			</div>
+			<div className="flex flex-col">
+				<div>
+					<Link
+						to={`${location.origin}/home/${id_user}`}
+						className="underline font-bold"
+					>
+						{firstname}
+					</Link>{' '}
+					sent you a message
+					<div className="text-xs opacity-70">
+						{created_at && getTimeElapsedString(created_at)}
+					</div>
+				</div>
+				<div className="text-xs opacity-70">{content}</div>
 			</div>
 		</>
 	);

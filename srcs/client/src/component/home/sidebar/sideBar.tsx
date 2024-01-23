@@ -2,9 +2,9 @@ import { StoreState, store } from '@/core/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { startDisconnecting } from '@/feature/interactions/store.slice';
 import { useEffect, useState } from 'react';
-import SidebarMainContent from './sideBarMainContent';
+import SidebarMainContent from './sidebar_main_content/sideBarMainContent';
 import { useSelector } from 'react-redux';
-import SidebarTop from './sidebarTop';
+import SidebarTop from './sidebar_top/sidebarTop';
 
 export default function SideBar() {
 	const [url, setUrl] = useState<'home' | 'user'>('home');
