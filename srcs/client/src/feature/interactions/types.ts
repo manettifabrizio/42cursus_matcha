@@ -16,4 +16,6 @@ export type Notification = {
 	firstname: string;
 	userId: number;
 	createdAt: string;
+    messageContent?: string;
+    userPicture?: string;
 };

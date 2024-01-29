@@ -13,7 +13,7 @@ import {
 	startDisconnecting,
 	viewProfile,
 } from '@/feature/interactions/store.slice';
-import { Message } from '@/feature/interactions/types';
+import { MessageType } from '@/feature/interactions/types';
 import { cookie } from '@/tool/cookie';
 import { Middleware } from 'redux';
 import { io, Socket } from 'socket.io-client';
@@ -85,7 +85,7 @@ const chatMiddleware: Middleware = (store) => {
 				},
 			);
 
-			socket.on('message:from', (payload: Message) => {
+			socket.on('message:from', (payload: MessageType) => {
 				store.dispatch(receiveMessage(payload));
 			});
 
@@ -105,7 +105,6 @@ const chatMiddleware: Middleware = (store) => {
 		if (!isConnectionEstablished) next(action);
 
 		if (getMessages.match(action)) {
-			console.log('getMessages');
 			socket.emit('message:list', action.payload);
 		}
 

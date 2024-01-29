@@ -1,4 +1,4 @@
-import { Message } from './types';
+import { MessageType } from './types';
 
 export function createMessage(
 	id_user_to: number,
@@ -6,7 +6,7 @@ export function createMessage(
 	content: string,
 	created_at?: Date,
 	seen?: boolean,
-): Message {
+): MessageType {
 	return {
 		id: 0,
 		id_user_from,

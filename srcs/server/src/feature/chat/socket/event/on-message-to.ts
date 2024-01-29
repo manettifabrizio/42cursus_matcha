@@ -8,7 +8,6 @@ import { query as createMessage } from '@/feature/chat/use-case/create/query';
 export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 	(client) =>
 	async ({ id_user, content }) => {
-		console.log('onMessageTo', { id_user, content }, typeof id_user);
 		if (typeof id_user !== 'number' || id_user <= 0) {
 			client.emit('message:to:error', {
 				id_user,

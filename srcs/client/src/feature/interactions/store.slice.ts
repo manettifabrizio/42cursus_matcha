@@ -1,7 +1,7 @@
 import { type StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { Message, Notification } from './types';
+import { MessageType, Notification } from './types';
 import { Profile } from '../user/types';
 import {
 	likeToast,
@@ -17,7 +17,7 @@ type State = {
 	userId: number;
 	isEstablishingConnection: boolean;
 	isConnected: boolean;
-	messages: Record<number, Message[]>;
+	messages: Record<number, MessageType[]>;
 	// TODO: Maybe remove matches, could be done only with liked users
 	// the only critical usecase is ReceiveLike
 	matches: Profile[];
@@ -128,24 +128,20 @@ const slice = createSlice({
 			state,
 			action: PayloadAction<{
 				id_user: number;
-				messages: Message[];
+				messages: MessageType[];
 			}>,
 		) => {
 			const { id_user: id_other_user, messages } = action.payload;
 
 			const chat_id: number = id_other_user;
 
-			const existingUserMessages: Message[] =
+			const existingUserMessages: MessageType[] =
 				state.messages[chat_id] || [];
-
-			console.log('existingUserMessages', existingUserMessages);
 
 			const unseen_messages = messages.map((message) => ({
 				...message,
-				seen: false,
+				seen: true,
 			}));
-
-			console.log('unseen_messages', unseen_messages);
 
 			// Remove duplicates
 			const updatedUserMessages = Array.from(
@@ -165,7 +161,7 @@ const slice = createSlice({
 				},
 			};
 		},
-		receiveMessage: (state, action: PayloadAction<Message>) => {
+		receiveMessage: (state, action: PayloadAction<MessageType>) => {
 			const { id_user_from, id_user_to } = action.payload;
 
 			const chat_id: number =
@@ -173,9 +169,11 @@ const slice = createSlice({
 
 			const existingUserMessages = state.messages[chat_id] || [];
 
+			const is_chat_opened = location.pathname === `/chat/${chat_id}`;
+
 			const updatedUserMessages = [
 				...existingUserMessages,
-				action.payload,
+				{ ...action.payload, seen: is_chat_opened },
 			];
 
 			const other_user = state.matches.find(
@@ -196,6 +194,18 @@ const slice = createSlice({
 					...state.messages,
 					[chat_id]: updatedUserMessages,
 				},
+				notifications: [
+					...state.notifications,
+					createNotification(
+						state.notifications.length,
+						'message',
+						other_user?.firstname ?? 'unknown',
+						action.payload.id_user_from,
+						state.notifications_opened,
+						other_user?.picture?.path ?? undefined,
+						action.payload.content,
+					),
+				],
 			};
 		},
 		setLikedUsers: (
@@ -322,8 +332,6 @@ const slice = createSlice({
 
 				delete updatedMessages[userId];
 
-				console.log('unlikeMessages', Object.entries(updatedMessages));
-
 				return {
 					...state,
 					notifications: [
@@ -369,6 +377,17 @@ const slice = createSlice({
 				}),
 			};
 		},
+		readMessages: (state, { payload }: PayloadAction<number>) => {
+			return {
+				...state,
+				messages: {
+					...state.messages,
+					[payload]: state.messages[payload].map((message) => {
+						return { ...message, seen: true };
+					}),
+				},
+			};
+		},
 	},
 });
 
@@ -397,6 +416,7 @@ export const {
 	addNotification,
 	rmNotification,
 	readNotifications,
+	readMessages,
 } = slice.actions;
 
 // Selector --------------------------------------------------------------------

@@ -46,6 +46,8 @@ export default function Notifications() {
 												notification.type,
 												notification.firstname,
 												notification.userId,
+                                                notification.messageContent,
+                                                notification.userPicture,
 												notification.createdAt,
 											)}
 										</div>

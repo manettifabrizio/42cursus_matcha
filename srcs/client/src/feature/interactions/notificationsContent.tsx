@@ -8,6 +8,8 @@ export function createNotification(
 	firstname: string,
 	userId: number,
 	seen = false,
+	userPicture?: string,
+	messageContent?: string,
 ): Notification {
 	return {
 		id,
@@ -16,6 +18,8 @@ export function createNotification(
 		userId,
 		type,
 		seen,
+		userPicture,
+		messageContent,
 	};
 }
 
@@ -151,13 +155,15 @@ function messageContent(
 			</div>
 			<div className="flex flex-col">
 				<div>
-					<Link
-						to={`${location.origin}/home/${id_user}`}
-						className="underline font-bold"
-					>
-						{firstname}
-					</Link>{' '}
-					sent you a message
+					<div>
+						<Link
+							to={`${location.origin}/home/${id_user}`}
+							className="underline font-bold"
+						>
+							{firstname}
+						</Link>{' '}
+						sent you a message
+					</div>
 					<div className="text-xs opacity-70">
 						{created_at && getTimeElapsedString(created_at)}
 					</div>

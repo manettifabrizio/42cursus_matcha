@@ -30,6 +30,7 @@ export default function ChatBottom({ other_user }: ChatBottomProps) {
 				<input
 					onChange={(e) => setMessage(e.target.value)}
 					type="text"
+                    placeholder='Type a message...'
 					className="bg-transparent w-full flex input-no-style"
 					value={message}
 				/>
