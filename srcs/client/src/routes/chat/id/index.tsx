@@ -3,7 +3,7 @@ import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
 import { Navigate, useParams } from 'react-router-dom';
 import MatchaLogo from '@/component/ui/matchaLogo';
-import { getMessages } from '@/feature/interactions/store.slice';
+import { readMessages } from '@/feature/interactions/store.slice';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -29,39 +29,42 @@ export function Component() {
 	);
 
 	useEffect(() => {
-		dispatch(getMessages({ id_user: id_other_user, page: 0 }));
+		if (id_other_user && messages) {
+			dispatch(readMessages(id_other_user));
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, id_other_user]);
 
-	if (id) {
-		if (isLoading || isFetching) {
-			return (
-				<div className="w-full h-full flex flex-col justify-center items-center">
-					<LoadingSpinner message="Loading User" />
-				</div>
-			);
-		}
+	if (!id_other_user || !id) return <Navigate to="/home" />;
 
-		if (!data) {
-			toast.error(`Error: User n.${id} not found`);
-			return <Navigate to="/home" />;
-		}
-
-		if (!messages)
-			return (
-				<div className="w-full h-full flex flex-col justify-center items-center">
-					<LoadingSpinner message="Loading Messages" />
-				</div>
-			);
-
-		const other_user = data;
-
+	if (isLoading || isFetching) {
 		return (
-			<div className="flex flex-col w-full h-full">
-				<MatchaLogo to="/home" />
-				<ChatTop other_user={other_user} />
-				<ChatMainContent other_user={other_user} messages={messages} />
-				<ChatBottom other_user={other_user} />
+			<div className="w-full h-full flex flex-col justify-center items-center">
+				<LoadingSpinner message="Loading User" />
 			</div>
 		);
 	}
+
+	if (!data) {
+		toast.error(`Error: User n.${id} not found`);
+		return <Navigate to="/home" />;
+	}
+
+	if (!messages)
+		return (
+			<div className="w-full h-full flex flex-col justify-center items-center">
+				<LoadingSpinner message="Loading Messages" />
+			</div>
+		);
+
+	const other_user = data;
+
+	return (
+		<div className="flex flex-col w-full h-full">
+			<MatchaLogo to="/home" />
+			<ChatTop user={other_user} />
+			<ChatMainContent other_user={other_user} messages={messages} />
+			<ChatBottom other_user={other_user} />
+		</div>
+	);
 }
