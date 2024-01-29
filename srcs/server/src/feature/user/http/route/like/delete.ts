@@ -36,7 +36,8 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 				socket_svc.io().to(`user-${Number(req.params.id_user)}`)
 					.emit('unlike:from', {
 						id_user_from: req.user!.id,
-						username: user.username,
+						firstname: user.firstname,
+						lastname: user.lastname,
 					});
 			}).catch(() => {});
 		})
