@@ -13,10 +13,11 @@ type SelectDropdownProps = {
 	name?: string;
 	errors?: string[];
 	options: Option[];
-	multi_select: boolean;
+	multi_select?: boolean;
 	id: string;
 	setValue: React.Dispatch<React.SetStateAction<Option[]>>;
 	value?: Option[];
+	placeholder?: string;
 };
 
 export default function SelectDropdown({
@@ -26,10 +27,11 @@ export default function SelectDropdown({
 	name,
 	errors,
 	options,
-	multi_select,
+	multi_select = false,
 	id,
 	setValue,
 	value,
+	placeholder,
 }: SelectDropdownProps) {
 	const [length, setLength] = useState(0);
 
@@ -51,7 +53,7 @@ export default function SelectDropdown({
 			<Select
 				closeMenuOnSelect={!multi_select || length === 3}
 				classNames={{
-					valueContainer: () => 'gap-1 ' + px,
+					valueContainer: () => 'cursor-pointer gap-1 ' + px,
 					indicatorsContainer: () => 'gap-1 ' + px,
 					multiValue: () =>
 						'border rounded-xl px-2 hover:bg-gray-800',
@@ -59,12 +61,14 @@ export default function SelectDropdown({
 						'hover:bg-gray-800 px-1 rounded-sm hover:cursor-pointer',
 					menu: () =>
 						'flex border-2 rounded-md p-2 border-s-white bg-black hover:cursor-pointer mb-3 max-h-36 ',
-					menuList: () => 'w-full',
+					menuList: () => 'w-full no-scrollbar',
+					placeholder: () => 'opacity-80',
 				}}
 				isSearchable={isSearchable ?? false}
 				id={id}
 				unstyled
 				options={options}
+				placeholder={placeholder}
 				name={name}
 				required
 				isDisabled={disabled}

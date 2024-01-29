@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react';
-import { Form, Navigate, useNavigate } from 'react-router-dom';
+import { Form, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
 import {
@@ -35,8 +35,9 @@ export function Component() {
 	} = useGetProfileQuery();
 
 	const [submitting, setSubmitting] = useState(false);
+	const { search } = useLocation();
 	const [page, setPage] = useState(
-		Number(new URLSearchParams(location.search).get('page')) ?? 1,
+		Number(new URLSearchParams(search).get('page')) ?? 1,
 	);
 	const [profile, setProfile] =
 		useState<CompleteProfile>(initCompleteProfile);
@@ -45,12 +46,19 @@ export function Component() {
 	);
 
 	useEffect(() => {
+		setPage(Number(new URLSearchParams(search).get('page')) ?? 1);
+	}, [search]);
+
+	useEffect(() => {
 		if (data) {
 			if (!isProfileCompleted(data)) {
+				console.log('complete-profile');
 				navigate('/home');
 			}
 		}
-	}, [data, navigate]);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const submitCompleteProfile = async (
 		e: React.FormEvent<HTMLFormElement>,
@@ -67,11 +75,11 @@ export function Component() {
 		if (await editProfile(profile, setErrors, setSubmitting, id))
 			if (await sendTags(profile, setErrors, setSubmitting, id)) {
 				await setCurrentUser();
-				setPage(2);
 				toast.success(
 					"Profile completed successfully! Let's upload some pictures.",
 					{ id },
 				);
+				navigate('/user/complete-profile?page=2');
 			}
 	};
 
