@@ -30,18 +30,18 @@ export function invalidLinkToast(link: string, toast_id?: string) {
 }
 
 export function viewToast(firstname: string, id_user: number) {
-    toast.custom((t) => (
-        <div
-            className={`${
-                t.visible ? 'animate-enter' : 'animate-leave'
-            } flex flex-row items-center justify-center bg-gray-700 text-white rounded-xl p-3`}
-        >
-            {chooseNotificationContent('view', firstname, id_user)}
-            <button className="ps-3" onClick={() => toast.dismiss()}>
-                <AiOutlineClose />
-            </button>
-        </div>
-    ));
+	toast.custom((t) => (
+		<div
+			className={`${
+				t.visible ? 'animate-enter' : 'animate-leave'
+			} flex flex-row items-center justify-center bg-gray-700 text-white rounded-xl p-3`}
+		>
+			{chooseNotificationContent('view', firstname, id_user)}
+			<button className="ps-3" onClick={() => toast.dismiss()}>
+				<AiOutlineClose />
+			</button>
+		</div>
+	));
 }
 
 export function likeToast(firstname: string, id_user: number) {
@@ -82,6 +82,26 @@ export function matchToast(firstname: string, id_user: number) {
 			} flex flex-row items-center justify-center bg-gray-700 text-white rounded-xl p-3`}
 		>
 			{chooseNotificationContent('match', firstname, id_user)}
+			<button className="ps-3" onClick={() => toast.dismiss()}>
+				<AiOutlineClose />
+			</button>
+		</div>
+	));
+}
+
+export function messageToast(
+	firstname: string,
+	id_user: number,
+	content: string,
+	picture: string,
+) {
+	toast.custom((t) => (
+		<div
+			className={`${
+				t.visible ? 'animate-enter' : 'animate-leave'
+			} flex flex-row items-center justify-center bg-gray-700 text-white rounded-xl p-3`}
+		>
+			{chooseNotificationContent('message', firstname, id_user, content, picture)}
 			<button className="ps-3" onClick={() => toast.dismiss()}>
 				<AiOutlineClose />
 			</button>

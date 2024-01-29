@@ -34,7 +34,8 @@ export default function MainPage() {
 			);
 			setUsers(users_no_duplicates);
 		}
-	}, [data.users, isFetching, isLoading, users]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data.users, isFetching, isLoading]);
 
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		// Infinite scroll works only if smart recommendation is off

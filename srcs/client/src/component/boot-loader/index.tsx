@@ -47,7 +47,7 @@ export default function BootLoader({ setBooting }: Props) {
 			case 'RELOG':
 				(async () => {
 					try {
-						await relog().unwrap();
+						await relog({}).unwrap();
 						dispatch(setAuthAccessToken(cookie('access-token')));
 						await setCurrentUser();
 						dispatch(startConnecting());

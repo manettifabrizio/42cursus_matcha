@@ -5,10 +5,12 @@ import { Outlet } from 'react-router-dom';
 
 type SidebarMainContentProps = {
 	form?: boolean;
+	logo?: boolean;
 };
 
 export default function SidebarMainContent({
 	form = true,
+	logo = true,
 }: SidebarMainContentProps) {
 	return (
 		<>
@@ -16,14 +18,14 @@ export default function SidebarMainContent({
 			<div className="ml-72 h-full">
 				{form ? (
 					<div className="flex justify-between flex-col items-center w-full h-full">
-						<MatchaLogo to="/home" />
+						{logo && <MatchaLogo to="/home" />}
 						<FormContainer size="sm">
 							<Outlet />
 						</FormContainer>
 					</div>
 				) : (
 					<div className="flex justify-between flex-col w-full h-full">
-						<MatchaLogo to="/home" />
+						{logo && <MatchaLogo to="/home" />}
 						<Outlet />
 					</div>
 				)}

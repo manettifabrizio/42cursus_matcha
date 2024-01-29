@@ -1,7 +1,7 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
-import SideBarPhoto from './sidebar_top/sideBarPhoto';
-import NotificationsIndicator from './sidebar_top/notificationsIndicator';
+import SideBarPhoto from './sideBarPhoto';
+import NotificationsIndicator from './notificationsIndicator';
 
 type SideBarTopProps = {
 	NotificationsOpened: boolean;

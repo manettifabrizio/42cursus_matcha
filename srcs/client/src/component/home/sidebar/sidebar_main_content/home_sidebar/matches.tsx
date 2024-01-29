@@ -81,7 +81,7 @@ export default function MatchesList() {
 							key={match.id}
 						>
 							<Link
-								to="#"
+								to={`/chat/${match.id}`}
 								className="user-match relative items-center h-12 w-12"
 							>
 								<img

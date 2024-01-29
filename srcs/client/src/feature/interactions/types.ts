@@ -1,9 +1,10 @@
-export interface Message {
+export interface MessageType {
 	id: number;
 	id_user_from: number;
 	id_user_to: number;
 	content: string;
 	created_at: Date;
+	seen?: boolean;
 }
 
 export type NotificationType = 'like' | 'unlike' | 'match' | 'message' | 'view';
@@ -15,4 +16,6 @@ export type Notification = {
 	firstname: string;
 	userId: number;
 	createdAt: string;
+    messageContent?: string;
+    userPicture?: string;
 };

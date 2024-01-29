@@ -12,8 +12,8 @@ export default function UsersSearchBar({
 	return (
 		<div className="w-48 pe-3">
 			<LabelInput
-				setExternalValue={setSearchValue}
 				input_props={{
+					onChange: (e) => setSearchValue(e.target.value),
 					type: 'search',
 					name: 'search',
 					placeholder: 'Search users',

@@ -1,4 +1,5 @@
 import { store } from '@/core/store';
+import { setUserId } from '@/feature/interactions/store.slice';
 import { userApi } from '@/feature/user/api.slice';
 import { setUser } from '@/feature/user/store.slice';
 import {
@@ -14,6 +15,7 @@ export async function setCurrentUser() {
 		const res = await req.unwrap();
 
 		store.dispatch(setUser(res));
+		store.dispatch(setUserId(res.id));
 	} catch (e) {
 		if (location.pathname !== '/user/complete-profile')
 			console.error(`Failed to get current user: ${JSON.stringify(e)}`);
@@ -100,4 +102,9 @@ export function profileToCompleteProfile(profile: Profile): CompleteProfile {
 		location: profile.location,
 		tags: profile.tags.map((tag) => tag.name),
 	};
+}
+
+export function getDistance(user: Profile) {
+	if (user.location?.distance) return Math.floor(user.location.distance);
+	else return 1;
 }

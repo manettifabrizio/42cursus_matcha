@@ -1,7 +1,7 @@
-import ChatsList from './home_sidebar/chats';
+import ChatsList from './home_sidebar/chat/chatList';
 import Matches from './home_sidebar/matches';
-import Notifications from './sidebar_main_content/notifications';
-import ProfileMenu from './sidebar_main_content/profile_sidebar/menu';
+import Notifications from './notifications';
+import ProfileMenu from './profile_sidebar/menu';
 
 type SidebarMainContentProps = {
 	url: 'home' | 'user';

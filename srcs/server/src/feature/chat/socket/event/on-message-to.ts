@@ -6,7 +6,8 @@ import { query as findBlock } from '@/feature/block/use-case/find/query';
 import { query as createMessage } from '@/feature/chat/use-case/create/query';
 
 export const onMessageTo: (client: Socket) => (...args: any[]) => void =
-	(client) => async ({ id_user, content }) => {
+	(client) =>
+	async ({ id_user, content }) => {
 		if (typeof id_user !== 'number' || id_user <= 0) {
 			client.emit('message:to:error', {
 				id_user,
@@ -15,7 +16,11 @@ export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 			return;
 		}
 
-		if (typeof content !== 'string' || content.length < 1 || content.length > 512) {
+		if (
+			typeof content !== 'string' ||
+			content.length < 1 ||
+			content.length > 512
+		) {
 			client.emit('message:to:error', {
 				id_user,
 				error: `Message content must be between 1 and 512 characters.`,
@@ -61,8 +66,7 @@ export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 			return;
 		}
 
-		try
-		{
+		try {
 			const message = await createMessage(db_svc, {
 				id_user_from: client.data.user.id,
 				id_user_to: id_user,
@@ -76,9 +80,7 @@ export const onMessageTo: (client: Socket) => (...args: any[]) => void =
 			}
 
 			targets.emit('message:from', message);
-		}
-		catch (err: unknown)
-		{
+		} catch (err: unknown) {
 			client.emit('message:to:error', {
 				id_user,
 				error: `Failed to create message.`,

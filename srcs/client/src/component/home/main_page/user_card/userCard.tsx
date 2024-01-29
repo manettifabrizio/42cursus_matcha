@@ -1,6 +1,7 @@
 import { Profile } from '@/feature/user/types';
 import './user_card.scss';
 import { Link } from 'react-router-dom';
+import { getDistance } from '@/tool/userTools';
 
 type UserCardProps = {
 	user: Profile;
@@ -13,11 +14,6 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 			(Date.now() - new Date(birthdate).getTime()) / 31536000000,
 		);
 		return age;
-	}
-
-	function getDistance() {
-		if (user.location?.distance) return Math.floor(user.location.distance);
-		else return 10;
 	}
 
 	function userCardContent() {
@@ -37,7 +33,7 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 						<b>{user.firstname}</b>
 						{user.birthdate && ', ' + getAge(user.birthdate)}
 					</div>
-					{<div>{getDistance() + ' km'}</div>}
+					{<div>{getDistance(user) + ' km'}</div>}
 				</div>
 			</>
 		);
@@ -54,7 +50,7 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 		<Link
 			key={user.id}
 			className="user-card relative w-52 h-72 rounded-xl"
-			to={`${location.origin}/home/${user.id}`}
+			to={`${location.origin}/user/${user.id}`}
 		>
 			{userCardContent()}
 		</Link>

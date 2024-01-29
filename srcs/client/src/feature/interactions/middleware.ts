@@ -1,5 +1,6 @@
 import {
 	connectionEstablished,
+	getMessages,
 	isUserOnline,
 	profileViewed,
 	receiveAllMessages,
@@ -12,7 +13,7 @@ import {
 	startDisconnecting,
 	viewProfile,
 } from '@/feature/interactions/store.slice';
-import { Message } from '@/feature/interactions/types';
+import { MessageType } from '@/feature/interactions/types';
 import { cookie } from '@/tool/cookie';
 import { Middleware } from 'redux';
 import { io, Socket } from 'socket.io-client';
@@ -34,6 +35,20 @@ function asyncEmit<T, U>(
 }
 
 type FromPayload = { id_user_from: number; username: string };
+type MessageListPayload = {
+	id_user: number;
+	messages: {
+		id: number;
+		id_user_from: number;
+		id_user_to: number;
+		content: string;
+		created_at: Date;
+	}[];
+};
+type MessageListErrorPayload = {
+	id_user: number;
+	error: string;
+};
 
 const chatMiddleware: Middleware = (store) => {
 	let socket: Socket;
@@ -58,20 +73,24 @@ const chatMiddleware: Middleware = (store) => {
 				store.dispatch(profileViewed(payload));
 			});
 
-			socket.on('message:list', (messages: Message[]) => {
-				store.dispatch(receiveAllMessages({ messages }));
+			socket.on('message:list', (payload: MessageListPayload) => {
+				store.dispatch(receiveAllMessages(payload));
 			});
 
-			socket.on('message:list:error', (messages: Message[]) => {
-				store.dispatch(receiveAllMessages({ messages }));
-			});
+			socket.on(
+				'message:list:error',
+				(payload: MessageListErrorPayload) => {
+					console.error(`message:list:error: ${payload.error}`);
+					// store.dispatch(receiveAllMessages(payload));
+				},
+			);
 
-			socket.on('message:from', (message: Message) => {
-				store.dispatch(receiveMessage({ message }));
+			socket.on('message:from', (payload: MessageType) => {
+				store.dispatch(receiveMessage(payload));
 			});
 
 			socket.on('message:to:error', (err) => {
-				console.error(`message:error: ${err}`);
+				console.error(`message:error: ${JSON.stringify(err)}`);
 			});
 
 			socket.on('like:from', (payload: FromPayload) => {
@@ -83,10 +102,21 @@ const chatMiddleware: Middleware = (store) => {
 			});
 		}
 
-		if (sendMessage.match(action) && isConnectionEstablished)
-			socket.emit('message:to', action.payload.content);
+		if (!isConnectionEstablished) next(action);
 
-		if (isUserOnline.match(action) && isConnectionEstablished) {
+		if (getMessages.match(action)) {
+			socket.emit('message:list', action.payload);
+		}
+
+		if (sendMessage.match(action)) {
+			console.log(
+				'sendMessage',
+				action.payload,
+				typeof action.payload.id_user,
+			);
+			socket.emit('message:to', action.payload);
+		}
+		if (isUserOnline.match(action)) {
 			const payload = await asyncEmit<
 				{
 					id_user: number;
@@ -99,11 +129,11 @@ const chatMiddleware: Middleware = (store) => {
 			store.dispatch(setUserOnline(payload));
 		}
 
-		if (startDisconnecting.match(action) && isConnectionEstablished) {
+		if (startDisconnecting.match(action)) {
 			socket.disconnect();
 		}
 
-		if (viewProfile.match(action) && isConnectionEstablished) {
+		if (viewProfile.match(action)) {
 			socket.emit('profile:view', action.payload);
 		}
 
