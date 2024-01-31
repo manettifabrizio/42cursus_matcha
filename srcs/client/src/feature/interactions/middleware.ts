@@ -13,7 +13,7 @@ import {
 	startDisconnecting,
 	viewProfile,
 } from '@/feature/interactions/store.slice';
-import { MessageType } from '@/feature/interactions/types';
+import { FromPayload, MessageType } from '@/feature/interactions/types';
 import { cookie } from '@/tool/cookie';
 import { Middleware } from 'redux';
 import { io, Socket } from 'socket.io-client';
@@ -34,7 +34,7 @@ function asyncEmit<T, U>(
 	});
 }
 
-type FromPayload = { id_user_from: number; username: string };
+
 type MessageListPayload = {
 	id_user: number;
 	messages: {
