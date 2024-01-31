@@ -20,15 +20,18 @@ export default function ChatMainContent({
 	return (
 		<div className="flex-1 my-2 px-2 scroller">
 			<ul className="flex flex-col w-full scroller-content">
-				{Object.keys(grouped_messages).map((key) => (
-					<div className="flex flex-col gap-1" id={key}>
+				{Object.keys(grouped_messages).map((day) => (
+					<div className="flex flex-col gap-1" key={day}>
 						<div className="flex justify-center">
-							<span className="text-gray-400">{key}</span>
+							<span className="text-gray-400">{day}</span>
 						</div>
-						{grouped_messages[key].map((message_group) => (
-							<div className="message-group gap-1 flex flex-col">
+						{grouped_messages[day].map((message_day_group, i) => (
+							<div
+								className="message-group gap-1 flex flex-col"
+								key={i}
+							>
 								<MessageGroup
-									messages={message_group}
+									messages={message_day_group}
 									other_user={other_user}
 								/>
 							</div>

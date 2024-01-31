@@ -157,7 +157,7 @@ function messageContent(
 				<div>
 					<div>
 						<Link
-							to={`${location.origin}/home/${id_user}`}
+							to={`${location.origin}/chat/${id_user}`}
 							className="underline font-bold"
 						>
 							{firstname}
