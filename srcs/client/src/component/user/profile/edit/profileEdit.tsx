@@ -3,7 +3,7 @@ import {
 	CompleteProfileError,
 	initCompleteProfileErrors,
 } from '@/feature/user/types';
-import CompleteProfileForm from '../../complete-profile/completeProfileInputs';
+import CompleteProfileInputs from '../../complete-profile/completeProfileInputs';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -18,14 +18,17 @@ import { setCurrentUser } from '@/tool/userTools';
 
 type ProfileEditProps = {
 	base_profile: CompleteProfile;
+	errors: CompleteProfileError;
+	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>;
 };
 
-export default function ProfileEdit({ base_profile }: ProfileEditProps) {
+export default function ProfileEdit({
+	base_profile,
+	errors,
+	setErrors,
+}: ProfileEditProps) {
 	const [profile, setProfile] = useState<CompleteProfile>(base_profile);
 	const [submitting, setSubmitting] = useState(false);
-	const [errors, setErrors] = useState<CompleteProfileError>(
-		initCompleteProfileErrors,
-	);
 
 	const submit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -55,7 +58,7 @@ export default function ProfileEdit({ base_profile }: ProfileEditProps) {
 				Edit Profile
 			</div>
 			<Form onSubmit={submit} className="w-full">
-				<CompleteProfileForm
+				<CompleteProfileInputs
 					profile={profile}
 					base_profile={base_profile}
 					setProfile={setProfile}
