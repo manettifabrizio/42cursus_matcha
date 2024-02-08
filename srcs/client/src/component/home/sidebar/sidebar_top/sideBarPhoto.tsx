@@ -1,6 +1,6 @@
 import { Profile } from '@/feature/user/types';
 import { FaChevronLeft } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type SideBarPhotoProps = {
 	url: 'home' | 'user';
@@ -10,14 +10,18 @@ type SideBarPhotoProps = {
 
 export default function SideBarPhoto({ url, user }: SideBarPhotoProps) {
 	const center = !(url === 'user');
+	const navigate = useNavigate();
 
 	return (
 		<>
 			{url === 'user' && (
 				<div className={`absolute top-1/2 -translate-y-1/2 left-0 `}>
-					<Link to="/home" className="w-full flex m-3 text-xl">
+					<button
+						onClick={() => navigate(-1)}
+						className="flex m-3 text-xl"
+					>
 						<FaChevronLeft />
-					</Link>
+					</button>
 				</div>
 			)}
 			<Link
