@@ -23,6 +23,8 @@ export async function setCurrentUser() {
 }
 
 export function isProfileCompleted(profile: Profile): number | undefined {
+	console.log(profile, profile.pictures.length, profile.picture);
+
 	if (
 		profile.birthdate == undefined ||
 		profile.biography == undefined ||
@@ -60,6 +62,23 @@ export function getSearchStr(filters: UserFilters) {
 	return (
 		(filters.smart_recommendation ? '/recommandation' : '') +
 		(defined_filters.length > 0 ? '?' + defined_filters : '')
+	);
+}
+
+export function isDateValid(
+	day_str: string,
+	month_str: string,
+	year_str: string,
+) {
+	const year = Number(year_str);
+	const month = Number(month_str);
+	const day = Number(day_str);
+	const inputDate = new Date(year, month - 1, day); // Month is zero-based, so subtract 1
+
+	return (
+		inputDate.getFullYear() === year &&
+		inputDate.getMonth() === month - 1 &&
+		inputDate.getDate() === day
 	);
 }
 

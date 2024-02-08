@@ -10,7 +10,7 @@ export default function Message({ id_other_user, message }: MessageProps) {
 		const date = new Date(message.created_at);
 		const options = { timeZone: 'UTC' };
 
-		return date.toLocaleTimeString(undefined, options).slice(0, -3);
+		return date.toLocaleTimeString('en-GB', options).slice(0, -3);
 	}
 
 	return (

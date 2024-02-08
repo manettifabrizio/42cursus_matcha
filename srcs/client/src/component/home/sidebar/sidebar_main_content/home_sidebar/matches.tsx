@@ -6,14 +6,18 @@ import {
 	useLazyGetProfileQuery,
 } from '@/feature/user/api.slice';
 import { notEmpty } from '@/tool/userTools';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function MatchesList() {
+	const [scrollPosition, setScrollPosition] = useState(0);
+	const [scrollMax, setScrollMax] = useState(0);
 	const matches = useSelector(
 		(state: StoreState) => state.interactions.matches,
 	);
+	const listRef = useRef<HTMLUListElement>();
 	const dispatch = useDispatch();
 	const {
 		data = { likes: { by_me: [], to_me: [] } },
@@ -24,6 +28,26 @@ export default function MatchesList() {
 		getProfile,
 		{ isLoading: isLoadingProfiles, isFetching: isFetchingProfiles },
 	] = useLazyGetProfileQuery();
+
+	const handleList = useCallback((node: HTMLUListElement) => {
+		const handleScroll = () => {
+			if (node) {
+				const currentPosition = node.scrollLeft;
+				setScrollPosition(currentPosition);
+			}
+		};
+
+		if (node) {
+			node.addEventListener('scroll', handleScroll);
+			setScrollMax(node.scrollWidth - node.clientWidth);
+		}
+
+		return () => {
+			if (node) {
+				node.removeEventListener('scroll', handleScroll);
+			}
+		};
+	}, []);
 
 	useEffect(() => {
 		if (!(isFetchingLikes || isLoadingLikes)) {
@@ -59,8 +83,26 @@ export default function MatchesList() {
 		}
 	}, [data, dispatch, getProfile, isFetchingLikes, isLoadingLikes]);
 
+	const scrollToRight = () => {
+		if (listRef.current && scrollPosition < scrollMax) {
+			if (scrollPosition <= scrollMax) {
+				const newScrollPosition = scrollPosition + 100; // Adjust the value as needed
+				listRef.current.scrollLeft = newScrollPosition;
+				setScrollPosition(newScrollPosition);
+			}
+		}
+	};
+
+	const scrollToLeft = () => {
+		if (listRef.current && scrollPosition > 0) {
+			const newScrollPosition = scrollPosition - 100; // Adjust the value as needed
+			listRef.current.scrollLeft = newScrollPosition;
+			setScrollPosition(newScrollPosition);
+		}
+	};
+
 	return (
-		<div className="mb-4 flex flex-col">
+		<div className="flex flex-col">
 			<p className="font-bold mb-2 text-2xl">Your Matches</p>
 			{isFetchingLikes ||
 			isLoadingLikes ||
@@ -74,25 +116,48 @@ export default function MatchesList() {
 					Start discovering people to get matches.
 				</div>
 			) : (
-				<ul className="flex list-none p-0 flex-row">
-					{matches.map((match) => (
-						<li
-							className="grid auto-rows-auto auto-cols-max gap-3 h-12 w-12 relative"
-							key={match.id}
+				<div className="relative">
+					<ul
+						className="flex overflow-x-auto h-14 flex-row gap-3 no-scrollbar relative scroll-smooth"
+						ref={(el) => {
+							if (el) {
+								handleList(el);
+								listRef.current = el;
+							}
+						}}
+					>
+						{matches.map((match) => (
+							<li className="flex h-12 w-12" key={match.id}>
+								<Link
+									to={`/chat/${match.id}`}
+									className="user-match relative items-center h-12 w-12"
+								>
+									<img
+										src={`${location.origin}/api/pictures/${match.picture?.path}`}
+										alt="Match"
+										className="absolute inset-0 h-12 w-12 object-cover rounded-full border border-black"
+									/>
+								</Link>
+							</li>
+						))}
+					</ul>
+					{scrollPosition < scrollMax && (
+						<button
+							className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 text-black"
+							onClick={scrollToRight}
 						>
-							<Link
-								to={`/chat/${match.id}`}
-								className="user-match relative items-center h-12 w-12"
-							>
-								<img
-									src={`${location.origin}/api/pictures/${match.picture?.path}`}
-									alt="Match"
-									className="absolute inset-0 h-12 w-12 object-cover rounded-full border border-black"
-								/>
-							</Link>
-						</li>
-					))}
-				</ul>
+							<FaChevronRight />
+						</button>
+					)}
+					{scrollPosition > 0 && (
+						<button
+							className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 text-black"
+							onClick={scrollToLeft}
+						>
+							<FaChevronLeft />
+						</button>
+					)}
+				</div>
 			)}
 		</div>
 	);

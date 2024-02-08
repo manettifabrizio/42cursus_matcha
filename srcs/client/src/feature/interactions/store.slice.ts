@@ -1,7 +1,7 @@
 import { type StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { MessageType, Notification } from './types';
+import { FromPayload, MessageType, Notification } from './types';
 import { Profile } from '../user/types';
 import {
 	likeToast,
@@ -78,17 +78,11 @@ const slice = createSlice({
 				id_user: number;
 			}>,
 		) => {},
-		profileViewed: (
-			state,
-			action: PayloadAction<{
-				id_user_from: number;
-				username: string;
-			}>,
-		) => {
-			const username = action.payload.username;
+		profileViewed: (state, action: PayloadAction<FromPayload>) => {
+			const firstname = action.payload.firstname;
 			const userId = action.payload.id_user_from;
 
-			viewToast(username, userId);
+			viewToast(firstname, userId);
 
 			// TODO: Emit from server only when user that view profile is online
 			return {
@@ -98,7 +92,7 @@ const slice = createSlice({
 					createNotification(
 						state.notifications.length,
 						'view',
-						username,
+						firstname,
 						userId,
 						state.notifications_opened,
 					),
@@ -256,14 +250,8 @@ const slice = createSlice({
 				),
 			};
 		},
-		receiveLike: (
-			state,
-			action: PayloadAction<{
-				id_user_from: number;
-				username: string;
-			}>,
-		) => {
-			const { id_user_from, username } = action.payload;
+		receiveLike: (state, action: PayloadAction<FromPayload>) => {
+			const { id_user_from, firstname } = action.payload;
 
 			const matched_user = state.liked_users.find(
 				(user) => user.id === id_user_from,
@@ -288,13 +276,15 @@ const slice = createSlice({
 							state.notifications_opened,
 						),
 					],
-					matches: [...state.matches, matched_user],
+					matches: state.matches.find((u) => u.id === matched_user.id)
+						? state.matches
+						: [...state.matches, matched_user],
 					messages: {
 						[matched_user.id]: [],
 					},
 				};
 			} else {
-				likeToast(username, id_user_from);
+				likeToast(firstname, id_user_from);
 
 				return {
 					...state,
@@ -303,7 +293,7 @@ const slice = createSlice({
 						createNotification(
 							state.notifications.length,
 							'like',
-							username,
+							firstname,
 							id_user_from,
 							state.notifications_opened,
 						),
@@ -311,22 +301,16 @@ const slice = createSlice({
 				};
 			}
 		},
-		receiveUnlike: (
-			state,
-			action: PayloadAction<{
-				id_user_from: number;
-				username: string;
-			}>,
-		) => {
+		receiveUnlike: (state, action: PayloadAction<FromPayload>) => {
 			const userId = action.payload.id_user_from;
-			const username = action.payload.username;
+			const firstname = action.payload.firstname;
 
 			if (
 				state.matches.some(
 					(user) => user.id === action.payload.id_user_from,
 				)
 			) {
-				unlikeToast(username, userId);
+				unlikeToast(firstname, userId);
 
 				const updatedMessages = state.messages;
 
@@ -339,13 +323,12 @@ const slice = createSlice({
 						createNotification(
 							state.notifications.length,
 							'unlike',
-							username,
+							firstname,
 							userId,
 							state.notifications_opened,
 						),
 					],
 					matches: state.matches.filter((user) => user.id !== userId),
-					messages: updatedMessages,
 				};
 			}
 		},

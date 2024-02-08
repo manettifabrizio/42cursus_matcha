@@ -59,7 +59,7 @@ function viewContent(firstname: string, id_user: number, created_at?: string) {
 			<div className="text-2xl pe-3">👀</div>
 			<div>
 				<Link
-					to={`${location.origin}/home/${id_user}`}
+					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
 				>
 					{firstname}
@@ -80,7 +80,7 @@ function likeContent(firstname: string, id_user: number, created_at?: string) {
 			<div>
 				You received a like from{' '}
 				<Link
-					to={`${location.origin}/home/${id_user}`}
+					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
 				>
 					{firstname}
@@ -103,7 +103,7 @@ function unlikeContent(
 			<div className="text-2xl pe-3">💔</div>
 			<div>
 				<Link
-					to={`${location.origin}/home/${id_user}`}
+					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
 				>
 					{firstname}
@@ -124,7 +124,7 @@ function matchContent(firstname: string, id_user: number, created_at?: string) {
 			<div>
 				You matched with{' '}
 				<Link
-					to={`${location.origin}/home/${id_user}`}
+					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
 				>
 					{firstname}
@@ -157,7 +157,7 @@ function messageContent(
 				<div>
 					<div>
 						<Link
-							to={`${location.origin}/home/${id_user}`}
+							to={`${location.origin}/chat/${id_user}`}
 							className="underline font-bold"
 						>
 							{firstname}

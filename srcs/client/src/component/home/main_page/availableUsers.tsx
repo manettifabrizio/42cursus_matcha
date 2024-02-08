@@ -27,8 +27,7 @@ export default function AvailableUsers({
 						<>
 							<div className="grid auto-rows-auto auto-cols-max gap-9 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] mx-5 my-3 transition">
 								{users.map((u) => (
-									// TODO: Fix key error
-									<UserCard user={u} />
+									<UserCard user={u} key={u.id} />
 								))}
 							</div>
 							{(isFetching || isLoading) && (

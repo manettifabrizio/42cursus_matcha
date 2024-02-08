@@ -108,6 +108,7 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 					<div className="flex flex-col">
 						{Options.map((o) => (
 							<button
+								key={o.value}
 								className="p-2 hover:bg-gray-600 w-full rounded-md text-start"
 								onClick={() => setValue(o.value)}
 							>

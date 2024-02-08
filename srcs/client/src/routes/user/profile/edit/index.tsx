@@ -1,7 +1,9 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import ProfileEdit from '@/component/user/profile/edit/profileEdit';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
+import { CompleteProfileError, initCompleteProfileErrors } from '@/feature/user/types';
 import { profileToCompleteProfile } from '@/tool/userTools';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
 
@@ -12,6 +14,9 @@ export function Component() {
 		isLoading,
 		isError,
 	} = useGetProfileQuery();
+    const [errors, setErrors] = useState<CompleteProfileError>(
+		initCompleteProfileErrors,
+	);
 
 	if (isLoading || isFetching) {
 		return (
@@ -30,6 +35,8 @@ export function Component() {
 		<ProfileEdit
 			key={data.tags.join(' ')}
 			base_profile={profileToCompleteProfile(data)}
+            errors={errors}
+            setErrors={setErrors}
 		/>
 	) : (
 		<div className="w-full h-full flex flex-col justify-center items-center">

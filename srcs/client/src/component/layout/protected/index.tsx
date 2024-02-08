@@ -32,6 +32,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		return <Navigate to={redirectTo ?? '/home'} replace />;
 
 	const page = isProfileCompleted(user);
+	console.log('page', isProfileCompleted(user));
 
 	const url_page =
 		Number(new URLSearchParams(location.search).get('page')) ?? page;
