@@ -45,9 +45,9 @@ export default function ChatTop({ user }: ChatTopProps) {
 
 	return (
 		<div className="flex flex-row w-full px-2 pt-2">
-			<button onClick={() => navigate(-1)} className="flex m-3 text-xl">
+			<Link to="/home" className="flex m-3 text-xl">
 				<FaChevronLeft />
-			</button>
+			</Link>
 			<Link className="flex flex-row" to={`/user/${user.id}`}>
 				<img
 					src={`${location.origin}/api/pictures/${user.picture?.path}`}

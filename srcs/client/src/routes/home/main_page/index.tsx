@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import SearchAndFilter from '@/component/home/main_page/users_filter/searchAndFIlter';
 import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@/core/store';
 
 export default function MainPage() {
 	const [searchValue, setSearchValue] = useState('');
@@ -16,6 +18,9 @@ export default function MainPage() {
 		isFetching,
 		isLoading,
 	} = useGetUsersQuery({ filters: filter_str });
+	const liked_users = useSelector(
+		(state: StoreState) => state.interactions.liked_users,
+	);
 
 	useEffect(
 		// On filter change reset page to 1 and users to empty array
@@ -32,7 +37,12 @@ export default function MainPage() {
 			const users_no_duplicates = Array.from(
 				new Map(concat_users.map((user) => [user.id, user])).values(),
 			);
-			setUsers(users_no_duplicates);
+
+			const users_no_likes = users_no_duplicates.filter(
+				(u) => !liked_users.find((l) => l.id === u.id),
+			);
+
+			setUsers(users_no_likes);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data.users, isFetching, isLoading]);

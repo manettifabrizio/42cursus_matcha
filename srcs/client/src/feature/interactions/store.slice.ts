@@ -188,18 +188,21 @@ const slice = createSlice({
 					...state.messages,
 					[chat_id]: updatedUserMessages,
 				},
-				notifications: [
-					...state.notifications,
-					createNotification(
-						state.notifications.length,
-						'message',
-						other_user?.firstname ?? 'unknown',
-						action.payload.id_user_from,
-						state.notifications_opened,
-						other_user?.picture?.path ?? undefined,
-						action.payload.content,
-					),
-				],
+				notifications:
+					id_user_from === other_user?.id
+						? [
+								...state.notifications,
+								createNotification(
+									state.notifications.length,
+									'message',
+									other_user?.firstname ?? 'unknown',
+									action.payload.id_user_from,
+									state.notifications_opened,
+									other_user?.picture?.path ?? undefined,
+									action.payload.content,
+								),
+						  ]
+						: state.notifications,
 			};
 		},
 		setLikedUsers: (
@@ -280,6 +283,7 @@ const slice = createSlice({
 						? state.matches
 						: [...state.matches, matched_user],
 					messages: {
+						...state.messages,
 						[matched_user.id]: [],
 					},
 				};
@@ -316,20 +320,19 @@ const slice = createSlice({
 
 				delete updatedMessages[userId];
 
-				return {
-					...state,
-					notifications: [
-						...state.notifications,
-						createNotification(
-							state.notifications.length,
-							'unlike',
-							firstname,
-							userId,
-							state.notifications_opened,
-						),
-					],
-					matches: state.matches.filter((user) => user.id !== userId),
-				};
+				state.notifications.push(
+					createNotification(
+						state.notifications.length,
+						'unlike',
+						firstname,
+						userId,
+						state.notifications_opened,
+					),
+				);
+
+				state.matches = state.matches.filter(
+					(user) => user.id !== userId,
+				);
 			}
 		},
 		toggleNotifications: (state) => {
