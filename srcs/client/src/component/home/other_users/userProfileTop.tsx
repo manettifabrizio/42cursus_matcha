@@ -21,11 +21,11 @@ export default function UserInfo({ user, status }: UserProfileProps) {
 			<div className="mb-0 me-4 text-4xl">{user.firstname}</div>
 			<div className={`flex flex-row items-center mb-5`}>
 				<div className="text-xl whitespace-nowrap">{age} yrs</div>{' '}
-				<LuDot className="m-1" />
+				<LuDot />
 				{status != undefined ? (
 					<div
 						className={
-							`no-scrollbar h-full w-full italic whitespace-nowrap overflow-x-scroll ` +
+							`flex items-center no-scrollbar h-full w-full italic whitespace-nowrap overflow-x-scroll ` +
 							(typeof status === 'boolean'
 								? 'text-green-500'
 								: 'text-gray-300')

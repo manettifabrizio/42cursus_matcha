@@ -12,7 +12,7 @@ import {
 } from '@/feature/interactions/store.slice';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
-import UserBioDistance from './userProfileBio';
+import UserBio from './userProfileBio';
 
 type UserProfileProps = {
 	user: Profile;
@@ -84,7 +84,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 						</div>
 					)}
 					<UserInfo user={user} status={status} />
-					<UserBioDistance user={user} />
+					<UserBio user={user} />
 					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>
