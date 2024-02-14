@@ -5,6 +5,7 @@ import {
 	useGetLikesQuery,
 	useLazyGetProfileQuery,
 } from '@/feature/user/api.slice';
+import { Profile } from '@/feature/user/types';
 import { notEmpty } from '@/tool/userTools';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
@@ -12,13 +13,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function MatchesList() {
+	const [displayedMatches, setDisplayedMatches] = useState<Profile[]>([]);
 	const [scrollPosition, setScrollPosition] = useState(0);
 	const [scrollMax, setScrollMax] = useState(0);
+	const listRef = useRef<HTMLUListElement>();
+	const dispatch = useDispatch();
 	const matches = useSelector(
 		(state: StoreState) => state.interactions.matches,
 	);
-	const listRef = useRef<HTMLUListElement>();
-	const dispatch = useDispatch();
+	const messages = useSelector(
+		(state: StoreState) => state.interactions.messages,
+	);
 	const {
 		data = { likes: { by_me: [], to_me: [] } },
 		isFetching: isFetchingLikes,
@@ -71,17 +76,25 @@ export default function MatchesList() {
 
 			getLikedUsers().then((res) => {
 				const liked_users = res.filter(notEmpty);
-				const matches = liked_users.filter((user) =>
+				const new_matches = liked_users.filter((user) =>
 					likes.to_me
 						.map((like) => like.id_user_from)
 						.some((id) => user.id === id),
 				);
 
 				dispatch(setLikedUsers({ liked_users }));
-				dispatch(setMatches({ matches: matches.filter(notEmpty) }));
+				dispatch(setMatches({ matches: new_matches.filter(notEmpty) }));
 			});
 		}
 	}, [data, dispatch, getProfile, isFetchingLikes, isLoadingLikes]);
+
+	useEffect(() => {
+		setDisplayedMatches(
+			matches.filter(
+				(user) => !messages[user.id] || messages[user.id].length === 0,
+			),
+		);
+	}, [matches, messages]);
 
 	const scrollToRight = () => {
 		if (listRef.current && scrollPosition < scrollMax) {
@@ -111,8 +124,8 @@ export default function MatchesList() {
 				<div className="w-full flex justify-center items-center">
 					<LoadingSpinner size="sm" />
 				</div>
-			) : matches.length === 0 ? (
-				<div className="italic text-gray-500 text-sm">
+			) : displayedMatches.length === 0 ? (
+				<div className="italic text-gray-500 text-sm mb-2">
 					Start discovering people to get matches.
 				</div>
 			) : (
@@ -126,7 +139,7 @@ export default function MatchesList() {
 							}
 						}}
 					>
-						{matches.map((match) => (
+						{displayedMatches.map((match) => (
 							<li className="flex h-12 w-12" key={match.id}>
 								<Link
 									to={`/chat/${match.id}`}

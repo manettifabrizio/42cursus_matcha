@@ -1,7 +1,7 @@
 import { Profile } from '@/feature/user/types';
 import { useEffect } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserInfo from './userProfileTop';
 import UserActions from './userProfileBottom';
 import { useStoreDispatch } from '@/hook/useStore';
@@ -12,7 +12,7 @@ import {
 } from '@/feature/interactions/store.slice';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
-import UserBioDistance from './userProfileBio';
+import UserBio from './userProfileBio';
 
 type UserProfileProps = {
 	user: Profile;
@@ -21,6 +21,7 @@ type UserProfileProps = {
 
 export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	const dispatch = useStoreDispatch();
+	const navigate = useNavigate();
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
 	);
@@ -46,12 +47,12 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	return (
 		<div className="relative w-full h-full flex justify-center items-center">
 			<div className={`absolute top-0 left-0 `}>
-				<Link
-					to="/home"
+				<button
+					onClick={() => navigate(-1)}
 					className="w-full justify-start flex flex-row items-center m-2 text-xl"
 				>
 					<FaChevronLeft />
-				</Link>
+				</button>
 			</div>
 			<div
 				// TODO: Better color when match
@@ -83,7 +84,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 						</div>
 					)}
 					<UserInfo user={user} status={status} />
-					<UserBioDistance user={user} />
+					<UserBio user={user} />
 					<UserActions user={user} isFetching={isFetching} />
 				</div>
 			</div>

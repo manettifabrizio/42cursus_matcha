@@ -49,7 +49,12 @@ export function Component() {
 
 			getViews().then((res) => {
 				const views = res.filter(notEmpty);
-				setUsers(views);
+
+				const views_no_duplicates = Array.from(
+					new Map(views.map((user) => [user.id, user])).values(),
+				);
+
+				setUsers(views_no_duplicates);
 			});
 		}
 	}, [data, getProfile, isLoadingActivities, isFetchingActivities]);

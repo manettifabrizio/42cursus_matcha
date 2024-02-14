@@ -119,7 +119,9 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 
 	return (
 		<>
-			{distance && <div className="my-3 text-xl">{distance} km away</div>}
+			{distance != undefined && (
+				<div className="my-3 text-xl">{distance} km away</div>
+			)}
 			<div className="flex flex-row w-full justify-center mt-2">
 				{isFetching ? (
 					<LoadingSpinner size="sm" />

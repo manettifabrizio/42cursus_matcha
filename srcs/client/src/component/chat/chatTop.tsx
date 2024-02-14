@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { LuDot } from 'react-icons/lu';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type ChatTopProps = {
 	user: Profile;
@@ -18,6 +18,7 @@ type ChatTopProps = {
 
 export default function ChatTop({ user }: ChatTopProps) {
 	const dispatch = useStoreDispatch();
+	const navigate = useNavigate();
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
 	);
@@ -47,7 +48,7 @@ export default function ChatTop({ user }: ChatTopProps) {
 			<Link to="/home" className="flex m-3 text-xl">
 				<FaChevronLeft />
 			</Link>
-			<div className="flex flex-row">
+			<Link className="flex flex-row" to={`/user/${user.id}`}>
 				<img
 					src={`${location.origin}/api/pictures/${user.picture?.path}`}
 					alt="Chat"
@@ -79,7 +80,7 @@ export default function ChatTop({ user }: ChatTopProps) {
 						)}
 					</div>
 				</div>
-			</div>
+			</Link>
 		</div>
 	);
 }
