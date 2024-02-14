@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Notification, NotificationType } from './types';
 import { getTimeElapsedString } from '@/tool/interactionsTools';
+import MImage from '@/component/ui/mImage';
 
 export function createNotification(
 	id: number,
@@ -147,9 +148,9 @@ function messageContent(
 	return (
 		<>
 			<div className="text-2xl pe-3">
-				<img
-					src={`${location.origin}/api/pictures/${picture}`}
-					alt="Chat"
+				<MImage
+					src={`${picture}`}
+					alt="Avatar"
 					className="mr-2 inset-0 h-12 w-12 object-cover rounded-full"
 				/>
 			</div>

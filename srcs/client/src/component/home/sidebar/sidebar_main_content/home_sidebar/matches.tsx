@@ -1,4 +1,5 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
+import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
 import { setLikedUsers, setMatches } from '@/feature/interactions/store.slice';
 import {
@@ -145,9 +146,9 @@ export default function MatchesList() {
 									to={`/chat/${match.id}`}
 									className="user-match relative items-center h-12 w-12"
 								>
-									<img
-										src={`${location.origin}/api/pictures/${match.picture?.path}`}
-										alt="Match"
+									<MImage
+										src={`${match.picture?.path}`}
+										alt="Avatar"
 										className="absolute inset-0 h-12 w-12 object-cover rounded-full border border-black"
 									/>
 								</Link>

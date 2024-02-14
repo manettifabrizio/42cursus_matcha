@@ -47,10 +47,12 @@ export default function BootLoader({ setBooting }: Props) {
 			case 'RELOG':
 				(async () => {
 					try {
-						await relog({}).unwrap();
-						dispatch(setAuthAccessToken(cookie('access-token')));
-						await setCurrentUser();
-						dispatch(startConnecting());
+						if (localStorage.getItem('is_authenticated')) {
+							await relog({}).unwrap();
+							dispatch(setAuthAccessToken(cookie('access-token')));
+							await setCurrentUser();
+							dispatch(startConnecting());
+						}
 					} catch (err: unknown) {
 						console.log(`Component::BootLoader::RELOG: Failed.`);
 					} finally {

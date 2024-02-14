@@ -13,6 +13,7 @@ import {
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import UserBio from './userProfileBio';
+import MImage from '@/component/ui/mImage';
 
 type UserProfileProps = {
 	user: Profile;
@@ -64,14 +65,16 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 				}
 			>
 				<div className="bg-orange-500 w-1/2 h-full overflow-y-auto">
-					<img
-						src={`${location.origin}/api/pictures/${user.picture?.path}`}
+					<MImage
+						src={`${user.picture?.path}`}
+						alt="Avatar"
 						className="inset-0 w-full h-full object-cover"
 						key={user.picture?.id}
 					/>
 					{user_pictures.map((picture) => (
-						<img
-							src={`${location.origin}/api/pictures/${picture.path}`}
+						<MImage
+							src={`${picture.path}`}
+							alt="Picture"
 							className="inset-0 w-full"
 							key={picture.id}
 						/>

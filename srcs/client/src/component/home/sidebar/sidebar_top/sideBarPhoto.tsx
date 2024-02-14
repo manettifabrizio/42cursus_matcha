@@ -1,3 +1,4 @@
+import MImage from '@/component/ui/mImage';
 import { Profile } from '@/feature/user/types';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
@@ -27,8 +28,8 @@ export default function SideBarPhoto({ url, user }: SideBarPhotoProps) {
 					(center ? '' : 'justify-center')
 				}
 			>
-				<img
-					src={`${location.origin}/api/pictures/${user.picture?.path}`}
+				<MImage
+					src={`${user.picture?.path}`}
 					alt="Profile"
 					className={`rounded-full inset-0 object-cover ${
 						center ? 'h-12' : 'h-16'

@@ -80,7 +80,14 @@ BEGIN
 		INSERT INTO pictures
 			( "id_user", "path" )
 		VALUES
-			( user_id, concat(gen_random_uuid()::text, '.png') )
+			( user_id, concat('https://placehold.co/400x600?text=', gen_random_uuid()::text) )
+		RETURNING
+			"id" INTO picture_id;
+
+		INSERT INTO pictures
+			( "id_user", "path" )
+		VALUES
+			( user_id, concat('https://placehold.co/400x600?text=', gen_random_uuid()::text) )
 		RETURNING
 			"id" INTO picture_id;
 
@@ -93,7 +100,7 @@ BEGIN
 
 		-- Loop: User Tags
 		FOR t IN
-			SELECT "id" FROM tags ORDER BY random() LIMIT random_int(0, 8)
+			SELECT "id" FROM tags ORDER BY random() LIMIT random_int(0, 4)
 		LOOP
 			-- Add Tag to User
 			INSERT INTO users_tags
