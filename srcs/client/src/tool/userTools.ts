@@ -23,8 +23,6 @@ export async function setCurrentUser() {
 }
 
 export function isProfileCompleted(profile: Profile): number | undefined {
-	console.log(profile, profile.pictures.length, profile.picture);
-
 	if (
 		profile.birthdate == undefined ||
 		profile.biography == undefined ||
