@@ -21,8 +21,12 @@ const slice = createSlice({
             action: PayloadAction<State['accessToken']>
         ) => {
             state.accessToken = action.payload;
+            localStorage.setItem('is_authenticated', JSON.stringify(true));
         },
-        clearAuth: () => initialState // Todo: Verify if it works
+        clearAuth: () => {
+            localStorage.removeItem('is_authenticated');
+            return initialState // Todo: Verify if it works
+        }
     }
 });
 

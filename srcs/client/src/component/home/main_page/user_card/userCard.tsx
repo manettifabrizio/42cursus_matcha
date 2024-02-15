@@ -2,6 +2,7 @@ import { Profile } from '@/feature/user/types';
 import './user_card.scss';
 import { Link } from 'react-router-dom';
 import { getDistance } from '@/tool/userTools';
+import MImage from '@/component/ui/mImage';
 
 type UserCardProps = {
 	user: Profile;
@@ -22,8 +23,9 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 				{user.picture == undefined ? (
 					<div />
 				) : (
-					<img
-						src={`${location.origin}/api/pictures/${user.picture?.path}`}
+					<MImage
+						src={`${user.picture?.path}`}
+						alt="Avatar"
 						className="absolute inset-0 w-full h-full object-cover rounded-xl"
 					/>
 				)}

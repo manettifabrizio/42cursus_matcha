@@ -11,6 +11,7 @@ import { FaChevronLeft } from 'react-icons/fa6';
 import { LuDot } from 'react-icons/lu';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import MImage from '../ui/mImage';
 
 type ChatTopProps = {
 	user: Profile;
@@ -49,9 +50,9 @@ export default function ChatTop({ user }: ChatTopProps) {
 				<FaChevronLeft />
 			</Link>
 			<Link className="flex flex-row" to={`/user/${user.id}`}>
-				<img
-					src={`${location.origin}/api/pictures/${user.picture?.path}`}
-					alt="Chat"
+				<MImage
+					src={`${user.picture?.path}`}
+					alt="Avatar"
 					className="mr-2 inset-0 h-12 w-12 object-cover rounded-full"
 				/>
 				<div className="flex flex-wrap flex-col">

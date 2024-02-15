@@ -10,6 +10,7 @@ import {
 } from '@/feature/user/imagesUpload';
 import { PicturesInputProps } from '../user/complete-profile/inputs/picturesInput';
 import LoadingSpinner from './loadingSpinner';
+import MImage from './mImage';
 
 export default function ImageSelector({
 	errors,
@@ -153,8 +154,9 @@ export default function ImageSelector({
 												<AiFillCloseSquare />
 											</button>
 										)}
-									<img
+									<MImage
 										src={URL.createObjectURL(p.file)}
+										alt="Picture"
 										id={p.file.name}
 										onClick={async () =>
 											await handleImageClick(p)

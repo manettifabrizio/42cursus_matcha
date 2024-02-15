@@ -1,3 +1,4 @@
+import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
 import { getMessages } from '@/feature/interactions/store.slice';
 import { Profile } from '@/feature/user/types';
@@ -57,9 +58,9 @@ export default function Chat({ user }: ChatProps) {
 				to={`/chat/${user.id}`}
 				className="flex flex-nowrap items-center overflow-x-hidden"
 			>
-				<img
-					src={`${location.origin}/api/pictures/${user.picture?.path}`}
-					alt="Chat"
+				<MImage
+					src={`${user.picture?.path}`}
+					alt="Avatar"
 					className="mr-2 inset-0 h-12 w-12 object-cover rounded-full"
 				/>
 				<div
