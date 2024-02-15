@@ -1,26 +1,52 @@
-import { store } from '@/core/store';
-import { authApi } from '@/feature/auth/api.slice';
-import { Link } from 'react-router-dom';
+import LoadingSpinner from '@/component/ui/loadingSpinner';
+import { useConfirmMutation } from '@/feature/auth/api.slice';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, Navigate } from 'react-router-dom';
 
 export function Component() {
-	const urlParams = new URLSearchParams(window.location.search);
+	const [confirm] = useConfirmMutation();
+	const [confirmed, setConfirmed] = useState<boolean | null>(null);
 
-	const fields = {
-		id: urlParams.get('id') as string,
-		secret: urlParams.get('secret') as string,
-	};
+	useEffect(() => {
+		const urlParams = new URLSearchParams(window.location.search);
+		const fields = {
+			id: urlParams.get('id') as string,
+			secret: urlParams.get('secret') as string,
+		};
 
-	store.dispatch(authApi.endpoints.confirm.initiate(fields));
+		const confirmEmail = async (fields: { id: string; secret: string }) => {
+			try {
+				await confirm(fields).unwrap();
+				setConfirmed(true);
+				toast.success('Email confirmed successfully!');
+			} catch (err: unknown) {
+				setConfirmed(false);
+				toast.error('Failed to confirm email: ' + JSON.stringify(err));
+			}
+		};
 
-	return (
-		<div className="flex items-center justify-center flex-col w-full h-full">
-			<h2>Email confirmed successfully!</h2>
-			<div className="flex flex-row justify-center items-center mt-5">
-				Go to&nbsp;
-				<Link to="/auth/login" className="font-bold underline">
-					Log In
+		confirmEmail(fields);
+	}, [confirm]);
+
+	if (confirmed === null) {
+		return (
+			<div className="w-full h-full flex flex-col justify-center items-center">
+				<LoadingSpinner message="Confirming..." />
+			</div>
+		);
+	}
+
+	if (confirmed === false) {
+		return (
+			<div className="flex items-center justify-center flex-col w-full h-full">
+				<h2 className="text-red-500">Failed to confirm email.</h2>
+				<Link to="/auth/register" className="font-bold underline">
+					Resend
 				</Link>
 			</div>
-		</div>
-	);
+		);
+	}
+
+	return <Navigate to="/auth/login" />;
 }
