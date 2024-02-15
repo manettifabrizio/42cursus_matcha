@@ -44,9 +44,9 @@ export type Profile = {
 	gender: 'MALE' | 'FEMALE';
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
 	biography?: string;
-	picture?: { id: number; path: string };
+	picture?: Picture;
 	location?: { distance: number };
-	pictures: { id: number; path: string }[];
+	pictures: Picture[];
 	tags: { id: number; name: string }[];
 	likes?: { by_me: boolean; to_me: boolean };
 	blocks?: { by_me: boolean };
@@ -141,8 +141,8 @@ export const initAuthProfile: AuthProfile = {
 };
 
 export type PicturesProfile = {
-	pictures: FileWithId[];
-	profile_picture?: FileWithId;
+	pictures: Picture[];
+	profile_picture?: Picture;
 };
 
 export const initPicturesProfile: PicturesProfile = {
@@ -167,8 +167,6 @@ export type CompleteProfileInputProps = {
 	disabled: boolean;
 	profile: CompleteProfile;
 };
-
-export type FileWithId = { file: File; id?: number };
 
 /* ERRORS */
 

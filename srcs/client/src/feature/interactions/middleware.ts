@@ -65,7 +65,6 @@ const chatMiddleware: Middleware = (store) => {
 			});
 
 			socket.on('connect', () => {
-				console.log('Socket is connected');
 				store.dispatch(connectionEstablished());
 			});
 
@@ -109,11 +108,6 @@ const chatMiddleware: Middleware = (store) => {
 		}
 
 		if (sendMessage.match(action)) {
-			console.log(
-				'sendMessage',
-				action.payload,
-				typeof action.payload.id_user,
-			);
 			socket.emit('message:to', action.payload);
 		}
 		if (isUserOnline.match(action)) {
