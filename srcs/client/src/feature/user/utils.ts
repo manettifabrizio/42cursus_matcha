@@ -4,7 +4,6 @@ import {
 	AuthProfileError,
 	CompleteProfile,
 	CompleteProfileError,
-	PicturesProfile,
 	TagsError,
 } from './types';
 import { getGeolocation } from '@/tool/getLocation';
@@ -198,23 +197,4 @@ export async function sendTags(
 	return (
 		!res.length || res.find((r) => r.status === 'rejected') === undefined
 	);
-}
-
-export function hasImagesChanged(
-	profile: PicturesProfile,
-	base: PicturesProfile,
-): boolean {
-	const images = profile.pictures;
-	const base_images = base.pictures;
-
-	if (images.length !== base_images.length) return true;
-
-	for (let i = 0; i < images.length; i++) {
-		if (images[i].file.name !== base_images[i].file.name) return true;
-	}
-
-	if (profile.profile_picture?.file.name !== base.profile_picture?.file.name)
-		return true;
-
-	return false;
 }

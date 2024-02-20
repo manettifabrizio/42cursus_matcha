@@ -16,14 +16,14 @@ export default function TagsFilter({ tags, setTags }: FameFilterProps) {
 							'absolute h-0 w-full outline-none z-40 pointer-events-none undefined'
 						}
 						min="0"
-						max="5"
+						max="4"
 						value={tags}
 					/>
 					<div className="relative w-full bg-white">
 						{/* Slider */}
 						<div className="absolute border-2 border-white z-20 rounded-md w-full" />
 						<div className="absolute text-white text-xs mt-3 left-0">
-							{tags}/5
+							{tags}/4
 						</div>
 					</div>
 				</div>

@@ -79,7 +79,7 @@ export type UserSortCriteria = 'age' | 'distance' | 'tags' | 'fame';
 type SortOption = `${UserSortCriteria},${'asc' | 'desc'}`;
 
 export interface UserFilters {
-	smart_recommendation: boolean;
+	smart_recommendation?: boolean;
 	page: number;
 	age_min: number;
 	age_max: number;
@@ -93,17 +93,15 @@ export interface UserFilters {
 }
 
 export const initFilters: UserFilters = {
-	smart_recommendation: true,
 	page: 1,
 	age_min: 18,
 	age_max: 80,
-	distance_min: 1,
-	distance_max: 1,
+	distance_min: 0,
+	distance_max: 100,
 	tags_min: 0,
 	tags_max: 0,
 	fame_min: 0,
 	fame_max: 100,
-	sort: undefined,
 };
 
 export type CompleteProfile = {

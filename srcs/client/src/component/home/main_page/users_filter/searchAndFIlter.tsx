@@ -8,6 +8,8 @@ type SearchAndFilterProps = {
 	searchValue: string;
 	filters: UserFilters;
 	setFilters: React.Dispatch<React.SetStateAction<UserFilters>>;
+	onSave: (filters: UserFilters) => void;
+	onReset: () => void;
 };
 
 export default function SearchAndFilter({
@@ -15,6 +17,8 @@ export default function SearchAndFilter({
 	setSearchValue,
 	filters,
 	setFilters,
+	onSave,
+	onReset,
 }: SearchAndFilterProps) {
 	return (
 		<>
@@ -24,8 +28,13 @@ export default function SearchAndFilter({
 					setSearchValue={setSearchValue}
 				/>
 				<div className="flex flex-row">
-					<UsersSort setFilters={setFilters} />
-					<UsersFilter filters={filters} setFilters={setFilters} />
+					<UsersSort setFilters={setFilters} onSave={onSave}/>
+					<UsersFilter
+						filters={filters}
+						setFilters={setFilters}
+						onSave={onSave}
+						onReset={onReset}
+					/>
 				</div>
 			</div>
 		</>

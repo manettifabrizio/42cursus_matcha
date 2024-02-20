@@ -61,7 +61,9 @@ export default function BootLoader({ setBooting }: Props) {
 					try {
 						if (localStorage.getItem('is_authenticated')) {
 							await relog({}).unwrap();
-							dispatch(setAuthAccessToken(cookie('access-token')));
+							dispatch(
+								setAuthAccessToken(cookie('access-token')),
+							);
 							await setCurrentUser();
 							dispatch(startConnecting());
 						}

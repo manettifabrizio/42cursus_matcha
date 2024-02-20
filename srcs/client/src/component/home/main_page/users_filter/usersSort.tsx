@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { UserFilters, UserSortCriteria } from '@/feature/user/types';
 import { useEffect, useRef, useState } from 'react';
 import { BsArrowDown, BsArrowUp, BsCheck } from 'react-icons/bs';
@@ -6,6 +7,7 @@ import { FaWandMagic, FaWandMagicSparkles } from 'react-icons/fa6';
 
 export type UsersSortProps = {
 	setFilters: React.Dispatch<React.SetStateAction<UserFilters>>;
+	onSave: (filters: UserFilters) => void;
 };
 
 const Options: { value: UserSortCriteria; label: string }[] = [
@@ -15,7 +17,7 @@ const Options: { value: UserSortCriteria; label: string }[] = [
 	{ value: 'tags', label: 'Tags' },
 ];
 
-export default function UsersSort({ setFilters }: UsersSortProps) {
+export default function UsersSort({ setFilters, onSave }: UsersSortProps) {
 	const [value, setValue] = useState<UserSortCriteria | null>(null);
 	const [show, setShow] = useState(false);
 	const [smart_recommendation, setSmartRecommendation] = useState(true);
@@ -25,17 +27,27 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 
 	useEffect(() => {
 		if (value)
-			setFilters((f) => ({
-				...f,
-				sort: `${value},${sortOrder}`,
-			}));
+			setFilters((f) => {
+				const newFilters: UserFilters = {
+					...f,
+					sort: `${value},${sortOrder}`,
+				};
+				onSave(newFilters);
+
+				return newFilters;
+			});
 	}, [value, sortOrder, setFilters]);
 
 	useEffect(() => {
-		setFilters((f) => ({
-			...f,
-			smart_recommendation,
-		}));
+		setFilters((f) => {
+			const newFilters: UserFilters = {
+				...f,
+				smart_recommendation,
+			};
+			onSave(newFilters);
+
+			return newFilters;
+		});
 	}, [smart_recommendation, setFilters]);
 
 	useEffect(() => {
@@ -135,7 +147,15 @@ export default function UsersSort({ setFilters }: UsersSortProps) {
 							}
 							onClick={() => {
 								setValue(null);
-								setFilters((f) => ({ ...f, sort: undefined }));
+								setFilters((f) => {
+									const newFilters = {
+										...f,
+										sort: undefined,
+									};
+									onSave(newFilters);
+
+									return newFilters;
+								});
 							}}
 						>
 							Reset

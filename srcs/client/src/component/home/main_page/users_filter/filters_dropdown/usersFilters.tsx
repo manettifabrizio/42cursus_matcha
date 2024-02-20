@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import { GoFilter } from 'react-icons/go';
 import AgeFilter from './ageFilter';
@@ -10,9 +11,16 @@ import { AiOutlineClose } from 'react-icons/ai';
 export type UserFiltersProps = {
 	filters: UserFilters;
 	setFilters: React.Dispatch<React.SetStateAction<UserFilters>>;
+	onSave: (filters: UserFilters) => void;
+	onReset: () => void;
 };
 
-export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
+export default function UsersFilter({
+	filters,
+	setFilters,
+	onSave,
+	onReset,
+}: UserFiltersProps) {
 	const [show, setShow] = useState(false);
 	const [age, setAge] = useState({
 		min: initFilters.age_min,
@@ -24,32 +32,43 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 		min: initFilters.fame_min,
 		max: initFilters.fame_max,
 	});
+	const [saved, setSaved] = useState(true);
 
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	const resetFilters = () => {
+	const areFiltersReset = () => {
+		const compareFilters: UserFilters = {
+			...initFilters,
+			smart_recommendation: filters.smart_recommendation,
+			sort: filters.sort,
+		};
+
+		return JSON.stringify(filters) === JSON.stringify(compareFilters);
+	};
+
+	const reset = () => {
+		onReset();
 		setAge({ min: initFilters.age_min, max: initFilters.age_max });
 		setDistance(initFilters.distance_max);
 		setTags(initFilters.tags_max);
 		setFame({ min: initFilters.fame_min, max: initFilters.fame_max });
 	};
 
-	const isResetDisabled = () =>
-		JSON.stringify(filters) === JSON.stringify(initFilters);
-
 	useEffect(() => {
 		setFilters((c) => ({
 			...c,
 			age_min: age.min,
 			age_max: age.max,
-			distance_min: 1,
+			distance_min: 0,
 			distance_max: distance,
 			tags_min: 0,
 			tags_max: tags,
 			fame_min: fame.min,
 			fame_max: fame.max,
 		}));
+		if (areFiltersReset()) return;
+		setSaved(false);
 	}, [age, distance, tags, fame, setFilters]);
 
 	useEffect(() => {
@@ -68,7 +87,7 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 		return () => {
 			window.removeEventListener('mousedown', handleOutsideClick);
 		};
-	});
+	}, []);
 
 	return (
 		<>
@@ -101,16 +120,31 @@ export default function UsersFilter({ filters, setFilters }: UserFiltersProps) {
 						setFame={setFame}
 						fame={{ min: filters.fame_min, max: filters.fame_max }}
 					/>
-					<button
-						disabled={isResetDisabled()}
-						className={
-							'underline w-full ' +
-							(isResetDisabled() ? 'opacity-50' : '')
-						}
-						onClick={resetFilters}
-					>
-						Reset
-					</button>
+					<div className="flex flex-row justify-between w-full">
+						<button
+							disabled={saved}
+							className={
+								'underline w-full ' +
+								(saved ? 'opacity-50' : '')
+							}
+							onClick={() => {
+								onSave(filters);
+								setSaved(true);
+							}}
+						>
+							Save
+						</button>
+						<button
+							disabled={areFiltersReset()}
+							className={
+								'underline w-full ' +
+								(areFiltersReset() ? 'opacity-50' : '')
+							}
+							onClick={reset}
+						>
+							Reset
+						</button>
+					</div>
 				</div>
 			</div>
 		</>
