@@ -6,6 +6,7 @@ const HTTP_ERROR = {
   Unauthorized: 401,
   Forbidden: 403,
   "Unprocessable Entity": 422,
+  "Failed Dependency": 424,
   "Internal Server Error": 500,
 } as const;
 

@@ -1,4 +1,3 @@
-import type { CryptoService } from "@/core/cryto/types";
 import type { DatabaseService } from "@/core/database/types";
 import type { ValidationService } from "@/core/validation/types";
 import type { Account } from "../../entity";
@@ -7,22 +6,19 @@ import { validate } from "./validate";
 
 // Type ------------------------------------------------------------------------
 type ActionInput = {
-  username: string;
-  password: string;
+  id: string | number;
 };
 
-type ActionOutput = Pick<Account,
-  "id" | "email" | "email_new" | "secret" | "is_confirmed"> | null;
+type ActionOutput = Pick<Account, "id" | "email" | "email_new" | "is_confirmed" | "secret"> | null;
 
 // Function --------------------------------------------------------------------
 export const action = async (
   validation_svc: ValidationService,
   database_svc: DatabaseService,
-  crypto_svc: CryptoService,
   dto: ActionInput
 ): Promise<ActionOutput> => {
   const fields = await validate(validation_svc, dto);
-  const account = await query(database_svc, crypto_svc, fields);
+  const account = await query(database_svc, fields);
 
   return account;
 };

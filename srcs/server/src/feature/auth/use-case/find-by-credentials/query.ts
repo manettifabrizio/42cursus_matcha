@@ -5,7 +5,8 @@ import type { Account } from "../../entity";
 // Type ------------------------------------------------------------------------
 type QueryInput = Pick<Account, "username" | "password">;
 
-type QueryOutput = Pick<Account, "id" | "is_confirmed"> | null;
+type QueryOutput = Pick<Account,
+  "id" | "email" | "email_new" | "secret" | "is_confirmed"> | null;
 
 // Function --------------------------------------------------------------------
 export const query = async (
@@ -15,7 +16,7 @@ export const query = async (
 ): Promise<QueryOutput> => {
   const query = `
 		SELECT
-			id, password, is_confirmed
+			id, password, email, email_new, secret, is_confirmed
 		FROM
 			accounts
 		WHERE
@@ -25,7 +26,7 @@ export const query = async (
   const params = [dto.username];
 
   const result = await database_svc.query<
-    Pick<Account, "id" | "password" | "is_confirmed">
+    Pick<Account, "id" | "password" | "email" | "email_new" | "secret" | "is_confirmed">
   >(query, params);
 
   if (result.rowCount === 0) {

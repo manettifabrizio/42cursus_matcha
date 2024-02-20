@@ -33,13 +33,25 @@ export default function BootLoader({ setBooting }: Props) {
 				break;
 			case 'CSRF':
 				(async () => {
-					try {
-						await getCsrfToken().unwrap();
-						dispatch(setCsrfToken(cookie('csrf-token')));
-					} catch (err: unknown) {
-						// Todo: Handle error
+					const MAX_RETRY = 5;
+					let retry = 0;
+
+					while (retry < MAX_RETRY) {
+						try {
+							await getCsrfToken().unwrap();
+							dispatch(setCsrfToken(cookie('csrf-token')));
+							break;
+						} catch (err: unknown) {
+							retry += 1;
+						}
+					}
+
+					if (retry == MAX_RETRY) {
 						console.log(`Component::BootLoader::CSRF: Failed.`);
-					} finally {
+						// Todo: Notify user ? Display an error ?
+						location.reload();
+					}
+					else {
 						setTimeout(() => setStep('RELOG'), 500);
 					}
 				})();

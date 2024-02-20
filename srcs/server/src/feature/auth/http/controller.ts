@@ -7,6 +7,7 @@ import { route as Refresh } from "./route/refresh";
 import { route as Logout } from "./route/logout";
 import { route as ResetPassword } from "./route/reset-password";
 import { route as UpdatePassword } from "./route/update-password";
+import { route as ResendConfirmationEmail } from "./route/resend-confirmation-email";
 import { route as Edit } from "./route/edit";
 
 // Controller ------------------------------------------------------------------
@@ -19,5 +20,6 @@ controller.post("/refresh", Refresh);
 controller.post("/logout", Logout);
 controller.post("/reset-password", ResetPassword);
 controller.post("/update-password", UpdatePassword);
+controller.post("/resend-confirmation-email", ResendConfirmationEmail);
 
 controller.patch("/edit", AuthMiddleware, Edit);
