@@ -5,7 +5,9 @@ import { service as crypto_svc } from "@/core/cryto/service";
 import { service as mail_svc } from "@/core/mail/service";
 import { service as validation_svc } from "@/core/validation/service";
 import { action as findAccountByCrendentials } from "../../use-case/find-by-credentials/action";
+import { query as findAccountById } from "../../use-case/find-by-id/query";
 import { HttpException } from '@/core/exception';
+import { middleware as AuthMiddleware } from '../middleware';
 
 // Type ------------------------------------------------------------------------
 type RequestBody = {
@@ -20,11 +22,23 @@ export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (
   req,
   res
 ) => {
-    const account = await findAccountByCrendentials(validation_svc, database_svc, crypto_svc, {
-      username: req.body.username,
-      password: req.body.password,
-    });
+	let account = null;
+	
+	if (req.body.username && req.body.password) {
+		account = await findAccountByCrendentials(validation_svc, database_svc, crypto_svc, {
+			username: req.body.username,
+			password: req.body.password,
+		});
+	}
+	else {
+		AuthMiddleware(req, res, () => {});
 
+		if (req.user?.id) {
+			account = await findAccountById(database_svc, { id: req.user.id });
+		}
+	}
+
+	
 	if (account === null) {
 		throw new HttpException("Unauthorized", {
 			cause: `Invalid credentials.`
@@ -35,11 +49,11 @@ export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (
 	{
 		throw new HttpException("Forbidden", {
 			cause: `Email has already been validated.`
-		})
+		});
 	}
 
-    // Todo: Match link with frontend routing
-    try {
+	// Todo: Match link with frontend routing
+	try {
 		await mail_svc.send({
 			from: '"Matcha" <noreply@matcha.org>',
 			to: account.email_new ?? account.email,
@@ -50,13 +64,13 @@ export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (
 					Confirm my email
 				</a>
 			`,
-		})
+		});
 	}
 	catch (err: any) {
 		throw new HttpException("Failed Dependency", {
 			cause: `Failed to send confirmation email.`,
 			details: err,
-		})
+		});
 	}
 
     return res.status(201).json();
