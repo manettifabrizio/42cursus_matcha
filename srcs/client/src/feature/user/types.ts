@@ -44,9 +44,9 @@ export type Profile = {
 	gender: 'MALE' | 'FEMALE';
 	orientation: 'HETEROSEXUAL' | 'HOMOSEXUAL' | 'BISEXUAL';
 	biography?: string;
-	picture?: { id: number; path: string };
+	picture?: Picture;
 	location?: { distance: number };
-	pictures: { id: number; path: string }[];
+	pictures: Picture[];
 	tags: { id: number; name: string }[];
 	likes?: { by_me: boolean; to_me: boolean };
 	blocks?: { by_me: boolean };
@@ -79,7 +79,7 @@ export type UserSortCriteria = 'age' | 'distance' | 'tags' | 'fame';
 type SortOption = `${UserSortCriteria},${'asc' | 'desc'}`;
 
 export interface UserFilters {
-	smart_recommendation: boolean;
+	smart_recommendation?: boolean;
 	page: number;
 	age_min: number;
 	age_max: number;
@@ -93,17 +93,15 @@ export interface UserFilters {
 }
 
 export const initFilters: UserFilters = {
-	smart_recommendation: true,
 	page: 1,
 	age_min: 18,
 	age_max: 80,
-	distance_min: 1,
-	distance_max: 1,
+	distance_min: 0,
+	distance_max: 100,
 	tags_min: 0,
 	tags_max: 0,
 	fame_min: 0,
 	fame_max: 100,
-	sort: undefined,
 };
 
 export type CompleteProfile = {
@@ -141,8 +139,8 @@ export const initAuthProfile: AuthProfile = {
 };
 
 export type PicturesProfile = {
-	pictures: FileWithId[];
-	profile_picture?: FileWithId;
+	pictures: Picture[];
+	profile_picture?: Picture;
 };
 
 export const initPicturesProfile: PicturesProfile = {
@@ -167,8 +165,6 @@ export type CompleteProfileInputProps = {
 	disabled: boolean;
 	profile: CompleteProfile;
 };
-
-export type FileWithId = { file: File; id?: number };
 
 /* ERRORS */
 

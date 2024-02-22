@@ -117,7 +117,7 @@ export const authApi = api.injectEndpoints({
 
 // Hook ------------------------------------------------------------------------
 export const {
-	useRegisterMutation,
+	useConfirmMutation,
 	useLoginMutation,
 	useRefreshMutation,
 	useLogoutMutation,

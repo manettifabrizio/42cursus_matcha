@@ -1,20 +1,26 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import ProfileEdit from '@/component/user/profile/edit/profileEdit';
+import { clearAuth } from '@/feature/auth/store.slice';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
-import { CompleteProfileError, initCompleteProfileErrors } from '@/feature/user/types';
+import {
+	CompleteProfileError,
+	initCompleteProfileErrors,
+} from '@/feature/user/types';
 import { profileToCompleteProfile } from '@/tool/userTools';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export function Component() {
+	const dispatch = useDispatch();
 	const {
 		data = undefined,
 		isFetching,
 		isLoading,
 		isError,
 	} = useGetProfileQuery();
-    const [errors, setErrors] = useState<CompleteProfileError>(
+	const [errors, setErrors] = useState<CompleteProfileError>(
 		initCompleteProfileErrors,
 	);
 
@@ -28,6 +34,7 @@ export function Component() {
 
 	if (isError) {
 		toast.error(`Error: User not found`);
+		dispatch(clearAuth());
 		return <Navigate to="/" />;
 	}
 
@@ -35,8 +42,8 @@ export function Component() {
 		<ProfileEdit
 			key={data.tags.join(' ')}
 			base_profile={profileToCompleteProfile(data)}
-            errors={errors}
-            setErrors={setErrors}
+			errors={errors}
+			setErrors={setErrors}
 		/>
 	) : (
 		<div className="w-full h-full flex flex-col justify-center items-center">

@@ -18,14 +18,14 @@ export default function DistanceFilter({
 						className={
 							'absolute h-0 w-full outline-none z-40 pointer-events-none undefined'
 						}
-						min="1"
+						min="0"
 						value={distance}
 					/>
 					<div className="relative w-full bg-white">
 						{/* Slider */}
 						<div className="absolute border-2 border-white z-20 rounded-md w-full" />
 						<div className="absolute text-white text-xs mt-3 left-0">
-							{distance}km
+							{distance === 100 ? '100+' : distance}km
 						</div>
 					</div>
 				</div>

@@ -1,10 +1,13 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import PicturesEdit from '@/component/user/profile/pictures/picturesEdit';
+import { clearAuth } from '@/feature/auth/store.slice';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export function Component() {
+	const dispatch = useDispatch();
 	const {
 		data = undefined,
 		isFetching,
@@ -14,6 +17,7 @@ export function Component() {
 
 	if (isError) {
 		toast.error(`Error: User not found`);
+		dispatch(clearAuth());
 		return <Navigate to="/" />;
 	}
 

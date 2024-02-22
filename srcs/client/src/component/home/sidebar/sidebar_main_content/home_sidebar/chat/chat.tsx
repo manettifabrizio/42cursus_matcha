@@ -47,7 +47,6 @@ export default function Chat({ user }: ChatProps) {
 
 	useEffect(() => {
 		if ((last_message && !last_message.seen) || !last_message) {
-			console.log(last_message);
 			setNewMessage(true);
 		} else setNewMessage(false);
 	}, [last_message]);

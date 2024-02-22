@@ -1,15 +1,11 @@
 import ImageSelector from '@/component/ui/imageSelector';
-import {
-	PicturesProfileError,
-	FileWithId,
-	Profile,
-} from '@/feature/user/types';
+import { Picture, PicturesProfileError, Profile } from '@/feature/user/types';
 
 export type PicturesInputProps = {
 	setErrors: React.Dispatch<React.SetStateAction<PicturesProfileError>>;
 	errors?: string[];
-	base_pictures?: FileWithId[];
-	profile_picture?: FileWithId;
+	base_pictures?: Picture[];
+	profile_picture?: Picture;
 	profile: Profile;
 	loading: boolean;
 };

@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { LuDot } from 'react-icons/lu';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MImage from '../ui/mImage';
 
 type ChatTopProps = {
@@ -19,7 +19,6 @@ type ChatTopProps = {
 
 export default function ChatTop({ user }: ChatTopProps) {
 	const dispatch = useStoreDispatch();
-	const navigate = useNavigate();
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
 	);

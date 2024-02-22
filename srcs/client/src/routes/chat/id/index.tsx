@@ -33,7 +33,6 @@ export function Component() {
 	);
 
 	useEffect(() => {
-		console.log("messages", messages);
 		if (id_other_user && messages) {
 			dispatch(readMessages(id_other_user));
 		}

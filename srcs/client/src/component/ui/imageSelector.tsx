@@ -2,7 +2,6 @@ import toast from 'react-hot-toast';
 import { AiFillCloseSquare } from 'react-icons/ai';
 
 import { useEffect, useState } from 'react';
-import { FileWithId } from '@/feature/user/types';
 import {
 	deletePicture,
 	uploadPicture,
@@ -11,6 +10,7 @@ import {
 import { PicturesInputProps } from '../user/complete-profile/inputs/picturesInput';
 import LoadingSpinner from './loadingSpinner';
 import MImage from './mImage';
+import { Picture } from '@/feature/user/types';
 
 export default function ImageSelector({
 	errors,
@@ -19,9 +19,9 @@ export default function ImageSelector({
 	profile_picture,
 	loading,
 }: PicturesInputProps) {
-	const [profilePicture, setProfilePicture] = useState<FileWithId>();
+	const [profilePicture, setProfilePicture] = useState<Picture>();
 	const [submitting, setSubmitting] = useState(false);
-	const [pictures, setPictures] = useState<FileWithId[]>(base_pictures ?? []);
+	const [pictures, setPictures] = useState<Picture[]>(base_pictures ?? []);
 
 	const MAX_COUNT = 5;
 
@@ -58,19 +58,14 @@ export default function ImageSelector({
 
 		for (const file of files) {
 			if (checkFile(file)) {
-				const fileName = file.name.replace(/-/g, '');
-				if (
-					pictures.findIndex((p) => p.file.name === fileName) === -1
-				) {
-					const id = await uploadPicture(
-						file,
-						setErrors,
-						setSubmitting,
-						toast_id,
-					);
+				const id = await uploadPicture(
+					file,
+					setErrors,
+					setSubmitting,
+					toast_id,
+				);
 
-					if (id) pictures_uploaded++;
-				}
+				if (id) pictures_uploaded++;
 			}
 		}
 
@@ -88,31 +83,28 @@ export default function ImageSelector({
 		e: React.MouseEvent<HTMLInputElement, MouseEvent>,
 	) => ((e.target as HTMLInputElement).value = '');
 
-	const handleFileEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleFileEvent = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const chosenFiles: File[] = Array.prototype.slice.call(e.target.files);
-		handleUploadFiles(chosenFiles);
+		await handleUploadFiles(chosenFiles);
 	};
 
-	const handleImageClick = async (picture: FileWithId) => {
-		if (picture.file.name === profilePicture?.file.name || submitting)
-			return;
+	const handleImageClick = async (picture: Picture) => {
+		if (picture.id === profilePicture?.id || submitting) return;
 
 		if (await uploadProfilePicture(picture, setErrors, setSubmitting)) {
 			setProfilePicture(picture);
 		}
 	};
 
-	const isProfilePicture = (picture: FileWithId) =>
-		picture.file.name === profilePicture?.file.name;
+	const isProfilePicture = (picture: Picture) =>
+		picture.id === profilePicture?.id;
 
-	const rmFile = async (picture: FileWithId) => {
+	const rmFile = async (picture: Picture) => {
 		if (
 			picture.id === undefined ||
 			(await deletePicture(picture.id, setErrors, setSubmitting))
 		) {
-			setPictures((c) =>
-				c.filter((p) => p.file.name !== picture.file.name),
-			);
+			setPictures((c) => c.filter((p) => p.id !== picture.id));
 		}
 	};
 
@@ -128,7 +120,7 @@ export default function ImageSelector({
 						{pictures.map((p) => (
 							<div
 								className="w-full h-full flex justify-evenly items-center"
-								key={p.file.name}
+								key={p.id}
 							>
 								<div
 									className={
@@ -155,9 +147,9 @@ export default function ImageSelector({
 											</button>
 										)}
 									<MImage
-										src={URL.createObjectURL(p.file)}
+										src={p.path}
 										alt="Picture"
-										id={p.file.name}
+										id={p.id.toString()}
 										onClick={async () =>
 											await handleImageClick(p)
 										}

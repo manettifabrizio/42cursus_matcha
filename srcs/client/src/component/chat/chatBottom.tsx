@@ -16,7 +16,6 @@ export default function ChatBottom({ other_user }: ChatBottomProps) {
 			<form
 				className="flex flex-row py-2 px-3 rounded-full w-full border"
 				onSubmit={(e) => {
-					console.log('submit');
 					e.preventDefault();
 					dispatch(
 						sendMessage({

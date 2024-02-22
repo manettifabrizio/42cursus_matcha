@@ -22,18 +22,28 @@ export default function MainPage() {
 		(state: StoreState) => state.interactions.liked_users,
 	);
 
-	useEffect(
-		// On filter change reset page to 1 and users to empty array
-		() => {
-			setUsers([]);
-			setPage(1);
-			setFilterStr(getSearchStr({ ...filters, page: 1 }));
-		},
-		[filters],
-	);
+	// On filter change reset page to 1 and users to empty array
+	const onSave = (filters: UserFilters) => {
+		setUsers([]);
+		setPage(1);
+		setFilterStr(getSearchStr({ ...filters, page: 1 }));
+	};
+
+	const onReset = () => {
+		const resetFilters: UserFilters = {
+			...initFilters,
+			smart_recommendation: filters.smart_recommendation,
+			sort: filters.sort,
+		};
+		console.log(resetFilters);
+		setFilters(resetFilters);
+		onSave(resetFilters);
+	};
+
 	useEffect(() => {
 		if (!isFetching && !isLoading) {
 			const concat_users = users.concat(data.users);
+
 			const users_no_duplicates = Array.from(
 				new Map(concat_users.map((user) => [user.id, user])).values(),
 			);
@@ -68,6 +78,8 @@ export default function MainPage() {
 				setSearchValue={setSearchValue}
 				filters={filters}
 				setFilters={setFilters}
+				onSave={onSave}
+				onReset={onReset}
 			/>
 			<AvailableUsers
 				isFetching={isFetching}
