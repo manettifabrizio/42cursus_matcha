@@ -1,6 +1,6 @@
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
-import { getMessages } from '@/feature/interactions/store.slice';
+import { getMessages, toggleSidebar } from '@/feature/interactions/store.slice';
 import { Profile } from '@/feature/user/types';
 import { useStoreDispatch } from '@/hook/useStore';
 import { useEffect, useState } from 'react';
@@ -55,6 +55,9 @@ export default function Chat({ user }: ChatProps) {
 		<li className="mb-1 w-full">
 			<Link
 				to={`/chat/${user.id}`}
+				onClick={() => {
+					dispatch(toggleSidebar(false));
+				}}
 				className="flex flex-nowrap items-center overflow-x-hidden"
 			>
 				<MImage

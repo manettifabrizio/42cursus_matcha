@@ -14,6 +14,7 @@ import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import UserBio from './userProfileBio';
 import MImage from '@/component/ui/mImage';
+import { useMediaQuery } from 'react-responsive';
 
 type UserProfileProps = {
 	user: Profile;
@@ -22,6 +23,7 @@ type UserProfileProps = {
 
 export default function UserProfile({ user, isFetching }: UserProfileProps) {
 	const dispatch = useStoreDispatch();
+	const isDesktop = useMediaQuery({ query: '(min-width: 940px)' });
 	const navigate = useNavigate();
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
@@ -58,38 +60,72 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 			<div
 				// TODO: Better color when match
 				className={
-					'flex flex-row border-4 w-3/4 h-5/6 rounded-xl overflow-hidden max-w-4xl max-h-[45rem] ' +
+					'user-profile flex relative border-4 w-3/4 h-5/6 rounded-xl max-w-4xl sm:max-h-[45rem] ' +
+					(isDesktop
+						? 'flex-row overflow-hidden '
+						: 'flex-col overflow-y-auto ') +
 					(user.likes?.by_me && user.likes?.to_me
 						? 'border-red-500'
 						: '')
 				}
 			>
-				<div className="bg-orange-500 w-1/2 h-full overflow-y-auto">
-					<MImage
-						src={`${user.picture?.path}`}
-						alt="Avatar"
-						className="inset-0 w-full h-full object-cover"
-						key={user.picture?.id}
-					/>
-					{user_pictures.map((picture) => (
-						<MImage
-							src={`${picture.path}`}
-							alt="Picture"
-							className="inset-0 w-full"
-							key={picture.id}
-						/>
-					))}
-				</div>
-				<div className="flex flex-col w-1/2 h-full p-10 relative">
-					{user.blocks?.by_me && (
-						<div className="absolute top-0 left-0 text-red-500 italic font-light border-red-500 border-b w-full text-center">
-							User is blocked
+				{isDesktop ? (
+					<>
+						<div className="bg-orange-500 w-1/2 h-full overflow-y-auto">
+							<MImage
+								src={`${user.picture?.path}`}
+								alt="Avatar"
+								className="inset-0 w-full h-full object-cover"
+								key={user.picture?.id}
+							/>
+							{user_pictures.map((picture) => (
+								<MImage
+									src={`${picture.path}`}
+									alt="Picture"
+									className="inset-0 w-full"
+									key={picture.id}
+								/>
+							))}
 						</div>
-					)}
-					<UserInfo user={user} status={status} />
-					<UserBio user={user} />
-					<UserActions user={user} isFetching={isFetching} />
-				</div>
+						<div className="flex flex-col w-1/2 h-full p-10 relative">
+							{user.blocks?.by_me && (
+								<div className="absolute top-0 left-0 text-red-500 italic font-light border-red-500 border-b w-full text-center">
+									User is blocked
+								</div>
+							)}
+							<UserInfo user={user} status={status} />
+							<UserBio user={user} />
+							<UserActions user={user} isFetching={isFetching} />
+						</div>
+					</>
+				) : (
+					<>
+						{user.blocks?.by_me && (
+							<div className="absolute top-0 left-0 text-white italic font-light border-red-500 bg-red-500 border-b w-full text-center">
+								User is blocked
+							</div>
+						)}
+						<MImage
+							src={`${user.picture?.path}`}
+							alt="Avatar"
+							className="inset-0 w-full h-full object-cover"
+							key={user.picture?.id}
+						/>
+						<div className="flex flex-col p-3">
+							<UserInfo user={user} status={status} />
+							<UserBio user={user} />
+							<UserActions user={user} isFetching={isFetching} />
+						</div>
+						{user_pictures.map((picture) => (
+							<MImage
+								src={`${picture.path}`}
+								alt="Picture"
+								className="inset-0 w-full"
+								key={picture.id}
+							/>
+						))}
+					</>
+				)}
 			</div>
 		</div>
 	);

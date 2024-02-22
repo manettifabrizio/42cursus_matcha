@@ -35,7 +35,6 @@ export default function MainPage() {
 			smart_recommendation: filters.smart_recommendation,
 			sort: filters.sort,
 		};
-		console.log(resetFilters);
 		setFilters(resetFilters);
 		onSave(resetFilters);
 	};

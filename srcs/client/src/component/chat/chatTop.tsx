@@ -12,6 +12,8 @@ import { LuDot } from 'react-icons/lu';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MImage from '../ui/mImage';
+import { useMediaQuery } from 'react-responsive';
+import { BackToMenuArrow } from '../home/sidebar/sidebar_main_content/profile_sidebar/backToMenuArrow';
 
 type ChatTopProps = {
 	user: Profile;
@@ -19,6 +21,7 @@ type ChatTopProps = {
 
 export default function ChatTop({ user }: ChatTopProps) {
 	const dispatch = useStoreDispatch();
+	const isDesktop = useMediaQuery({ query: '(min-width: 640px)' });
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
 	);
@@ -45,9 +48,13 @@ export default function ChatTop({ user }: ChatTopProps) {
 
 	return (
 		<div className="flex flex-row w-full px-2 pt-2">
-			<Link to="/home" className="flex m-3 text-xl">
-				<FaChevronLeft />
-			</Link>
+			{isDesktop ? (
+				<Link to="/home" className="flex m-3 text-xl">
+					<FaChevronLeft />
+				</Link>
+			) : (
+				<BackToMenuArrow chat={true} />
+			)}
 			<Link className="flex flex-row" to={`/user/${user.id}`}>
 				<MImage
 					src={`${user.picture?.path}`}

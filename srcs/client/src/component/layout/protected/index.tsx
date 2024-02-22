@@ -49,7 +49,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	}
 
 	return (
-		<div className="black-background relative h-screen overflow-hidden">
+		<div className="black-background relative h-svh overflow-hidden">
 			{inverted ? (
 				<>
 					<div className="ellipse absolute bottom-0 right-0 transform translate-x-1/2 translate-y-1/2 bg-red-600 rounded-full -z-30"></div>

@@ -25,7 +25,7 @@ export default function AvailableUsers({
 				<>
 					{users.length > 0 ? (
 						<>
-							<div className="grid auto-rows-auto auto-cols-max gap-9 grid-cols-[repeat(auto-fill,minmax(200px,1fr))] mx-5 my-3 transition">
+							<div className="grid auto-rows-auto auto-cols-max gap-4 sm:gap-9 grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] mx-2 sm:mx-5 my-3">
 								{users.map((u) => (
 									<UserCard user={u} key={u.id} />
 								))}

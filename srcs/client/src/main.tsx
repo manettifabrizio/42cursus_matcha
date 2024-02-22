@@ -8,8 +8,6 @@ import '@/style/global.scss';
 // Application -----------------------------------------------------------------
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<Provider store={store}>
-		<div className="w-screen h-screen">
-			<RouterProvider router={router} />
-		</div>
+		<RouterProvider router={router} />
 	</Provider>,
 );

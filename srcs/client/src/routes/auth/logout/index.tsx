@@ -7,7 +7,7 @@ export { loader } from '@/feature/auth/logout/loader';
 // Component -------------------------------------------------------------------
 export function Component() {
 	return (
-		<div className="flex content-center h-screen">
+		<div className="flex content-center h-svh">
 			<FormContainer>Logging out...</FormContainer>
 		</div>
 	);

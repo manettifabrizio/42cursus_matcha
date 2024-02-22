@@ -71,3 +71,9 @@
 		background-position: 100% 0%;
 	}
 }
+
+@media (max-height: 43.75rem) {
+	.user-profile {
+		max-height: 32rem;
+	}
+}

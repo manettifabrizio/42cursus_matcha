@@ -40,7 +40,7 @@ export function Component() {
 	if (confirmed === false) {
 		return (
 			<div className="flex items-center justify-center flex-col w-full h-full">
-				<h2 className="text-red-500">Failed to confirm email.</h2>
+				<h2 className="text-red-500 text-center">Failed to confirm email.</h2>
 				<Link to="/auth/register" className="font-bold underline">
 					Resend
 				</Link>

@@ -24,7 +24,8 @@ type State = {
 	liked_users: Profile[];
 	user_status: boolean | Date | undefined;
 	notifications: Notification[];
-	notifications_opened: boolean;
+	notifications_open: boolean;
+	sidebar_open: boolean;
 };
 
 const initialState: State = {
@@ -36,7 +37,8 @@ const initialState: State = {
 	matches: [],
 	user_status: undefined,
 	notifications: [],
-	notifications_opened: false,
+	notifications_open: false,
+	sidebar_open: false,
 };
 
 export type addNotificationType = typeof slice.caseReducers.addNotification;
@@ -94,7 +96,7 @@ const slice = createSlice({
 						'view',
 						firstname,
 						userId,
-						state.notifications_opened,
+						state.notifications_open,
 					),
 				],
 			};
@@ -197,7 +199,7 @@ const slice = createSlice({
 									'message',
 									other_user?.firstname ?? 'unknown',
 									action.payload.id_user_from,
-									state.notifications_opened,
+									state.notifications_open,
 									other_user?.picture?.path ?? undefined,
 									action.payload.content,
 								),
@@ -276,7 +278,7 @@ const slice = createSlice({
 							'match',
 							matched_user.firstname ?? 'unknown',
 							id_user_from,
-							state.notifications_opened,
+							state.notifications_open,
 						),
 					],
 					matches: state.matches.find((u) => u.id === matched_user.id)
@@ -299,7 +301,7 @@ const slice = createSlice({
 							'like',
 							firstname,
 							id_user_from,
-							state.notifications_opened,
+							state.notifications_open,
 						),
 					],
 				};
@@ -326,7 +328,7 @@ const slice = createSlice({
 						'unlike',
 						firstname,
 						userId,
-						state.notifications_opened,
+						state.notifications_open,
 					),
 				);
 
@@ -335,10 +337,24 @@ const slice = createSlice({
 				);
 			}
 		},
-		toggleNotifications: (state) => {
+		toggleNotifications: (
+			state,
+			{ payload }: PayloadAction<boolean | undefined>,
+		) => {
 			return {
 				...state,
-				notifications_opened: !state.notifications_opened,
+				notifications_open:
+					payload !== undefined ? payload : !state.notifications_open,
+			};
+		},
+		toggleSidebar: (
+			state,
+			{ payload }: PayloadAction<boolean | undefined>,
+		) => {
+			return {
+				...state,
+				sidebar_open:
+					payload !== undefined ? payload : !state.sidebar_open,
 			};
 		},
 		addNotification: (state, { payload }: PayloadAction<Notification>) => {
@@ -399,6 +415,7 @@ export const {
 	addLikedUser,
 	rmLikedUser,
 	toggleNotifications,
+	toggleSidebar,
 	addNotification,
 	rmNotification,
 	readNotifications,

@@ -69,13 +69,13 @@ export default function UsersSort({ setFilters, onSave }: UsersSortProps) {
 	});
 
 	return (
-		<div className="relative flex me-6">
+		<div className="relative flex me-2 sm:me-6 text-xs sm:text-sm">
 			<button
 				title={
 					(!smart_recommendation ? 'Enable' : 'Disable') +
 					' Smart Recommendation: only 25 users picked for you are shown.'
 				}
-				className="border-2 rounded-md p-2 text-2xl hover:bg-white hover:text-black hover:border-black transition mb-2 me-2"
+				className="border-2 rounded-md p-2 text-xl sm:text-2xl hover:bg-white hover:text-black hover:border-black transition mb-2 me-2"
 				onClick={() => setSmartRecommendation((s) => !s)}
 			>
 				{smart_recommendation ? (
@@ -95,11 +95,11 @@ export default function UsersSort({ setFilters, onSave }: UsersSortProps) {
 				}}
 			>
 				<button
-					className="border-2 p-2 rounded-md me-2 flex"
+					className="border-2 p-2 rounded-md me-2 flex items-center"
 					tabIndex={0}
 					ref={dropdownBtnRef}
 				>
-					<div>
+					<div className="whitespace-nowrap">
 						Sort by{' '}
 						<strong>
 							{value
@@ -122,7 +122,10 @@ export default function UsersSort({ setFilters, onSave }: UsersSortProps) {
 							<button
 								key={o.value}
 								className="p-2 hover:bg-gray-600 w-full rounded-md text-start"
-								onClick={() => setValue(o.value)}
+								onClick={() => {
+									setValue(o.value);
+									setShow(false);
+								}}
 							>
 								<div className="flex flex-row items-center">
 									<div

@@ -50,8 +50,7 @@ export default function BootLoader({ setBooting }: Props) {
 						console.log(`Component::BootLoader::CSRF: Failed.`);
 						// Todo: Notify user ? Display an error ?
 						location.reload();
-					}
-					else {
+					} else {
 						setTimeout(() => setStep('RELOG'), 500);
 					}
 				})();
@@ -89,14 +88,14 @@ export default function BootLoader({ setBooting }: Props) {
 
 	return (
 		<div className={style['loading-screen']}>
-			<div className="flex w-full h-40 justify-center">
+			<div className="flex w-full h-40 justify-center items-center">
 				<img
 					src={MatchaLogo}
 					alt="MatchaLogo"
 					className={style['loader']}
 				/>
 			</div>
-			<p>{bootStepMessage[step]}</p>
+			<p className="text-sm sm:text-lg">{bootStepMessage[step]}</p>
 		</div>
 	);
 }
