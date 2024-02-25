@@ -45,7 +45,9 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 		};
 	}, [dispatch, user.id]);
 
-	const user_pictures = user.pictures;
+	const user_pictures = user.pictures.filter(
+		(p) => p.id !== user.picture?.id,
+	);
 
 	return (
 		<div className="relative w-full h-full flex justify-center items-center">
