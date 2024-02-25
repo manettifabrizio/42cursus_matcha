@@ -84,7 +84,9 @@ export default function MainPage() {
 				isFetching={isFetching}
 				isLoading={isLoading}
 				users={users.filter((u) =>
-					u.firstname?.toLowerCase().includes(searchValue),
+					u.firstname
+						?.toLowerCase()
+						.includes(searchValue.toLowerCase()),
 				)}
 				handleScroll={handleScroll}
 			/>
