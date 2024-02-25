@@ -29,7 +29,7 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 						className="absolute inset-0 w-full h-full object-cover rounded-xl"
 					/>
 				)}
-				<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black from-0% to-100% opacity-70 via-transparent to-transparent text-white p-4 h-full rounded-xl" />
+				<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black from-0% to-100% opacity-70 via-transparent text-white p-4 h-full rounded-xl" />
 				<div className="absolute inset-x-0 bottom-0 text-white p-4">
 					<div className="text-xl">
 						<b>{user.firstname}</b>

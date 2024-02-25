@@ -97,7 +97,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 // Baground ellipses
 
-.ellipse {
+.ellipse-right,
+.ellipse-left {
 	transition: 1s;
 	width: 50rem;
 	height: 50rem;
@@ -121,6 +122,18 @@ input[type='date']::-webkit-calendar-picker-indicator {
 		height: 50rem;
 		filter: blur(80px);
 	}
+}
+
+.ellipse-right {
+	transform: translate3d(50%, -50%, 0);
+	-webkit-transform: translate3d(50%, -50%, 0);
+	-moz-transform: translate3d(50%, -50%, 0);
+}
+
+.ellipse-left {
+	transform: translate3d(-50%, 50%, 0);
+	-webkit-transform: translate3d(-50%, 50%, 0);
+	-moz-transform: translate3d(-50%, 50%, 0);
 }
 
 // Remove scrollbars

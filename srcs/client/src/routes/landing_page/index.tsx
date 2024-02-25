@@ -5,8 +5,8 @@ import MatchaLogo from '/matcha.svg';
 export function Component() {
 	return (
 		<div className="black-background relative h-svh overflow-hidden">
-			<div className="ellipse absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></div>
-			<div className="ellipse absolute bottom-0 left-0 transform -translate-x-1/2 translate-y-1/2 bg-amber-400 rounded-full"></div>
+			<div className="ellipse-right absolute top-0 right-0 bg-red-600 rounded-full"></div>
+			<div className="ellipse-left absolute bottom-0 left-0 bg-amber-400 rounded-full"></div>
 
 			<div className="flex w-full h-full justify-center">
 				<div className="flex justify-center flex-col items-center">
