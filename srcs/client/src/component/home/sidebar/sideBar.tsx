@@ -1,6 +1,5 @@
-import { StoreState, store } from '@/core/store';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { startDisconnecting } from '@/feature/interactions/store.slice';
+import { StoreState } from '@/core/store';
+import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import SidebarMainContent from './sidebar_main_content/sideBarMainContent';
 import { useSelector } from 'react-redux';
@@ -14,7 +13,6 @@ type SideBarProps = {
 
 export default function SideBar({ isDesktop, setUrl, url }: SideBarProps) {
 	const location_state = useLocation();
-	const navigate = useNavigate();
 	const NotificationsOpened = useSelector(
 		(state: StoreState) => state.interactions.notifications_open,
 	);
@@ -50,19 +48,6 @@ export default function SideBar({ isDesktop, setUrl, url }: SideBarProps) {
 					show_notifications={NotificationsOpened}
 					isDesktop={isDesktop}
 				/>
-
-				{/* Logout Button */}
-				{isDesktop && (
-					<button
-						onClick={() => {
-							store.dispatch(startDisconnecting());
-							navigate('/auth/logout', { replace: true });
-						}}
-						className="text-center underline"
-					>
-						Logout
-					</button>
-				)}
 			</div>
 		</div>
 	);

@@ -2,6 +2,9 @@ import ChatsList from './home_sidebar/chat/chatList';
 import Matches from './home_sidebar/matches';
 import Notifications from '../../notifications/notifications';
 import ProfileMenu from './profile_sidebar/menu';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { startDisconnecting } from '@/feature/interactions/store.slice';
 
 type SidebarMainContentProps = {
 	url: 'home' | 'user';
@@ -14,6 +17,9 @@ export default function SidebarMainContent({
 	show_notifications,
 	isDesktop,
 }: SidebarMainContentProps) {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	if (show_notifications && isDesktop) {
 		return <Notifications />;
 	} else {
@@ -25,7 +31,22 @@ export default function SidebarMainContent({
 				</>
 			);
 		} else {
-			return <ProfileMenu isDesktop={isDesktop} />;
+			return (
+				<>
+					<ProfileMenu isDesktop={isDesktop} />
+					<button
+						onClick={() => {
+							dispatch(startDisconnecting());
+							navigate('/auth/logout', { replace: true });
+						}}
+						className={
+							'text-center underline' + (isDesktop ? '' : ' mb-4')
+						}
+					>
+						Logout
+					</button>
+				</>
+			);
 		}
 	}
 }
