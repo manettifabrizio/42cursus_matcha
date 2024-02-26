@@ -77,7 +77,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 							<MImage
 								src={`${user.picture?.path}`}
 								alt="Avatar"
-								className="inset-0 h-[34rem] object-cover"
+								className="inset-0 h-full w-full object-cover"
 								key={user.picture?.id}
 							/>
 							{user_pictures.map((picture) => (
@@ -110,7 +110,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 						<MImage
 							src={`${user.picture?.path}`}
 							alt="Avatar"
-							className="inset-0 w-full h-full object-cover"
+							className="inset-0 h-[34rem] object-cover"
 							key={user.picture?.id}
 						/>
 						<div className="flex flex-col p-3">
