@@ -1,4 +1,4 @@
-import { type StoreState } from '@/core/store';
+import { resetAll, type StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { FromPayload, MessageType, Notification } from './types';
@@ -47,6 +47,7 @@ export type addNotificationType = typeof slice.caseReducers.addNotification;
 const slice = createSlice({
 	name: 'interactions',
 	initialState,
+	extraReducers: (builder) => builder.addCase(resetAll, () => initialState),
 	reducers: {
 		setUserId: (state, action: PayloadAction<number>) => {
 			return { ...state, userId: action.payload };

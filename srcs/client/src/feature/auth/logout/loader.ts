@@ -1,6 +1,6 @@
 import type { LoaderFunction } from 'react-router-dom';
-import { store } from '@/core/store';
 import { authApi } from '../api.slice';
+import { store } from '@/core/store';
 import { clearAuth } from '../store.slice';
 import toast from 'react-hot-toast';
 
@@ -12,6 +12,8 @@ export const loader: LoaderFunction = async () => {
 		await req.unwrap();
 
 		store.dispatch(clearAuth());
+		// Reset store state on logout
+		store.dispatch({ type: 'resetAll' });
 	} catch (error: unknown) {
 		toast.error(`Error: logout failed.`);
 		console.error(`Error logout failed: ${JSON.stringify(error)}`);

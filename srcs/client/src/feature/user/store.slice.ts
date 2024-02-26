@@ -1,7 +1,6 @@
-import type { StoreState } from '@/core/store';
+import { resetAll, type StoreState } from '@/core/store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { clearAuth } from '@/feature/auth/store.slice';
 import { Profile, initProfile } from './types';
 import { formatDateTimeShort } from '@/tool/userTools';
 
@@ -12,6 +11,7 @@ type State = Profile;
 const slice = createSlice({
 	name: 'user',
 	initialState: initProfile,
+	extraReducers: (builder) => builder.addCase(resetAll, () => initProfile),
 	reducers: {
 		setUser: (state, { payload }: PayloadAction<State>) => {
 			state.id = payload.id;
@@ -32,11 +32,6 @@ const slice = createSlice({
 			state.blocks = payload.blocks;
 			state.reports = payload.reports;
 		},
-	},
-	extraReducers: (builder) => {
-		builder.addCase(clearAuth, () => {
-			return initProfile;
-		});
 	},
 });
 

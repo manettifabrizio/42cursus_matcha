@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRefreshMutation } from '@/feature/auth/api.slice';
-import { setAuthAccessToken } from '@/feature/auth/store.slice';
 import { useGetCsrfTokenMutation } from '@/feature/security/api.slice';
-import { setCsrfToken } from '@/feature/security/store.slice';
 import { useStoreDispatch } from '@/hook/useStore';
 import { cookie } from '@/tool/cookie';
 import style from './style.module.scss';
@@ -39,7 +37,10 @@ export default function BootLoader({ setBooting }: Props) {
 					while (retry < MAX_RETRY) {
 						try {
 							await getCsrfToken().unwrap();
-							dispatch(setCsrfToken(cookie('csrf-token')));
+							dispatch({
+								type: 'security/setCsrfToken',
+								payload: cookie('csrf-token'),
+							});
 							break;
 						} catch (err: unknown) {
 							retry += 1;
@@ -60,9 +61,10 @@ export default function BootLoader({ setBooting }: Props) {
 					try {
 						if (localStorage.getItem('is_authenticated')) {
 							await relog({}).unwrap();
-							dispatch(
-								setAuthAccessToken(cookie('access-token')),
-							);
+							dispatch({
+								type: 'auth/setAuthAccessToken',
+								payload: cookie('access-token'),
+							});
 							await setCurrentUser();
 							dispatch(startConnecting());
 						}
