@@ -61,7 +61,7 @@ export default function Chat({ user, setUrl }: ChatProps) {
 					dispatch(toggleSidebar(false));
 					setUrl('chat');
 				}}
-				className="flex flex-nowrap items-center overflow-x-hidden"
+				className="flex flex-nowrap items-center overflow-x-hidden w-full"
 			>
 				<MImage
 					src={`${user.picture?.path}`}
@@ -70,25 +70,18 @@ export default function Chat({ user, setUrl }: ChatProps) {
 				/>
 				<div
 					className={
-						'flex-1 flex justify-between flex-row items-center w-[calc(100%-3rem)]  ' +
+						'flex-1 flex justify-between flex-row items-center min-w-0 ' +
 						(new_message && 'font-bold')
 					}
 				>
-					<div>
-						<p
-							title={user.firstname}
-							className={
-								'text-ellipsis whitespace-nowrap overflow-x-hidden'
-							}
-						>
-							{user.firstname}
-						</p>
+					<div className="min-w-0 flex-1">
+						<p title={user.firstname}>{user.firstname}</p>
 						<p
 							title={
 								last_message?.content ?? 'You have a new match!'
 							}
 							className={
-								'text-ellipsis whitespace-nowrap overflow-x-hidden ' +
+								'text-ellipsis whitespace-nowrap overflow-hidden ' +
 								(new_message ? 'text-white' : 'text-gray-400')
 							}
 						>

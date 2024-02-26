@@ -41,7 +41,7 @@ export default function Notifications() {
 										key={notification.id}
 										className="flex flex-row items-start justify-between w-full rounded-lg p-1 mb-2 border-gray-300 text-sm"
 									>
-										<div className="flex justify-start items-center w-10/12">
+										<div className="flex justify-start items-center flex-1 min-w-0">
 											{chooseNotificationContent(
 												notification.type,
 												notification.firstname,
@@ -52,7 +52,7 @@ export default function Notifications() {
 											)}
 										</div>
 										<button
-											className="w-5"
+											className="flex w-4"
 											onClick={() =>
 												dispatch(
 													rmNotification(

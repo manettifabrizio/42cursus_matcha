@@ -146,15 +146,15 @@ function messageContent(
 	created_at?: string,
 ) {
 	return (
-		<>
-			<div className="text-2xl pe-3">
+		<div className="w-full flex flex-row">
+			<div className="text-2xl pe-2 w-[3.5rem]">
 				<MImage
 					src={`${picture}`}
 					alt="Avatar"
-					className="mr-2 inset-0 h-12 w-12 object-cover rounded-full"
+					className="inset-0 h-12 w-12 object-cover rounded-full"
 				/>
 			</div>
-			<div className="flex flex-col">
+			<div className="flex-1 flex-col min-w-0">
 				<div>
 					<div>
 						<Link
@@ -169,8 +169,10 @@ function messageContent(
 						{created_at && getTimeElapsedString(created_at)}
 					</div>
 				</div>
-				<div className="text-xs opacity-70">{content}</div>
+				<div className="text-xs opacity-70 overflow-hidden text-ellipsis whitespace-nowrap">
+					{content}
+				</div>
 			</div>
-		</>
+		</div>
 	);
 }
