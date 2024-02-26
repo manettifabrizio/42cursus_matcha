@@ -5,15 +5,18 @@ import ProfileMenu from './profile_sidebar/menu';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { startDisconnecting } from '@/feature/interactions/store.slice';
+import { URLType } from '@/feature/types';
 
 type SidebarMainContentProps = {
-	url: 'home' | 'user';
+	url: URLType;
+	setUrl: React.Dispatch<React.SetStateAction<URLType>>;
 	show_notifications: boolean;
 	isDesktop: boolean;
 };
 
 export default function SidebarMainContent({
 	url,
+	setUrl,
 	show_notifications,
 	isDesktop,
 }: SidebarMainContentProps) {
@@ -23,14 +26,7 @@ export default function SidebarMainContent({
 	if (show_notifications && isDesktop) {
 		return <Notifications />;
 	} else {
-		if (url === 'home') {
-			return (
-				<>
-					<Matches />
-					<ChatsList />
-				</>
-			);
-		} else {
+		if (url === 'user') {
 			return (
 				<>
 					<ProfileMenu isDesktop={isDesktop} />
@@ -45,6 +41,13 @@ export default function SidebarMainContent({
 					>
 						Logout
 					</button>
+				</>
+			);
+		} else {
+			return (
+				<>
+					<Matches />
+					<ChatsList setUrl={setUrl} />
 				</>
 			);
 		}

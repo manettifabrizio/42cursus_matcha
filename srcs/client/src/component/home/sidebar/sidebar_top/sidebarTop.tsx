@@ -2,10 +2,11 @@ import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import SideBarPhoto from './sideBarPhoto';
 import NotificationsIndicator from './notificationsIndicator';
+import { URLType } from '@/feature/types';
 
 type SideBarTopProps = {
 	NotificationsOpened: boolean;
-	url: 'home' | 'user';
+	url: URLType;
 };
 
 export default function SidebarTop({

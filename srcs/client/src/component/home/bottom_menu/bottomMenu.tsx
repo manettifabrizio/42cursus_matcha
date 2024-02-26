@@ -11,9 +11,10 @@ import {
 } from '@/feature/interactions/store.slice';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
+import { URLType } from '@/feature/types';
 
 type BottomMenuProps = {
-	url: 'home' | 'user';
+	url: URLType;
 };
 
 export default function BottomMenu({ url }: BottomMenuProps) {
@@ -25,19 +26,19 @@ export default function BottomMenu({ url }: BottomMenuProps) {
 	);
 
 	const goToProfile = () => {
-		if (url === 'home') navigate('/user/profile/edit');
+		if (url !== 'user') navigate('/user/profile/edit');
 		dispatch(toggleSidebar(true));
 		dispatch(toggleNotifications(false));
 	};
 
 	const goToMatches = () => {
-		if (url === 'user') navigate('/home');
+		if (url !== 'home') navigate('/home');
 		dispatch(toggleSidebar(true));
 		dispatch(toggleNotifications(false));
 	};
 
 	const goToHome = () => {
-		if (url === 'user') navigate('/home');
+		if (url !== 'home') navigate('/home');
 		dispatch(toggleSidebar(false));
 		dispatch(toggleNotifications(false));
 	};
@@ -65,7 +66,6 @@ export default function BottomMenu({ url }: BottomMenuProps) {
 			<button onClick={goToHome}>
 				<GoHome />
 			</button>
-			{/* <TbLogout /> */}
 		</footer>
 	);
 }

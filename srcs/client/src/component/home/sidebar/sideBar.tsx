@@ -4,11 +4,12 @@ import { useEffect } from 'react';
 import SidebarMainContent from './sidebar_main_content/sideBarMainContent';
 import { useSelector } from 'react-redux';
 import SidebarTop from './sidebar_top/sidebarTop';
+import { URLType } from '@/feature/types';
 
 type SideBarProps = {
 	isDesktop: boolean;
-	setUrl: React.Dispatch<React.SetStateAction<'home' | 'user'>>;
-	url: 'home' | 'user';
+	setUrl: React.Dispatch<React.SetStateAction<URLType>>;
+	url: URLType;
 };
 
 export default function SideBar({ isDesktop, setUrl, url }: SideBarProps) {
@@ -45,6 +46,7 @@ export default function SideBar({ isDesktop, setUrl, url }: SideBarProps) {
 
 				<SidebarMainContent
 					url={url}
+                    setUrl={setUrl}
 					show_notifications={NotificationsOpened}
 					isDesktop={isDesktop}
 				/>

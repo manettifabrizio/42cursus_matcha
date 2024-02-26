@@ -8,6 +8,7 @@ import { Outlet } from 'react-router-dom';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import Notifications from '@/component/home/notifications/notifications';
+import { URLType } from '@/feature/types';
 
 type SidebarMainContentProps = {
 	form?: boolean;
@@ -18,7 +19,7 @@ export default function SidebarMainContent({
 	form = true,
 	logo = true,
 }: SidebarMainContentProps) {
-	const [url, setUrl] = useState<'home' | 'user'>('home');
+	const [url, setUrl] = useState<URLType>('home');
 	const isDesktop = useMediaQuery({ query: '(min-width: 640px)' });
 	const notificationsOpen = useSelector(
 		(state: StoreState) => state.interactions.notifications_open,

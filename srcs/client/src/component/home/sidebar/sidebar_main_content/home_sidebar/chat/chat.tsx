@@ -1,6 +1,7 @@
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
 import { getMessages, toggleSidebar } from '@/feature/interactions/store.slice';
+import { URLType } from '@/feature/types';
 import { Profile } from '@/feature/user/types';
 import { useStoreDispatch } from '@/hook/useStore';
 import { useEffect, useState } from 'react';
@@ -9,9 +10,10 @@ import { Link } from 'react-router-dom';
 
 type ChatProps = {
 	user: Profile;
+	setUrl: React.Dispatch<React.SetStateAction<URLType>>;
 };
 
-export default function Chat({ user }: ChatProps) {
+export default function Chat({ user, setUrl }: ChatProps) {
 	const [new_message, setNewMessage] = useState(false);
 	const dispatch = useStoreDispatch();
 
@@ -57,6 +59,7 @@ export default function Chat({ user }: ChatProps) {
 				to={`/chat/${user.id}`}
 				onClick={() => {
 					dispatch(toggleSidebar(false));
+					setUrl('chat');
 				}}
 				className="flex flex-nowrap items-center overflow-x-hidden"
 			>

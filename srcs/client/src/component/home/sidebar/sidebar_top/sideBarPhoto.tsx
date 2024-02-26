@@ -1,16 +1,17 @@
 import MImage from '@/component/ui/mImage';
+import { URLType } from '@/feature/types';
 import { Profile } from '@/feature/user/types';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
 type SideBarPhotoProps = {
-	url: 'home' | 'user';
+	url: URLType;
 	user: Profile;
 	show_notifications: boolean;
 };
 
 export default function SideBarPhoto({ url, user }: SideBarPhotoProps) {
-	const center = !(url === 'user');
+	const center = url !== 'user';
 
 	return (
 		<>
