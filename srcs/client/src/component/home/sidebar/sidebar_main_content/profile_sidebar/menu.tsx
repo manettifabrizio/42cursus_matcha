@@ -38,13 +38,13 @@ export default function ProfileMenu({ isDesktop }: ProfileMenuProps) {
 	const dispatch = useDispatch();
 
 	return (
-		<div className="flex-1 overflow-auto h-full">
+		<div className="flex-1 h-full flex flex-col">
 			{!isDesktop && (
-				<div className="text-3xl text-start w-full font-bold mb-3">
+				<p className="text-3xl text-start w-full font-bold mb-3">
 					Profile Settings
-				</div>
+				</p>
 			)}
-			<div className="flex flex-col justify-center items-center min-h-full">
+			<div className="flex flex-col justify-center items-center flex-1 overflow-y-scroll">
 				{MenuItems.map((item, index) => (
 					<Link
 						to={item.path}
