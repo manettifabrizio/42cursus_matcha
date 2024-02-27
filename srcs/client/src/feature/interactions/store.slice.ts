@@ -20,8 +20,8 @@ type State = {
 	messages: Record<number, MessageType[]>;
 	// TODO: Maybe remove matches, could be done only with liked users
 	// the only critical usecase is ReceiveLike
-	matches: Profile[];
-	liked_users: Profile[];
+	matches?: Profile[];
+	liked_users?: Profile[];
 	user_status: boolean | Date | undefined;
 	notifications: Notification[];
 	notifications_open: boolean;
@@ -33,8 +33,8 @@ const initialState: State = {
 	isEstablishingConnection: false,
 	isConnected: false,
 	messages: {},
-	liked_users: [],
-	matches: [],
+	liked_users: undefined,
+	matches: undefined,
 	user_status: undefined,
 	notifications: [],
 	notifications_open: false,
@@ -173,7 +173,7 @@ const slice = createSlice({
 				{ ...action.payload, seen: is_chat_opened },
 			];
 
-			const other_user = state.matches.find(
+			const other_user = state.matches?.find(
 				(user) => user.id === id_user_from,
 			);
 
@@ -231,7 +231,7 @@ const slice = createSlice({
 			}>,
 		) => {
 			if (
-				state.liked_users.some(
+				state.liked_users?.some(
 					(user) => user.id !== action.payload.liked_user.id,
 				)
 			)
@@ -251,7 +251,7 @@ const slice = createSlice({
 		) => {
 			return {
 				...state,
-				liked_users: state.liked_users.filter(
+				liked_users: state.liked_users?.filter(
 					(user) => user.id !== action.payload.unliked_user_id,
 				),
 			};
@@ -259,7 +259,7 @@ const slice = createSlice({
 		receiveLike: (state, action: PayloadAction<FromPayload>) => {
 			const { id_user_from, firstname } = action.payload;
 
-			const matched_user = state.liked_users.find(
+			const matched_user = state.liked_users?.find(
 				(user) => user.id === id_user_from,
 			);
 
@@ -282,9 +282,13 @@ const slice = createSlice({
 							state.notifications_open,
 						),
 					],
-					matches: state.matches.find((u) => u.id === matched_user.id)
+					matches: state.matches?.find(
+						(u) => u.id === matched_user.id,
+					)
 						? state.matches
-						: [...state.matches, matched_user],
+						: state.matches
+						? [...state.matches, matched_user]
+						: undefined,
 					messages: {
 						...state.messages,
 						[matched_user.id]: [],
@@ -313,7 +317,7 @@ const slice = createSlice({
 			const firstname = action.payload.firstname;
 
 			if (
-				state.matches.some(
+				state.matches?.some(
 					(user) => user.id === action.payload.id_user_from,
 				)
 			) {
@@ -333,7 +337,7 @@ const slice = createSlice({
 					),
 				);
 
-				state.matches = state.matches.filter(
+				state.matches = state.matches?.filter(
 					(user) => user.id !== userId,
 				);
 			}

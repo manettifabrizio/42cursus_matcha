@@ -91,9 +91,13 @@ export default function MatchesList() {
 
 	useEffect(() => {
 		setDisplayedMatches(
-			matches.filter(
-				(user) => !messages[user.id] || messages[user.id].length === 0,
-			),
+			matches
+				? matches.filter(
+						(user) =>
+							!messages[user.id] ||
+							messages[user.id].length === 0,
+				  )
+				: [],
 		);
 	}, [matches, messages]);
 

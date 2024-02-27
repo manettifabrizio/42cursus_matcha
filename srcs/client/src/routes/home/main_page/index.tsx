@@ -48,7 +48,7 @@ export default function MainPage() {
 			);
 
 			const users_no_likes = users_no_duplicates.filter(
-				(u) => !liked_users.find((l) => l.id === u.id),
+				(u) => !liked_users?.find((l) => l.id === u.id),
 			);
 
 			setUsers(users_no_likes);

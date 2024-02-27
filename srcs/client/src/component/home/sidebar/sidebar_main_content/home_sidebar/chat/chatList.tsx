@@ -16,9 +16,11 @@ export default function ChatsList({ setUrl }: ChatsListProps) {
 		<div className="flex-1 overflow-y-auto w-full">
 			<p className="font-bold mb-2 text-3xl">Conversations</p>
 			<ul className="list-none p-0 w-full">
-				{matches.map((match) => (
-					<Chat key={match.id} user={match} setUrl={setUrl} />
-				))}
+				{matches
+					? matches.map((match) => (
+							<Chat key={match.id} user={match} setUrl={setUrl} />
+					  ))
+					: null}
 			</ul>
 		</div>
 	);
