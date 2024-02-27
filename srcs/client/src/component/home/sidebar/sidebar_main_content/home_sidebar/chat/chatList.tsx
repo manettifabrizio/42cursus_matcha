@@ -1,13 +1,8 @@
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import Chat from './chat';
-import { URLType } from '@/feature/types';
 
-type ChatsListProps = {
-	setUrl: React.Dispatch<React.SetStateAction<URLType>>;
-};
-
-export default function ChatsList({ setUrl }: ChatsListProps) {
+export default function ChatsList() {
 	const matches = useSelector(
 		(state: StoreState) => state.interactions.matches,
 	);
@@ -18,7 +13,7 @@ export default function ChatsList({ setUrl }: ChatsListProps) {
 			<ul className="list-none p-0 w-full">
 				{matches
 					? matches.map((match) => (
-							<Chat key={match.id} user={match} setUrl={setUrl} />
+							<Chat key={match.id} user={match} />
 					  ))
 					: null}
 			</ul>

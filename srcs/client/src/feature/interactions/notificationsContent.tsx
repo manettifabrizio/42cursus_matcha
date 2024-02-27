@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Notification, NotificationType } from './types';
 import { getTimeElapsedString } from '@/tool/interactionsTools';
 import MImage from '@/component/ui/mImage';
+import { goToProfile } from './utils';
 
 export function createNotification(
 	id: number,
@@ -62,6 +63,7 @@ function viewContent(firstname: string, id_user: number, created_at?: string) {
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>{' '}
@@ -83,6 +85,7 @@ function likeContent(firstname: string, id_user: number, created_at?: string) {
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>
@@ -106,6 +109,7 @@ function unlikeContent(
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>{' '}
@@ -127,6 +131,7 @@ function matchContent(firstname: string, id_user: number, created_at?: string) {
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>
@@ -160,6 +165,7 @@ function messageContent(
 						<Link
 							to={`${location.origin}/chat/${id_user}`}
 							className="underline font-bold"
+							onClick={() => goToProfile()}
 						>
 							{firstname}
 						</Link>{' '}

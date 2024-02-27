@@ -1,7 +1,7 @@
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
-import { getMessages, toggleSidebar } from '@/feature/interactions/store.slice';
-import { URLType } from '@/feature/types';
+import { getMessages } from '@/feature/interactions/store.slice';
+import { goToChat } from '@/feature/interactions/utils';
 import { Profile } from '@/feature/user/types';
 import { useStoreDispatch } from '@/hook/useStore';
 import { useEffect, useState } from 'react';
@@ -10,10 +10,9 @@ import { Link } from 'react-router-dom';
 
 type ChatProps = {
 	user: Profile;
-	setUrl: React.Dispatch<React.SetStateAction<URLType>>;
 };
 
-export default function Chat({ user, setUrl }: ChatProps) {
+export default function Chat({ user }: ChatProps) {
 	const [new_message, setNewMessage] = useState(false);
 	const dispatch = useStoreDispatch();
 
@@ -57,10 +56,7 @@ export default function Chat({ user, setUrl }: ChatProps) {
 		<li className="mb-1 w-full">
 			<Link
 				to={`/chat/${user.id}`}
-				onClick={() => {
-					dispatch(toggleSidebar(false));
-					setUrl('chat');
-				}}
+				onClick={goToChat}
 				className="flex flex-nowrap items-center overflow-x-hidden w-full"
 			>
 				<MImage

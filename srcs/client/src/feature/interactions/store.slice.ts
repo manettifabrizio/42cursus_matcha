@@ -26,6 +26,7 @@ type State = {
 	notifications: Notification[];
 	notifications_open: boolean;
 	sidebar_open: boolean;
+	url: 'home' | 'user' | 'chat';
 };
 
 const initialState: State = {
@@ -39,6 +40,7 @@ const initialState: State = {
 	notifications: [],
 	notifications_open: false,
 	sidebar_open: false,
+	url: 'home',
 };
 
 export type addNotificationType = typeof slice.caseReducers.addNotification;
@@ -362,6 +364,9 @@ const slice = createSlice({
 					payload !== undefined ? payload : !state.sidebar_open,
 			};
 		},
+		setUrl: (state, action: PayloadAction<'home' | 'user' | 'chat'>) => {
+			return { ...state, url: action.payload };
+		},
 		addNotification: (state, { payload }: PayloadAction<Notification>) => {
 			return {
 				...state,
@@ -421,6 +426,7 @@ export const {
 	rmLikedUser,
 	toggleNotifications,
 	toggleSidebar,
+    setUrl,
 	addNotification,
 	rmNotification,
 	readNotifications,

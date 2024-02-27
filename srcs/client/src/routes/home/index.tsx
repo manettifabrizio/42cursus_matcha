@@ -2,13 +2,11 @@ import SideBar from '@/component/home/sidebar/sideBar';
 import BottomMenu from '@/component/home/bottom_menu/bottomMenu';
 import FormContainer from '@/component/layout/form/formContainer';
 import MatchaLogo from '@/component/ui/matchaLogo';
-import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Outlet } from 'react-router-dom';
 import { StoreState } from '@/core/store';
 import { useSelector } from 'react-redux';
 import Notifications from '@/component/home/notifications/notifications';
-import { URLType } from '@/feature/types';
 
 type SidebarMainContentProps = {
 	form?: boolean;
@@ -19,7 +17,6 @@ export default function SidebarMainContent({
 	form = true,
 	logo = true,
 }: SidebarMainContentProps) {
-	const [url, setUrl] = useState<URLType>('home');
 	const isDesktop = useMediaQuery({ query: '(min-width: 640px)' });
 	const notificationsOpen = useSelector(
 		(state: StoreState) => state.interactions.notifications_open,
@@ -37,7 +34,7 @@ export default function SidebarMainContent({
 					</div>
 				)}
 				{(isDesktop || (sidebarOpen && !notificationsOpen)) && (
-					<SideBar setUrl={setUrl} url={url} isDesktop={isDesktop} />
+					<SideBar isDesktop={isDesktop} />
 				)}
 				{((!sidebarOpen && !notificationsOpen) || isDesktop) &&
 					(form ? (
@@ -54,7 +51,7 @@ export default function SidebarMainContent({
 						</div>
 					))}
 			</div>
-			{!isDesktop && <BottomMenu url={url} />}
+			{!isDesktop && <BottomMenu />}
 		</div>
 	);
 }

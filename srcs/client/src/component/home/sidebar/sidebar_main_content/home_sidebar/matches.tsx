@@ -2,6 +2,7 @@ import LoadingSpinner from '@/component/ui/loadingSpinner';
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
 import { setLikedUsers, setMatches } from '@/feature/interactions/store.slice';
+import { goToChat } from '@/feature/interactions/utils';
 import {
 	useGetLikesQuery,
 	useLazyGetProfileQuery,
@@ -149,6 +150,7 @@ export default function MatchesList() {
 								<Link
 									to={`/chat/${match.id}`}
 									className="user-match relative items-center h-12 w-12"
+									onClick={goToChat}
 								>
 									<MImage
 										src={`${match.picture?.path}`}

@@ -1,28 +1,17 @@
 import { StoreState } from '@/core/store';
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 import SidebarMainContent from './sidebar_main_content/sideBarMainContent';
 import { useSelector } from 'react-redux';
 import SidebarTop from './sidebar_top/sidebarTop';
-import { URLType } from '@/feature/types';
 
 type SideBarProps = {
 	isDesktop: boolean;
-	setUrl: React.Dispatch<React.SetStateAction<URLType>>;
-	url: URLType;
 };
 
-export default function SideBar({ isDesktop, setUrl, url }: SideBarProps) {
-	const location_state = useLocation();
+export default function SideBar({ isDesktop }: SideBarProps) {
 	const NotificationsOpened = useSelector(
 		(state: StoreState) => state.interactions.notifications_open,
 	);
-
-	useEffect(() => {
-		if (location_state.pathname.startsWith('/home')) setUrl('home');
-		else if (location_state.pathname.startsWith('/user/profile'))
-			setUrl('user');
-	}, [location_state, setUrl]);
+	const url = useSelector((state: StoreState) => state.interactions.url);
 
 	return (
 		<div
@@ -45,8 +34,6 @@ export default function SideBar({ isDesktop, setUrl, url }: SideBarProps) {
 				)}
 
 				<SidebarMainContent
-					url={url}
-                    setUrl={setUrl}
 					show_notifications={NotificationsOpened}
 					isDesktop={isDesktop}
 				/>
