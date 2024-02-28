@@ -44,7 +44,7 @@ export default function ProfileMenu({ isDesktop }: ProfileMenuProps) {
 					Profile Settings
 				</p>
 			)}
-			<div className="flex flex-col justify-center items-center flex-1 overflow-y-scroll">
+			<div className="flex flex-col justify-center items-center flex-1 overflow-y-auto">
 				{MenuItems.map((item, index) => (
 					<Link
 						to={item.path}
