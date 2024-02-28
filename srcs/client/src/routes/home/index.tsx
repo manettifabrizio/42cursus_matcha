@@ -47,7 +47,7 @@ export default function SidebarMainContent({
 					) : (
 						<div className="flex justify-between flex-col h-full sm:ml-72">
 							{logo && <MatchaLogo to="/home" />}
-							<div className="p-3 flex flex-col h-full">
+							<div className="p-3 flex flex-col flex-1 min-h-0">
 								<Outlet />
 							</div>
 						</div>
