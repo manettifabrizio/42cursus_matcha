@@ -99,9 +99,17 @@ export function messageToast(
 		<div
 			className={`${
 				t.visible ? 'animate-enter' : 'animate-leave'
-			} flex flex-row items-center justify-center bg-gray-700 text-white rounded-xl p-3`}
+			} flex flex-row items-center justify-center bg-gray-700 text-white rounded-xl p-3 max-w-[21rem] box-border`}
 		>
-			{chooseNotificationContent('message', firstname, id_user, content, picture)}
+			<div className="min-w-0 flex-1">
+				{chooseNotificationContent(
+					'message',
+					firstname,
+					id_user,
+					content,
+					picture,
+				)}
+			</div>
 			<button className="ps-3" onClick={() => toast.dismiss()}>
 				<AiOutlineClose />
 			</button>

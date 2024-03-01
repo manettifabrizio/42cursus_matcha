@@ -1,25 +1,26 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { StoreState } from '@/core/store';
+import { resetAll, type StoreState } from '@/core/store';
 import { createSlice } from '@reduxjs/toolkit';
 
 // State -----------------------------------------------------------------------
 type State = {
-    csrfToken: string | null;
+	csrfToken: string | null;
 };
 
 const initialState: State = {
-    csrfToken: null
+	csrfToken: null,
 };
 
 // Slice -----------------------------------------------------------------------
 const slice = createSlice({
-    name: 'security',
-    initialState,
-    reducers: {
-        setCsrfToken: (state, action: PayloadAction<State['csrfToken']>) => {
-            state.csrfToken = action.payload;
-        }
-    }
+	name: 'security',
+	initialState,
+	extraReducers: (builder) => builder.addCase(resetAll, () => initialState),
+	reducers: {
+		setCsrfToken: (state, action: PayloadAction<State['csrfToken']>) => {
+			state.csrfToken = action.payload;
+		},
+	},
 });
 
 // Action ----------------------------------------------------------------------

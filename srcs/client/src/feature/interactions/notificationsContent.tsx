@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Notification, NotificationType } from './types';
 import { getTimeElapsedString } from '@/tool/interactionsTools';
 import MImage from '@/component/ui/mImage';
+import { goToProfile } from './utils';
 
 export function createNotification(
 	id: number,
@@ -62,6 +63,7 @@ function viewContent(firstname: string, id_user: number, created_at?: string) {
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>{' '}
@@ -83,6 +85,7 @@ function likeContent(firstname: string, id_user: number, created_at?: string) {
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>
@@ -106,6 +109,7 @@ function unlikeContent(
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>{' '}
@@ -127,6 +131,7 @@ function matchContent(firstname: string, id_user: number, created_at?: string) {
 				<Link
 					to={`${location.origin}/user/${id_user}`}
 					className="underline font-bold"
+					onClick={() => goToProfile()}
 				>
 					{firstname}
 				</Link>
@@ -146,20 +151,21 @@ function messageContent(
 	created_at?: string,
 ) {
 	return (
-		<>
-			<div className="text-2xl pe-3">
+		<div className="w-full flex flex-row">
+			<div className="text-2xl pe-2 w-[3.5rem]">
 				<MImage
 					src={`${picture}`}
 					alt="Avatar"
-					className="mr-2 inset-0 h-12 w-12 object-cover rounded-full"
+					className="inset-0 h-12 w-12 object-cover rounded-full"
 				/>
 			</div>
-			<div className="flex flex-col">
+			<div className="flex-1 flex-col min-w-0">
 				<div>
 					<div>
 						<Link
 							to={`${location.origin}/chat/${id_user}`}
 							className="underline font-bold"
+							onClick={() => goToProfile()}
 						>
 							{firstname}
 						</Link>{' '}
@@ -169,8 +175,10 @@ function messageContent(
 						{created_at && getTimeElapsedString(created_at)}
 					</div>
 				</div>
-				<div className="text-xs opacity-70">{content}</div>
+				<div className="text-xs opacity-70 overflow-hidden text-ellipsis whitespace-nowrap">
+					{content}
+				</div>
 			</div>
-		</>
+		</div>
 	);
 }

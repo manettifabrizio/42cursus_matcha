@@ -2,6 +2,7 @@ import LoadingSpinner from '@/component/ui/loadingSpinner';
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
 import { setLikedUsers, setMatches } from '@/feature/interactions/store.slice';
+import { goToChat } from '@/feature/interactions/utils';
 import {
 	useGetLikesQuery,
 	useLazyGetProfileQuery,
@@ -91,9 +92,13 @@ export default function MatchesList() {
 
 	useEffect(() => {
 		setDisplayedMatches(
-			matches.filter(
-				(user) => !messages[user.id] || messages[user.id].length === 0,
-			),
+			matches
+				? matches.filter(
+						(user) =>
+							!messages[user.id] ||
+							messages[user.id].length === 0,
+				  )
+				: [],
 		);
 	}, [matches, messages]);
 
@@ -117,7 +122,7 @@ export default function MatchesList() {
 
 	return (
 		<div className="flex flex-col">
-			<p className="font-bold mb-2 text-2xl">Your Matches</p>
+			<p className="font-bold mb-2 text-3xl">Your Matches</p>
 			{isFetchingLikes ||
 			isLoadingLikes ||
 			isLoadingProfiles ||
@@ -126,7 +131,7 @@ export default function MatchesList() {
 					<LoadingSpinner size="sm" />
 				</div>
 			) : displayedMatches.length === 0 ? (
-				<div className="italic text-gray-500 text-sm mb-2">
+				<div className="italic text-gray-500 text-sm mb-4">
 					Start discovering people to get matches.
 				</div>
 			) : (
@@ -145,6 +150,7 @@ export default function MatchesList() {
 								<Link
 									to={`/chat/${match.id}`}
 									className="user-match relative items-center h-12 w-12"
+									onClick={goToChat}
 								>
 									<MImage
 										src={`${match.picture?.path}`}

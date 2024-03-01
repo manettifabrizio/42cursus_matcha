@@ -22,13 +22,13 @@ export default function SearchAndFilter({
 }: SearchAndFilterProps) {
 	return (
 		<>
-			<div className="flex justify-between items-center mx-5">
+			<div className="flex justify-between items-center mx-2 sm:mx-5">
 				<UsersSearchBar
 					value={searchValue}
 					setSearchValue={setSearchValue}
 				/>
-				<div className="flex flex-row">
-					<UsersSort setFilters={setFilters} onSave={onSave}/>
+				<div className="flex flex-row justify-end">
+					<UsersSort setFilters={setFilters} onSave={onSave} />
 					<UsersFilter
 						filters={filters}
 						setFilters={setFilters}

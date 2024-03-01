@@ -20,8 +20,8 @@ export default function Notifications() {
 
 	return (
 		<>
-			<p className="font-bold mb-2 text-2xl">Notifications</p>
-			<div className="mb-4 flex flex-col h-full overflow-scroll no-scrollbar">
+			<p className="font-bold mb-2 text-3xl">Notifications</p>
+			<div className="flex flex-col h-full overflow-scroll no-scrollbar">
 				<div
 					className={
 						'flex flex-col h-full no-scrollbar' +
@@ -34,25 +34,25 @@ export default function Notifications() {
 							No notifications
 						</div>
 					) : (
-						<ul className="flex flex-col list-none p-0">
+						<ul className="flex flex-col list-none p-0 h-full">
 							{notifications.toReversed().map((notification) => {
 								return (
 									<li
 										key={notification.id}
-										className="flex flex-row items-center justify-between w-full rounded-lg p-1 mb-2 border-gray-300 text-sm"
+										className="flex flex-row items-start justify-between w-full rounded-lg p-1 mb-2 border-gray-300 text-sm"
 									>
-										<div className="flex justify-start items-center w-10/12">
+										<div className="flex justify-start items-center flex-1 min-w-0">
 											{chooseNotificationContent(
 												notification.type,
 												notification.firstname,
 												notification.userId,
-                                                notification.messageContent,
-                                                notification.userPicture,
+												notification.messageContent,
+												notification.userPicture,
 												notification.createdAt,
 											)}
 										</div>
 										<button
-											className="w-5"
+											className="flex w-4"
 											onClick={() =>
 												dispatch(
 													rmNotification(

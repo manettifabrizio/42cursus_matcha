@@ -2,10 +2,8 @@ import { Profile, UserFilters, initFilters } from '@/feature/user/types';
 import AvailableUsers from '@/component/home/main_page/availableUsers';
 import { useEffect, useState } from 'react';
 import SearchAndFilter from '@/component/home/main_page/users_filter/searchAndFIlter';
-import { useGetUsersQuery } from '@/feature/user/api.slice';
+import { useGetLikesQuery, useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
-import { useSelector } from 'react-redux';
-import { StoreState } from '@/core/store';
 
 export default function MainPage() {
 	const [searchValue, setSearchValue] = useState('');
@@ -18,9 +16,11 @@ export default function MainPage() {
 		isFetching,
 		isLoading,
 	} = useGetUsersQuery({ filters: filter_str });
-	const liked_users = useSelector(
-		(state: StoreState) => state.interactions.liked_users,
-	);
+	const {
+		data: liked_users = { likes: { by_me: [], to_me: [] } },
+		isLoading: isLoadingLikes,
+		isFetching: isFetchingLikes,
+	} = useGetLikesQuery();
 
 	// On filter change reset page to 1 and users to empty array
 	const onSave = (filters: UserFilters) => {
@@ -35,13 +35,12 @@ export default function MainPage() {
 			smart_recommendation: filters.smart_recommendation,
 			sort: filters.sort,
 		};
-		console.log(resetFilters);
 		setFilters(resetFilters);
 		onSave(resetFilters);
 	};
 
 	useEffect(() => {
-		if (!isFetching && !isLoading) {
+		if (!isFetching && !isLoading && !isFetchingLikes && !isLoadingLikes) {
 			const concat_users = users.concat(data.users);
 
 			const users_no_duplicates = Array.from(
@@ -49,13 +48,16 @@ export default function MainPage() {
 			);
 
 			const users_no_likes = users_no_duplicates.filter(
-				(u) => !liked_users.find((l) => l.id === u.id),
+				(u) =>
+					!liked_users.likes.by_me
+						.map((like) => like.id_user_to)
+						.find((liked_user_id) => liked_user_id === u.id),
 			);
 
 			setUsers(users_no_likes);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data.users, isFetching, isLoading]);
+	}, [data.users, isFetching, isLoading, liked_users]);
 
 	const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 		// Infinite scroll works only if smart recommendation is off
@@ -82,10 +84,12 @@ export default function MainPage() {
 				onReset={onReset}
 			/>
 			<AvailableUsers
-				isFetching={isFetching}
-				isLoading={isLoading}
+				isFetching={isFetching || isFetchingLikes}
+				isLoading={isLoading || isLoadingLikes}
 				users={users.filter((u) =>
-					u.firstname?.toLowerCase().includes(searchValue),
+					u.firstname
+						?.toLowerCase()
+						.includes(searchValue.toLowerCase()),
 				)}
 				handleScroll={handleScroll}
 			/>

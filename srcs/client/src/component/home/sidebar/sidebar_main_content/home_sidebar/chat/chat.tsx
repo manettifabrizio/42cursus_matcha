@@ -1,6 +1,7 @@
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
 import { getMessages } from '@/feature/interactions/store.slice';
+import { goToChat } from '@/feature/interactions/utils';
 import { Profile } from '@/feature/user/types';
 import { useStoreDispatch } from '@/hook/useStore';
 import { useEffect, useState } from 'react';
@@ -55,7 +56,8 @@ export default function Chat({ user }: ChatProps) {
 		<li className="mb-1 w-full">
 			<Link
 				to={`/chat/${user.id}`}
-				className="flex flex-nowrap items-center overflow-x-hidden"
+				onClick={goToChat}
+				className="flex flex-nowrap items-center overflow-x-hidden w-full"
 			>
 				<MImage
 					src={`${user.picture?.path}`}
@@ -64,25 +66,18 @@ export default function Chat({ user }: ChatProps) {
 				/>
 				<div
 					className={
-						'flex-1 flex justify-between flex-row items-center w-[calc(100%-3rem)]  ' +
+						'flex-1 flex justify-between flex-row items-center min-w-0 ' +
 						(new_message && 'font-bold')
 					}
 				>
-					<div>
-						<p
-							title={user.firstname}
-							className={
-								'text-ellipsis whitespace-nowrap overflow-x-hidden'
-							}
-						>
-							{user.firstname}
-						</p>
+					<div className="min-w-0 flex-1">
+						<p title={user.firstname}>{user.firstname}</p>
 						<p
 							title={
 								last_message?.content ?? 'You have a new match!'
 							}
 							className={
-								'text-ellipsis whitespace-nowrap overflow-x-hidden ' +
+								'text-ellipsis whitespace-nowrap overflow-hidden ' +
 								(new_message ? 'text-white' : 'text-gray-400')
 							}
 						>

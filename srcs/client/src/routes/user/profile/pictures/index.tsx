@@ -1,3 +1,4 @@
+import { BackToMenuArrow } from '@/component/home/sidebar/sidebar_main_content/profile_sidebar/backToMenuArrow';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import PicturesEdit from '@/component/user/profile/pictures/picturesEdit';
 import { clearAuth } from '@/feature/auth/store.slice';
@@ -23,6 +24,7 @@ export function Component() {
 
 	return data ? (
 		<>
+			<BackToMenuArrow />
 			<div className="text-3xl mb-3 text-center w-full font-bold">
 				Edit Pictures
 			</div>

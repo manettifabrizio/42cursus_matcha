@@ -1,4 +1,5 @@
 import AvailableUsers from '@/component/home/main_page/availableUsers';
+import { BackToMenuArrow } from '@/component/home/sidebar/sidebar_main_content/profile_sidebar/backToMenuArrow';
 import {
 	useGetActivitiesQuery,
 	useLazyGetProfileQuery,
@@ -61,6 +62,7 @@ export function Component() {
 
 	return (
 		<>
+			<BackToMenuArrow />
 			<div className="text-3xl mb-3 text-center w-full font-bold">
 				Views
 			</div>

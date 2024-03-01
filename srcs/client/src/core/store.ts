@@ -1,10 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, createAction } from '@reduxjs/toolkit';
 import { api } from '@/core/api';
 import authReducers from '@/feature/auth/store.slice';
 import userReducers from '@/feature/user/store.slice';
 import securityReducers from '@/feature/security/store.slice';
 import interactionsReducers from '@/feature/interactions/store.slice';
 import chatMiddleware from '@/feature/interactions/middleware';
+
+// Reset store state
+export const resetAll = createAction('resetAll');
 
 // Store -----------------------------------------------------------------------
 export const store = configureStore({

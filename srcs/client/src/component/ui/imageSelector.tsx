@@ -116,7 +116,7 @@ export default function ImageSelector({
 						<LoadingSpinner message="Loading Pictures..." />
 					</div>
 				) : (
-					<div className="grid w-full grid-cols-3 gap-3 mt-2 mb-4 justify-evenly">
+					<div className="grid w-full grid-cols-3 grid-rows-2 gap-3 mt-2 mb-4 justify-evenly">
 						{pictures.map((p) => (
 							<div
 								className="w-full h-full flex justify-evenly items-center"

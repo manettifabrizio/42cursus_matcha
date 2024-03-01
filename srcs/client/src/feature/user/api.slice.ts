@@ -77,7 +77,10 @@ export const userApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getProfile: builder.query<ProfileResponse, ProfileRequest>({
 			query: (data) => ({
-				url: data && data.id ? `user/${data.id}/profile` : `user/profile`,
+				url:
+					data && data.id
+						? `user/${data.id}/profile`
+						: `user/profile`,
 				method: 'GET',
 			}),
 			providesTags: ['User'],

@@ -4,8 +4,6 @@ import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import type { StoreState } from './store';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
-import { clearAuth } from '@/feature/auth/store.slice';
-import { setAuthAccessToken } from '@/feature/auth/store.slice';
 import { cookie } from '@/tool/cookie';
 
 // Type ------------------------------------------------------------------------
@@ -73,9 +71,12 @@ const fetchAuth: BaseQueryFn<
 				);
 
 				if (res.error) {
-					api.dispatch(clearAuth());
+					api.dispatch({ type: 'auth/clearAuth' });
 				} else {
-					api.dispatch(setAuthAccessToken(cookie('access-token')));
+					api.dispatch({
+						type: 'auth/setAuthAccessToken',
+						payload: cookie('access-token'),
+					});
 
 					response = await fetchBase(args, api, extraOptions);
 				}

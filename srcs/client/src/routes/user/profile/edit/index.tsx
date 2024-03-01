@@ -1,3 +1,4 @@
+import { BackToMenuArrow } from '@/component/home/sidebar/sidebar_main_content/profile_sidebar/backToMenuArrow';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import ProfileEdit from '@/component/user/profile/edit/profileEdit';
 import { clearAuth } from '@/feature/auth/store.slice';
@@ -38,16 +39,21 @@ export function Component() {
 		return <Navigate to="/" />;
 	}
 
-	return data ? (
-		<ProfileEdit
-			key={data.tags.join(' ')}
-			base_profile={profileToCompleteProfile(data)}
-			errors={errors}
-			setErrors={setErrors}
-		/>
-	) : (
-		<div className="w-full h-full flex flex-col justify-center items-center">
-			<LoadingSpinner message="Loading user..." />
-		</div>
+	return (
+		<>
+			<BackToMenuArrow />
+			{data ? (
+				<ProfileEdit
+					key={data.tags.join(' ')}
+					base_profile={profileToCompleteProfile(data)}
+					errors={errors}
+					setErrors={setErrors}
+				/>
+			) : (
+				<div className="w-full h-full flex flex-col justify-center items-center">
+					<LoadingSpinner message="Loading user..." />
+				</div>
+			)}
+		</>
 	);
 }

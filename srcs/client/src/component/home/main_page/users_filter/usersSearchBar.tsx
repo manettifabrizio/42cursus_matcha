@@ -10,7 +10,7 @@ export default function UsersSearchBar({
 	setSearchValue,
 }: UsersSearchBarProps) {
 	return (
-		<div className="w-48 pe-3">
+		<div className="w-48 pe-3 mb-2">
 			<LabelInput
 				input_props={{
 					onChange: (e) => setSearchValue(e.target.value),

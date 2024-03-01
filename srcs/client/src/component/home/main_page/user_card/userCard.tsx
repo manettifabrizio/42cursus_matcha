@@ -29,7 +29,7 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 						className="absolute inset-0 w-full h-full object-cover rounded-xl"
 					/>
 				)}
-				<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black from-0% to-100% opacity-70 via-transparent to-transparent text-white p-4 h-full rounded-xl" />
+				<div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black from-0% to-100% opacity-70 via-transparent text-white p-4 h-full rounded-xl" />
 				<div className="absolute inset-x-0 bottom-0 text-white p-4">
 					<div className="text-xl">
 						<b>{user.firstname}</b>
@@ -51,7 +51,7 @@ export default function UserCard({ user, preview = false }: UserCardProps) {
 	return (
 		<Link
 			key={user.id}
-			className="user-card relative w-52 h-72 rounded-xl"
+			className="user-card relative w-40 h-60 sm:w-52 sm:h-72"
 			to={`/user/${user.id}`}
 		>
 			{userCardContent()}

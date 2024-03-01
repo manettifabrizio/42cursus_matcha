@@ -11,7 +11,7 @@
 	background: #000;
 	background-clip: padding-box; /* !important */
 	border: solid $border white; /* !important */
-	border-radius: 0.75em;
+	border-radius: 1em;
 
 	&:hover:before {
 		content: '';
@@ -69,5 +69,11 @@
 	}
 	to {
 		background-position: 100% 0%;
+	}
+}
+
+@media (max-height: 43.75rem) {
+	.user-profile {
+		max-height: 32rem;
 	}
 }
