@@ -37,10 +37,6 @@ export default function BootLoader({ setBooting }: Props) {
 					while (retry < MAX_RETRY) {
 						try {
 							await getCsrfToken().unwrap();
-							dispatch({
-								type: 'security/setCsrfToken',
-								payload: cookie('csrf-token'),
-							});
 							break;
 						} catch (err: unknown) {
 							retry += 1;

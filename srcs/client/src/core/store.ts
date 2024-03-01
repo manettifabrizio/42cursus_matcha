@@ -2,7 +2,7 @@ import { configureStore, createAction } from '@reduxjs/toolkit';
 import { api } from '@/core/api';
 import authReducers from '@/feature/auth/store.slice';
 import userReducers from '@/feature/user/store.slice';
-import securityReducers from '@/feature/security/store.slice';
+// import securityReducers from '@/feature/security/store.slice';
 import interactionsReducers from '@/feature/interactions/store.slice';
 import chatMiddleware from '@/feature/interactions/middleware';
 
@@ -15,7 +15,7 @@ export const store = configureStore({
 		[api.reducerPath]: api.reducer,
 		auth: authReducers,
 		user: userReducers,
-		security: securityReducers,
+		// security: securityReducers,
 		interactions: interactionsReducers,
 	},
 	middleware: (getDefaultMiddleware) =>

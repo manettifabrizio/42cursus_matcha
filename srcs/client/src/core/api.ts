@@ -29,7 +29,7 @@ const fetchBase = fetchBaseQuery({
 		const store = getState() as StoreState;
 
 		// CSRF
-		const csrfToken = store.security.csrfToken;
+		const csrfToken = cookie('csrf-token');
 
 		if (csrfToken !== null) {
 			headers.set('csrf-token', `${csrfToken}`);
