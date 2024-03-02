@@ -14,7 +14,11 @@ export const onProfileView: (client: Socket) => (...args: any[]) => void =
 			});
 			return;
 		}
-
+		
+		if (id_user === client.data.user.id) {
+			return;
+		}
+		
 		try {
 			const is_created = await createActivity(db_svc, {
 				id_user_from: client.data.user.id,
