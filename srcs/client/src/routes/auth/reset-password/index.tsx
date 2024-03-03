@@ -4,13 +4,14 @@ import LabelInput from '@/component/ui/labelInput';
 import { SlArrowLeft } from 'react-icons/sl';
 import MatchaLogo from '@/component/ui/matchaLogo';
 import FormContainer from '@/component/layout/form/formContainer';
+import { ResetPasswordFormErrors } from '@/feature/user/types';
 
 // Action ----------------------------------------------------------------------
 export { action } from '@/feature/auth/reset-password/action';
 
 // Component -------------------------------------------------------------------
 export function Component() {
-	const data = useActionData() as string[] | undefined;
+	const data = useActionData() as ResetPasswordFormErrors | undefined;
 
 	return (
 		<>
@@ -29,11 +30,6 @@ export function Component() {
 						account to change your password.
 					</div>
 					<Form method="post" className="w-full my-4 grid gap-2 ">
-						<input
-							name="form-id"
-							hidden
-							defaultValue="username-email"
-						/>
 						<LabelInput
 							input_props={{
 								required: true,
@@ -42,6 +38,7 @@ export function Component() {
 								placeholder: 'Username',
 								id: 'username',
 							}}
+                            errors_props={data?.username}
 						/>
 
 						<LabelInput
@@ -52,7 +49,7 @@ export function Component() {
 								placeholder: 'Email',
 								id: 'email',
 							}}
-							errors_props={data}
+							errors_props={data?.email}
 						/>
 						<button
 							type="submit"

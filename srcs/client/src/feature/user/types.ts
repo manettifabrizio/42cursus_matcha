@@ -189,6 +189,11 @@ export type LoginFormErrors = {
 	password?: string[];
 };
 
+export type ResetPasswordFormErrors = {
+	username?: string[];
+	email?: string[];
+};
+
 export type AuthProfileError = {
 	email?: string[];
 	password?: string[];
