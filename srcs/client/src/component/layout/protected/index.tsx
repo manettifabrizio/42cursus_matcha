@@ -2,10 +2,12 @@ import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { isProfileCompleted } from '@/tool/userTools';
-import { useDispatch, useSelector } from 'react-redux';
-import { StoreState } from '@/core/store';
+import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { setUrl } from '@/feature/interactions/store.slice';
+import { useGetProfileQuery } from '@/feature/user/api.slice';
+import toast from 'react-hot-toast';
+import { clearAuth } from '@/feature/auth/store.slice';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -18,7 +20,12 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	const isAuthenticated = localStorage.getItem('is_authenticated');
 	const location_state = useLocation();
 	const dispatch = useDispatch();
-	const user = useSelector((state: StoreState) => state.user);
+	const {
+		data = undefined,
+		isFetching,
+		isLoading,
+		isError,
+	} = useGetProfileQuery(undefined, { skip: isAuthenticated === 'false' });
 
 	useEffect(() => {
 		if (location_state.pathname.startsWith('/home'))
@@ -41,7 +48,9 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	// true => user is logged in
 
 	if (accepted === 'AUTHENTICATED' && isAuthenticated == null)
-		return <Navigate to={`/auth/login?redirect=${location_state.pathname}`} />;
+		return (
+			<Navigate to={`/auth/login?redirect=${location_state.pathname}`} />
+		);
 
 	if (accepted === 'AUTHENTICATED' && isAuthenticated === 'false')
 		return <Navigate to={`/auth/login`} />;
@@ -49,7 +58,25 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	if (accepted === 'UNAUTHENTICATED' && isAuthenticated === 'true')
 		return <Navigate to={redirectTo ?? '/home'} replace />;
 
-	const page = isProfileCompleted(user);
+	if (isError) {
+		toast.error(`Error: User not found`);
+		dispatch(clearAuth());
+		return <Navigate to="/" />;
+	}
+
+	let toast_id = undefined;
+
+	if (
+		accepted === 'AUTHENTICATED' &&
+		isAuthenticated === 'true' &&
+		(isFetching || isLoading || !data)
+	)
+		toast_id = toast.loading('Loading User', {
+			style: { minWidth: '350px' },
+		});
+	else if (data) toast.dismiss(toast_id);
+
+	const page = data ? isProfileCompleted(data) : 1;
 
 	const url_page =
 		Number(new URLSearchParams(location_state.search).get('page')) ?? page;
@@ -57,7 +84,8 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	if (
 		isAuthenticated === 'true' &&
 		page !== undefined &&
-		(location_state.pathname !== '/user/complete-profile' || page !== url_page)
+		(location_state.pathname !== '/user/complete-profile' ||
+			page !== url_page)
 	) {
 		return (
 			<Navigate

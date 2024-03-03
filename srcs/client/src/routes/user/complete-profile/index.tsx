@@ -69,28 +69,23 @@ export function Component() {
 		const id = toast.loading('Editing profile details...', {
 			style: { minWidth: '350px' },
 		});
-		if (!profile || !checkBeforeSubmitting(profile, id)) return null;
+		if (!profile || !data || !checkBeforeSubmitting(profile, id))
+			return null;
 
 		setErrors(initCompleteProfileErrors);
 		setSubmitting(true);
 
 		if (await editProfile(profile, setErrors, setSubmitting, id))
-			if (await sendTags(profile, setErrors, setSubmitting, id)) {
+			if (
+				await sendTags(profile, data.tags, setErrors, setSubmitting, id)
+			) {
 				await setCurrentUser();
 				toast.success(
 					"Profile completed successfully! Let's upload some pictures.",
 					{ id },
 				);
-				navigate('/user/complete-profile?page=2');
 			}
 	};
-
-	async function submitPictures(e: React.FormEvent<HTMLButtonElement>) {
-		e.preventDefault();
-
-		await setCurrentUser();
-		navigate('/home');
-	}
 
 	const id = useId();
 
@@ -138,28 +133,6 @@ export function Component() {
 								profile={data}
 								submitting={isLoading || isFetching}
 							/>
-							<div className="flex justify-center w-full">
-								<button
-									form="complete-pictures-form"
-									disabled={
-										isLoading ||
-										isFetching ||
-										!!isProfileCompleted(data)
-									}
-									type="submit"
-									onClick={submitPictures}
-									className={
-										'group relative w-full text-white font-semibold py-2 rounded-full overflow-hidden bg-gradient-to-b from-red-600 to-amber-400 ' +
-										(isLoading ||
-										isFetching ||
-										!!isProfileCompleted(data)
-											? 'opacity-60'
-											: 'hover:opacity-80')
-									}
-								>
-									Save
-								</button>
-							</div>
 						</div>
 					)
 				) : (

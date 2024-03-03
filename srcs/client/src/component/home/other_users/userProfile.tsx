@@ -17,11 +17,16 @@ import MImage from '@/component/ui/mImage';
 import { useMediaQuery } from 'react-responsive';
 
 type UserProfileProps = {
-	user: Profile;
+	my_user: Profile;
+	other_user: Profile;
 	isFetching: boolean;
 };
 
-export default function UserProfile({ user, isFetching }: UserProfileProps) {
+export default function UserProfile({
+	my_user,
+	other_user,
+	isFetching,
+}: UserProfileProps) {
 	const dispatch = useStoreDispatch();
 	const isDesktop = useMediaQuery({ query: '(min-width: 940px)' });
 	const navigate = useNavigate();
@@ -31,22 +36,22 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 
 	useEffect(() => {
 		const checkUserStatus = async () => {
-			dispatch(isUserOnline({ id_user: user.id }));
+			dispatch(isUserOnline({ id_user: other_user.id }));
 		};
 
 		// Double view notification because of react.Strict mode
 		const timer = setInterval(checkUserStatus, 1000);
 
-		dispatch(viewProfile({ id_user: user.id }));
+		dispatch(viewProfile({ id_user: other_user.id }));
 
 		return () => {
 			dispatch(resetIsUserOnline());
 			clearInterval(timer);
 		};
-	}, [dispatch, user.id]);
+	}, [dispatch, other_user.id]);
 
-	const user_pictures = user.pictures.filter(
-		(p) => p.id !== user.picture?.id,
+	const user_pictures = other_user.pictures.filter(
+		(p) => p.id !== other_user.picture?.id,
 	);
 
 	return (
@@ -66,7 +71,7 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 					(isDesktop
 						? 'flex-row overflow-hidden '
 						: 'flex-col overflow-y-auto ') +
-					(user.likes?.by_me && user.likes?.to_me
+					(other_user.likes?.by_me && other_user.likes?.to_me
 						? 'border-red-500'
 						: '')
 				}
@@ -75,10 +80,10 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 					<>
 						<div className="bg-orange-500 w-1/2 h-full overflow-y-auto">
 							<MImage
-								src={`${user.picture?.path}`}
+								src={`${other_user.picture?.path}`}
 								alt="Avatar"
 								className="inset-0 h-full w-full object-cover"
-								key={user.picture?.id}
+								key={other_user.picture?.id}
 							/>
 							{user_pictures.map((picture) => (
 								<MImage
@@ -90,33 +95,47 @@ export default function UserProfile({ user, isFetching }: UserProfileProps) {
 							))}
 						</div>
 						<div className="flex flex-col w-1/2 h-full p-10 relative">
-							{user.blocks?.by_me && (
+							{other_user.blocks?.by_me && (
 								<div className="absolute top-0 left-0 text-red-500 italic font-light border-red-500 border-b w-full text-center">
 									User is blocked
 								</div>
 							)}
-							<UserInfo user={user} status={status} />
-							<UserBio user={user} />
-							<UserActions user={user} isFetching={isFetching} />
+							<UserInfo
+								my_user={my_user}
+								other_user={other_user}
+								status={status}
+							/>
+							<UserBio user={other_user} />
+							<UserActions
+								user={other_user}
+								isFetching={isFetching}
+							/>
 						</div>
 					</>
 				) : (
 					<>
-						{user.blocks?.by_me && (
+						{other_user.blocks?.by_me && (
 							<div className="absolute top-0 left-0 text-white italic font-light border-red-500 bg-red-500 border-b w-full text-center">
 								User is blocked
 							</div>
 						)}
 						<MImage
-							src={`${user.picture?.path}`}
+							src={`${other_user.picture?.path}`}
 							alt="Avatar"
 							className="inset-0 h-[34rem] object-cover"
-							key={user.picture?.id}
+							key={other_user.picture?.id}
 						/>
 						<div className="flex flex-col p-3">
-							<UserInfo user={user} status={status} />
-							<UserBio user={user} />
-							<UserActions user={user} isFetching={isFetching} />
+							<UserInfo
+								my_user={my_user}
+								other_user={other_user}
+								status={status}
+							/>
+							<UserBio user={other_user} />
+							<UserActions
+								user={other_user}
+								isFetching={isFetching}
+							/>
 						</div>
 						{user_pictures.map((picture) => (
 							<MImage

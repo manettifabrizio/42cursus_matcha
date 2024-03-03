@@ -1,6 +1,7 @@
 import {
 	CompleteProfile,
 	CompleteProfileError,
+	Tag,
 	initCompleteProfileErrors,
 } from '@/feature/user/types';
 import CompleteProfileInputs from '../../complete-profile/completeProfileInputs';
@@ -18,12 +19,14 @@ import { setCurrentUser } from '@/tool/userTools';
 
 type ProfileEditProps = {
 	base_profile: CompleteProfile;
+	base_profile_tags: Tag[];
 	errors: CompleteProfileError;
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>;
 };
 
 export default function ProfileEdit({
 	base_profile,
+	base_profile_tags,
 	errors,
 	setErrors,
 }: ProfileEditProps) {
@@ -44,7 +47,13 @@ export default function ProfileEdit({
 		)
 			if (
 				!hasTagsChanged(profile.tags, base_profile.tags) ||
-				(await sendTags(profile, setErrors, setSubmitting, id))
+				(await sendTags(
+					profile,
+					base_profile_tags,
+					setErrors,
+					setSubmitting,
+					id,
+				))
 			) {
 				toast.success('Profile saved successfully!', { id });
 				await setCurrentUser();

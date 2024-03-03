@@ -8,13 +8,26 @@ export function Component() {
 	const { id } = useParams<{ id: string }>();
 
 	const {
-		data = undefined,
-		isFetching,
-		isLoading,
+		data: other_user = undefined,
+		isFetching: isFetchingOtherUser,
+		isLoading: isLoadingOtherUser,
+		isError: isOtherUserError,
 	} = useGetProfileQuery({ id: id ? parseInt(id) : undefined });
 
+	const {
+		data: my_user = undefined,
+		isFetching: isFetchingMyUser,
+		isLoading: isLoadingMyUser,
+		isError: isMyUserError,
+	} = useGetProfileQuery();
+
 	if (id) {
-		if (isLoading) {
+		if (
+			isLoadingMyUser ||
+			isFetchingMyUser ||
+			isLoadingOtherUser ||
+			isFetchingOtherUser
+		) {
 			return (
 				<div className="w-full h-full flex flex-col justify-center items-center">
 					<LoadingSpinner message="Loading User" />
@@ -22,14 +35,20 @@ export function Component() {
 			);
 		}
 
-		if (!data) {
-			toast.error(`Error: User n.${id} not found`);
+		if (!other_user || !my_user || isMyUserError || isOtherUserError) {
+			if (!other_user || isOtherUserError)
+				toast.error(`Error: User n.${id} not found`);
+			if (!my_user || isMyUserError) toast.error(`Error: User not found`);
 			return <Navigate to="/home" />;
 		}
 
 		return (
 			<div className="h-full w-full flex justify-center items-center">
-				<UserProfile user={data} isFetching={isFetching} />
+				<UserProfile
+					my_user={my_user}
+					other_user={other_user}
+					isFetching={isFetchingMyUser || isFetchingOtherUser}
+				/>
 			</div>
 		);
 	}

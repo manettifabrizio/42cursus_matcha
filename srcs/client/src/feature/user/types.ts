@@ -32,7 +32,7 @@ export type Profile = {
 	picture?: Picture;
 	location?: { distance: number };
 	pictures: Picture[];
-	tags: { id: number; name: string }[];
+	tags: Tag[];
 	likes?: { by_me: boolean; to_me: boolean };
 	blocks?: { by_me: boolean };
 	reports?: { by_me: boolean };
