@@ -2,8 +2,10 @@ import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { isProfileCompleted } from '@/tool/userTools';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@/core/store';
+import { useEffect } from 'react';
+import { setUrl } from '@/feature/interactions/store.slice';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -14,12 +16,22 @@ interface Props {
 // Component -------------------------------------------------------------------
 export default function ProtectedLayout({ accepted, inverted }: Props) {
 	const isAuthenticated = localStorage.getItem('is_authenticated');
-	const location = useLocation();
+	const location_state = useLocation();
+	const dispatch = useDispatch();
 	const user = useSelector((state: StoreState) => state.user);
+
+	useEffect(() => {
+		if (location_state.pathname.startsWith('/home'))
+			dispatch(setUrl('home'));
+		else if (location_state.pathname.startsWith('/user'))
+			dispatch(setUrl('user'));
+		else if (location_state.pathname.startsWith('/chat'))
+			dispatch(setUrl('chat'));
+	}, [location_state, dispatch]);
 
 	// Note: Base is irrelevant, just there to be able to use URL
 	const redirectTo = new URL(
-		`${location.pathname}${location.search}`,
+		`${location_state.pathname}${location_state.search}`,
 		`https://localhost`,
 	).searchParams.get('redirect');
 
@@ -29,7 +41,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	// true => user is logged in
 
 	if (accepted === 'AUTHENTICATED' && isAuthenticated == null)
-		return <Navigate to={`/auth/login?redirect=${location.pathname}`} />;
+		return <Navigate to={`/auth/login?redirect=${location_state.pathname}`} />;
 
 	if (accepted === 'AUTHENTICATED' && isAuthenticated === 'false')
 		return <Navigate to={`/auth/login`} />;
@@ -40,16 +52,16 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	const page = isProfileCompleted(user);
 
 	const url_page =
-		Number(new URLSearchParams(location.search).get('page')) ?? page;
+		Number(new URLSearchParams(location_state.search).get('page')) ?? page;
 
 	if (
 		isAuthenticated === 'true' &&
 		page !== undefined &&
-		(location.pathname !== '/user/complete-profile' || page !== url_page)
+		(location_state.pathname !== '/user/complete-profile' || page !== url_page)
 	) {
 		return (
 			<Navigate
-				to={`/user/complete-profile?redirect=${location.pathname}&page=${page}`}
+				to={`/user/complete-profile?redirect=${location_state.pathname}&page=${page}`}
 			/>
 		);
 	}
