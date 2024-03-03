@@ -1,8 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { selectAuth } from '@/feature/auth/store.slice';
-import { useStoreSelector } from '@/hook/useStore';
 import { isProfileCompleted } from '@/tool/userTools';
 import { useSelector } from 'react-redux';
 import { StoreState } from '@/core/store';
@@ -15,7 +13,7 @@ interface Props {
 
 // Component -------------------------------------------------------------------
 export default function ProtectedLayout({ accepted, inverted }: Props) {
-	const isAuthenticated = !!useStoreSelector(selectAuth).accessToken;
+	const isAuthenticated = localStorage.getItem('is_authenticated');
 	const location = useLocation();
 	const user = useSelector((state: StoreState) => state.user);
 
@@ -25,10 +23,18 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		`https://localhost`,
 	).searchParams.get('redirect');
 
-	if (accepted === 'AUTHENTICATED' && !isAuthenticated)
+	// isAuthenticated
+	// null => user has been logged out automatically (redirect)
+	// false => user has logged out manually (no redirect)
+	// true => user is logged in
+
+	if (accepted === 'AUTHENTICATED' && isAuthenticated == null)
 		return <Navigate to={`/auth/login?redirect=${location.pathname}`} />;
 
-	if (accepted === 'UNAUTHENTICATED' && isAuthenticated)
+	if (accepted === 'AUTHENTICATED' && isAuthenticated === 'false')
+		return <Navigate to={`/auth/login`} />;
+
+	if (accepted === 'UNAUTHENTICATED' && isAuthenticated === 'true')
 		return <Navigate to={redirectTo ?? '/home'} replace />;
 
 	const page = isProfileCompleted(user);
@@ -37,7 +43,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		Number(new URLSearchParams(location.search).get('page')) ?? page;
 
 	if (
-		isAuthenticated &&
+		isAuthenticated === 'true' &&
 		page !== undefined &&
 		(location.pathname !== '/user/complete-profile' || page !== url_page)
 	) {

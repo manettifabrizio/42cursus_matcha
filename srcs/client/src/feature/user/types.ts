@@ -184,6 +184,11 @@ export const initCompleteProfileErrors: CompleteProfileError = {
 	biography: [],
 };
 
+export type LoginFormErrors = {
+	username?: string[];
+	password?: string[];
+};
+
 export type AuthProfileError = {
 	email?: string[];
 	password?: string[];

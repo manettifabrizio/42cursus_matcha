@@ -1,7 +1,10 @@
 import type { ActionFunction } from 'react-router-dom';
 import { redirect } from 'react-router-dom';
 import { store } from '@/core/store';
-import { manageRTKQErrorCause } from '@/tool/isRTKQError';
+import {
+	manageRTKQErrorCause,
+	manageRTKQErrorDetails,
+} from '@/tool/isRTKQError';
 import { authApi } from '../api.slice';
 import { cookie } from '@/tool/cookie';
 import { setUser } from '@/feature/user/store.slice';
@@ -32,6 +35,14 @@ export const action: ActionFunction = async ({ request }) => {
 			new URL(request.url).searchParams.get('redirect') ?? `/`,
 		);
 	} catch (error: unknown) {
-		return manageRTKQErrorCause(error);
+		if (
+			!fields.username ||
+			fields.username === '' ||
+			!fields.password ||
+			fields.password === ''
+		)
+			return manageRTKQErrorDetails(error);
+
+		return { password: manageRTKQErrorCause(error) };
 	}
 };
