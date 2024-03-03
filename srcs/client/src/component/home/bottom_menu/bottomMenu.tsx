@@ -1,7 +1,7 @@
 import { GoHome } from 'react-icons/go';
-import { TbHeart } from 'react-icons/tb';
+import { TbHeart, TbLogout } from 'react-icons/tb';
 import MImage from '@/component/ui/mImage';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StoreState } from '@/core/store';
 import NotificationsIndicator from '../sidebar/sidebar_top/notificationsIndicator';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
@@ -12,9 +12,11 @@ import {
 	goToProfileSettings,
 } from '@/feature/interactions/utils';
 import { Link } from 'react-router-dom';
+import { startDisconnecting } from '@/feature/interactions/store.slice';
 
 export default function BottomMenu() {
 	const { data = undefined, isFetching, isLoading } = useGetProfileQuery();
+	const dispatch = useDispatch();
 	const NotificationsOpened = useSelector(
 		(state: StoreState) => state.interactions.notifications_open,
 	);
@@ -35,12 +37,18 @@ export default function BottomMenu() {
 			<Link onClick={goToMatches} to="/home">
 				<TbHeart />
 			</Link>
+			<Link onClick={goToHome} to="/home">
+				<GoHome />
+			</Link>
 			<NotificationsIndicator
 				show_notifications={NotificationsOpened}
 				isBottom={true}
 			/>
-			<Link onClick={goToHome} to="/home">
-				<GoHome />
+			<Link
+				onClick={() => dispatch(startDisconnecting())}
+				to="/auth/logout"
+			>
+				<TbLogout />
 			</Link>
 		</footer>
 	);

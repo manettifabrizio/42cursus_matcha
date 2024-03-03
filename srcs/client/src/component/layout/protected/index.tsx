@@ -64,17 +64,12 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		return <Navigate to="/" />;
 	}
 
-	let toast_id = undefined;
-
 	if (
 		accepted === 'AUTHENTICATED' &&
 		isAuthenticated === 'true' &&
 		(isFetching || isLoading || !data)
 	)
-		toast_id = toast.loading('Loading User', {
-			style: { minWidth: '350px' },
-		});
-	else if (data) toast.dismiss(toast_id);
+		toast.loading('Loading User');
 
 	const page = data ? isProfileCompleted(data) : 1;
 

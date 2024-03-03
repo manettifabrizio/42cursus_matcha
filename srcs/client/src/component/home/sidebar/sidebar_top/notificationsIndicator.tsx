@@ -24,25 +24,19 @@ export default function NotificationsIndicator({
 	).length;
 
 	return (
-		<div
-			className={
-				isBottom ? '' : 'absolute top-1/2 -translate-y-1/2 right-0'
-			}
+		<button
+			className="flex items-center justify-center border-transparent cursor-pointer rounded-md p-2"
+			onClick={() => dispatch(toggleNotifications(isBottom))}
 		>
-			<button
-				className="flex items-center justify-center border-transparent cursor-pointer rounded-md p-2"
-				onClick={() => dispatch(toggleNotifications(isBottom))}
-			>
-				{show_notifications && !isBottom ? (
-					<AiOutlineClose className="text-2xl" />
-				) : new_notifications > 0 ? (
-					<div className="w-5 h-5 rounded-full bg-gradient-to-r from-red-600 to-amber-400 text-white flex text-xs items-center justify-center">
-						{new_notifications}
-					</div>
-				) : (
-					<IoIosNotificationsOutline className="text-2xl" />
-				)}
-			</button>
-		</div>
+			{show_notifications && !isBottom ? (
+				<AiOutlineClose className="text-2xl" />
+			) : new_notifications > 0 ? (
+				<div className="w-5 h-5 rounded-full bg-gradient-to-r from-red-600 to-amber-400 text-white flex text-xs items-center justify-center">
+					{new_notifications}
+				</div>
+			) : (
+				<IoIosNotificationsOutline className="text-2xl" />
+			)}
+		</button>
 	);
 }
