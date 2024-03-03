@@ -17,21 +17,6 @@ export type User = {
 	age: number;
 };
 
-export const initUser: User = {
-	age: -1,
-	id: -1,
-	username: '',
-	firstname: '',
-	lastname: '',
-	gender: 'MALE',
-	orientation: 'BISEXUAL',
-	biography: '',
-	location: null,
-	tags: [],
-	picture: null,
-	pictures: [],
-};
-
 export type Profile = {
 	last_seen_at?: string;
 	id: number;

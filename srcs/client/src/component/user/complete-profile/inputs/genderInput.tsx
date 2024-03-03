@@ -31,8 +31,8 @@ export default function GenderInput({
 			<h5 className="mb-1">How do you identify?</h5>
 			<div className="flex justify-center items-center cursor-pointer">
 				<SelectDropdown
+					form="complete-profile-form"
 					disabled={disabled}
-					name="gender"
 					options={genderOptions}
 					multi_select={false}
 					id={id}

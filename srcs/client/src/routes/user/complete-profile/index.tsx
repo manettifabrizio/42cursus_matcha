@@ -38,7 +38,7 @@ export function Component() {
 
 	const [submitting, setSubmitting] = useState(false);
 	const { search } = useLocation();
-    const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const [page, setPage] = useState(
 		Number(new URLSearchParams(search).get('page')) ?? 1,
 	);
@@ -96,7 +96,7 @@ export function Component() {
 
 	if (isError) {
 		toast.error(`Error: User not found`);
-        dispatch(clearAuth());
+		dispatch(clearAuth());
 		return <Navigate to="/" />;
 	}
 
