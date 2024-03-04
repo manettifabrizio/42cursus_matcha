@@ -1,11 +1,14 @@
 import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { selectAuth } from '@/feature/auth/store.slice';
-import { useStoreSelector } from '@/hook/useStore';
 import { isProfileCompleted } from '@/tool/userTools';
-import { useSelector } from 'react-redux';
-import { StoreState } from '@/core/store';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setUrl } from '@/feature/interactions/store.slice';
+import { useGetProfileQuery } from '@/feature/user/api.slice';
+import toast from 'react-hot-toast';
+import { clearAuth } from '@/feature/auth/store.slice';
+import LoadingSpinner from '@/component/ui/loadingSpinner';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -15,39 +18,90 @@ interface Props {
 
 // Component -------------------------------------------------------------------
 export default function ProtectedLayout({ accepted, inverted }: Props) {
-	const isAuthenticated = !!useStoreSelector(selectAuth).accessToken;
-	const location = useLocation();
-	const user = useSelector((state: StoreState) => state.user);
+	const isAuthenticated = localStorage.getItem('is_authenticated');
+	const isCompleted = localStorage.getItem('is_completed');
+	const location_state = useLocation();
+	const dispatch = useDispatch();
+	const {
+		data = undefined,
+		isFetching,
+		isLoading,
+		isError,
+	} = useGetProfileQuery(undefined, {
+		skip: isAuthenticated === 'false' || isCompleted === 'true',
+	});
 
-	// Note: Base is irrelevant, just there to be able to use URL
-	const redirectTo = new URL(
-		`${location.pathname}${location.search}`,
-		`https://localhost:4443`,
-	).searchParams.get('redirect');
+	useEffect(() => {
+		if (location_state.pathname.startsWith('/home'))
+			dispatch(setUrl('home'));
+		else if (location_state.pathname.startsWith('/user/profile'))
+			dispatch(setUrl('user'));
+		else if (location_state.pathname.startsWith('/chat'))
+			dispatch(setUrl('chat'));
+	}, [location_state, dispatch]);
 
-	if (accepted === 'AUTHENTICATED' && !isAuthenticated)
-		return <Navigate to={`/auth/login?redirect=${location.pathname}`} />;
 
-	if (accepted === 'UNAUTHENTICATED' && isAuthenticated)
-		return <Navigate to={redirectTo ?? '/home'} replace />;
+	// isAuthenticated
+	// null => user has been logged out automatically (redirect)
+	// false => user has logged out manually (no redirect)
+	// true => user is logged in
 
-	const page = isProfileCompleted(user);
-
-	const url_page =
-		Number(new URLSearchParams(location.search).get('page')) ?? page;
-
-	if (
-		isAuthenticated &&
-		page !== undefined &&
-		(location.pathname !== '/user/complete-profile' || page !== url_page)
-	) {
-		return (
-			<Navigate
-				to={`/user/complete-profile?redirect=${location.pathname}&page=${page}`}
-			/>
-		);
+	if (accepted === 'AUTHENTICATED') {
+		if (isAuthenticated == null)
+			return (
+				<Navigate
+					to={`/auth/login?redirect=${location_state.pathname}`}
+				/>
+			);
+		else if (isAuthenticated === 'false') {
+			return <Navigate to={`/auth/login`} />;
+		}
 	}
 
+	if (accepted === 'UNAUTHENTICATED' && isAuthenticated === 'true') {
+		const redirectTo = new URLSearchParams(location_state.search).get(
+			'redirect',
+		);
+		return <Navigate to={redirectTo ?? '/home'} replace />;
+	}
+
+	if (isError) {
+		toast.error(`Error: User not found`);
+		dispatch(clearAuth());
+		return <Navigate to="/" />;
+	}
+
+	if (!isCompleted) {
+		if (
+			accepted === 'AUTHENTICATED' &&
+			isAuthenticated === 'true' &&
+			(isFetching || isLoading || !data)
+		)
+			return (
+				<div className="w-full h-svh flex justify-center items-center bg-transparent">
+					<LoadingSpinner message="Checking profile completion..." />
+				</div>
+			);
+
+		const page = data ? isProfileCompleted(data) : 1;
+
+		const url_page =
+			Number(new URLSearchParams(location_state.search).get('page')) ??
+			page;
+
+		if (
+			isAuthenticated === 'true' &&
+			page !== undefined &&
+			(location_state.pathname !== '/user/complete-profile' ||
+				page !== url_page)
+		) {
+			return (
+				<Navigate
+					to={`/user/complete-profile?redirect=${location_state.pathname}&page=${page}`}
+				/>
+			);
+		}
+	}
 	return (
 		<div className="black-background relative h-svh overflow-hidden">
 			{inverted ? (

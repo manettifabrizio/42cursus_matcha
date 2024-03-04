@@ -17,21 +17,6 @@ export type User = {
 	age: number;
 };
 
-export const initUser: User = {
-	age: -1,
-	id: -1,
-	username: '',
-	firstname: '',
-	lastname: '',
-	gender: 'MALE',
-	orientation: 'BISEXUAL',
-	biography: '',
-	location: null,
-	tags: [],
-	picture: null,
-	pictures: [],
-};
-
 export type Profile = {
 	last_seen_at?: string;
 	id: number;
@@ -47,7 +32,7 @@ export type Profile = {
 	picture?: Picture;
 	location?: { distance: number };
 	pictures: Picture[];
-	tags: { id: number; name: string }[];
+	tags: Tag[];
 	likes?: { by_me: boolean; to_me: boolean };
 	blocks?: { by_me: boolean };
 	reports?: { by_me: boolean };
@@ -127,15 +112,15 @@ export const initCompleteProfile: CompleteProfile = {
 };
 
 export type AuthProfile = {
-	email?: string;
-	password?: string;
-	password_confirm?: string;
+	email: string;
+	password: string;
+	password_confirm: string;
 };
 
 export const initAuthProfile: AuthProfile = {
-	email: undefined,
-	password: undefined,
-	password_confirm: undefined,
+	email: '',
+	password: '',
+	password_confirm: '',
 };
 
 export type PicturesProfile = {
@@ -182,6 +167,16 @@ export const initCompleteProfileErrors: CompleteProfileError = {
 	firstname: [],
 	lastname: [],
 	biography: [],
+};
+
+export type LoginFormErrors = {
+	username?: string[];
+	password?: string[];
+};
+
+export type ResetPasswordFormErrors = {
+	username?: string[];
+	email?: string[];
 };
 
 export type AuthProfileError = {

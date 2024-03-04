@@ -8,6 +8,7 @@ import style from './style.module.scss';
 import MatchaLogo from '/matcha.svg';
 import { setCurrentUser } from '@/tool/userTools';
 import { startConnecting } from '@/feature/interactions/store.slice';
+import toast from 'react-hot-toast';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -24,10 +25,9 @@ export default function BootLoader({ setBooting }: Props) {
 	const [relog] = useRefreshMutation();
 
 	useEffect(() => {
-		// Todo: Remove setTimeout ?
 		switch (step) {
 			case 'START':
-				setTimeout(() => setStep('CSRF'), 500);
+				setStep('CSRF');
 				break;
 			case 'CSRF':
 				(async () => {
@@ -37,10 +37,6 @@ export default function BootLoader({ setBooting }: Props) {
 					while (retry < MAX_RETRY) {
 						try {
 							await getCsrfToken().unwrap();
-							dispatch({
-								type: 'security/setCsrfToken',
-								payload: cookie('csrf-token'),
-							});
 							break;
 						} catch (err: unknown) {
 							retry += 1;
@@ -49,10 +45,12 @@ export default function BootLoader({ setBooting }: Props) {
 
 					if (retry == MAX_RETRY) {
 						console.log(`Component::BootLoader::CSRF: Failed.`);
-						// Todo: Notify user ? Display an error ?
+						toast.error(
+							"We can't connect to the server. Please try again later.",
+						);
 						location.reload();
 					} else {
-						setTimeout(() => setStep('RELOG'), 500);
+						setStep('RELOG');
 					}
 				})();
 				break;
@@ -71,7 +69,7 @@ export default function BootLoader({ setBooting }: Props) {
 					} catch (err: unknown) {
 						console.log(`Component::BootLoader::RELOG: Failed.`);
 					} finally {
-						setTimeout(() => setStep('DONE'), 500);
+						setStep('DONE');
 					}
 				})();
 				break;

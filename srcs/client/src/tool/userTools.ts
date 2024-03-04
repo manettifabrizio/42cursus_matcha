@@ -1,7 +1,6 @@
 import { store } from '@/core/store';
 import { setUserId } from '@/feature/interactions/store.slice';
 import { userApi } from '@/feature/user/api.slice';
-import { setUser } from '@/feature/user/store.slice';
 import {
 	CompleteProfile,
 	Profile,
@@ -14,7 +13,6 @@ export async function setCurrentUser() {
 		const req = store.dispatch(userApi.endpoints.getProfile.initiate());
 		const res = await req.unwrap();
 
-		store.dispatch(setUser(res));
 		store.dispatch(setUserId(res.id));
 	} catch (e) {
 		if (location.pathname !== '/user/complete-profile')
@@ -33,6 +31,8 @@ export function isProfileCompleted(profile: Profile): number | undefined {
 		return 1;
 
 	if (profile.pictures.length < 2 || profile.picture == null) return 2;
+
+	localStorage.setItem('is_completed', JSON.stringify(true));
 
 	return undefined;
 }

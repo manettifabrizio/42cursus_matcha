@@ -64,7 +64,7 @@ export default function MultiRangeSlider({
 					);
 					onChange({ max: currentValue.max, min: value });
 				}}
-				className="absolute h-0 w-full outline-none z-30 pointer-events-none"
+				className="absolute h-1 w-full outline-none z-30 pointer-events-none"
 			/>
 			<input
 				required
@@ -81,7 +81,7 @@ export default function MultiRangeSlider({
 					);
 					onChange({ max: value, min: currentValue.min });
 				}}
-				className="absolute h-0 w-full outline-none z-30 pointer-events-none"
+				className="absolute h-1 w-full outline-none z-30 pointer-events-none"
 			/>
 
 			{/* Slider */}

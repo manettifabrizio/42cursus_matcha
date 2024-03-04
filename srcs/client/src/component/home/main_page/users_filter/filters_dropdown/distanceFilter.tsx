@@ -16,7 +16,7 @@ export default function DistanceFilter({
 						type="range"
 						onChange={(e) => setDistance(Number(e.target.value))}
 						className={
-							'absolute h-0 w-full outline-none z-40 pointer-events-none undefined'
+							'absolute h-1 w-full outline-none z-40 pointer-events-none undefined'
 						}
 						min="0"
 						value={distance}

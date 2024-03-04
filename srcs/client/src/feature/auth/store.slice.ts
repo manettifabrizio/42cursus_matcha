@@ -25,8 +25,9 @@ const slice = createSlice({
 			localStorage.setItem('is_authenticated', JSON.stringify(true));
 		},
 		clearAuth: () => {
-			localStorage.removeItem('is_authenticated');
-			// Todo: Verify if it works
+			// is_authenticated is set to false when user logs out, and is null when user is not authenticated
+			localStorage.setItem('is_authenticated', JSON.stringify(false));
+			localStorage.removeItem('is_completed');
 		},
 	},
 });

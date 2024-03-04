@@ -4,7 +4,7 @@ import {
 } from '@/tool/isRTKQError';
 import toast from 'react-hot-toast';
 import { userApi } from './api.slice';
-import { PicturesProfileError, FileWithId, PictureError } from './types';
+import { PicturesProfileError, PictureError } from './types';
 import { store } from '@/core/store';
 
 async function uploadImage(picture: File) {
@@ -18,52 +18,23 @@ async function uploadImage(picture: File) {
 }
 
 export async function uploadProfilePicture(
-	picture: FileWithId,
+	id: number,
 	setErrors: React.Dispatch<React.SetStateAction<PicturesProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
 	const toast_id = toast.loading('Setting profile picture...');
 
-	const setProfilePicture = async (id: number) => {
-		return await store
-			.dispatch(userApi.endpoints.userEdit.initiate({ id_picture: id }))
-			.then(() => {
-				setSubmitting(false);
-				toast.success('Profile picture set.', { id: toast_id });
-				return true;
-			})
-			.catch((error) => {
-				checkErrorsInPromises(
-					error,
-					setErrors,
-					setSubmitting,
-					toast_id,
-				);
-				return false;
-			});
-	};
-
-	setSubmitting(true);
-
-	if (picture.id === undefined) {
-		await uploadImage(picture.file)
-			.then(async (res) => {
-				if (res.id) {
-					return await setProfilePicture(res.id);
-				}
-			})
-			.catch((error) => {
-				checkErrorsInPromises(
-					error,
-					setErrors,
-					setSubmitting,
-					toast_id,
-				);
-			});
-	} else {
-		return await setProfilePicture(picture.id);
-	}
-	return false;
+	return await store
+		.dispatch(userApi.endpoints.userEdit.initiate({ id_picture: id }))
+		.then(() => {
+			setSubmitting(false);
+			toast.success('Profile picture set.', { id: toast_id });
+			return true;
+		})
+		.catch((error) => {
+			checkErrorsInPromises(error, setErrors, setSubmitting, toast_id);
+			return false;
+		});
 }
 
 export async function deletePicture(

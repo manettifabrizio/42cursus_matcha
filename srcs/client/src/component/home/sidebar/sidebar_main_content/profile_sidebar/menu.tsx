@@ -16,7 +16,7 @@ const MenuItems = [
 		path: '/user/profile/auth',
 	},
 	{
-		name: 'Liked',
+		name: 'Likes',
 		path: '/user/profile/likes',
 	},
 	{
@@ -53,7 +53,7 @@ export default function ProfileMenu({ isDesktop }: ProfileMenuProps) {
 							dispatch(toggleSidebar(false));
 						}}
 						className={
-							'flex justify-center rounded-xl hover:bg-gray-700 p-2 m-2 ' +
+							'flex justify-center rounded-xl hover:font-bold p-2 m-2 ' +
 							(location.pathname === item.path ? 'font-bold' : '')
 						}
 					>

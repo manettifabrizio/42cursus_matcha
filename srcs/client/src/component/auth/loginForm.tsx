@@ -1,4 +1,5 @@
 import LabelInput from '@/component/ui/labelInput';
+import { LoginFormErrors } from '@/feature/user/types';
 import { useId } from 'react';
 import { Form } from 'react-router-dom';
 import { useNavigation } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { useActionData } from 'react-router-dom';
 export default function LoginForm() {
 	const id = useId();
 	const navigation = useNavigation();
-	const data = useActionData() as string[] | undefined;
+	const data = useActionData() as LoginFormErrors | undefined;
 
 	return (
 		<>
@@ -21,6 +22,7 @@ export default function LoginForm() {
 						placeholder: 'Username',
 						id: `${id}-username`,
 					}}
+					errors_props={data?.username}
 				/>
 				<LabelInput
 					input_props={{
@@ -30,7 +32,7 @@ export default function LoginForm() {
 						placeholder: 'Password',
 						id: `${id}-password`,
 					}}
-					errors_props={data}
+					errors_props={data?.password}
 				/>
 				<button
 					type="submit"

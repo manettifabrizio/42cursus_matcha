@@ -42,10 +42,11 @@ export function Component() {
 	return (
 		<>
 			<BackToMenuArrow />
-			{data ? (
+			{data && !isFetching && !isLoading ? (
 				<ProfileEdit
 					key={data.tags.join(' ')}
 					base_profile={profileToCompleteProfile(data)}
+					base_profile_tags={data.tags}
 					errors={errors}
 					setErrors={setErrors}
 				/>

@@ -4,6 +4,7 @@ import {
 	AuthProfileError,
 	CompleteProfile,
 	CompleteProfileError,
+	Tag,
 	TagsError,
 } from './types';
 import { getGeolocation } from '@/tool/getLocation';
@@ -16,6 +17,16 @@ export function checkBeforeSubmitting(
 	profile: CompleteProfile,
 	toast_id: string,
 ): boolean {
+	if (profile.birthdate === undefined) {
+		toast.error('Birthdate is required.', { id: toast_id });
+		return false;
+	}
+
+	if (profile.tags.length === 0) {
+		toast.error('At least one tag is required.', { id: toast_id });
+		return false;
+	}
+
 	if (profile.tags.length > 4) {
 		toast.error('Too many tags selected. Max is 4.', { id: toast_id });
 		return false;
@@ -129,12 +140,11 @@ export function hasTagsChanged(tags: string[], base: string[]): boolean {
 
 async function deleteOldTags(
 	tags: string[],
+	old_tags: Tag[],
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 	toast_id: string,
 ) {
-	const old_tags = store.getState().user.tags;
-
 	const to_delete = old_tags.filter((t) => {
 		return !tags.find((new_t) => t.name === new_t);
 	});
@@ -178,11 +188,18 @@ function checkTagsErrorsInPromises(
 
 export async function sendTags(
 	profile: CompleteProfile,
+	old_tags: Tag[],
 	setErrors: React.Dispatch<React.SetStateAction<CompleteProfileError>>,
 	setSubmitting: React.Dispatch<React.SetStateAction<boolean>>,
 	toast_id: string,
 ): Promise<boolean> {
-	await deleteOldTags(profile.tags, setErrors, setSubmitting, toast_id);
+	await deleteOldTags(
+		profile.tags,
+		old_tags,
+		setErrors,
+		setSubmitting,
+		toast_id,
+	);
 
 	const promises = profile.tags.map(
 		async (t) =>

@@ -36,7 +36,6 @@ export default function OrientationInput({
 			<div className="flex justify-center items-center cursor-pointer">
 				<SelectDropdown
 					disabled={disabled}
-					name="gender"
 					options={orientationOptions}
 					multi_select={false}
 					id={id}

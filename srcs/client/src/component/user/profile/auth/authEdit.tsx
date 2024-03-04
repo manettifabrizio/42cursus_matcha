@@ -32,8 +32,8 @@ export default function AuthEdit({ base_profile }: ProfileEditProps) {
 			await setCurrentUser();
 			setProfile((c) => ({
 				...c,
-				password: undefined,
-				password_confirm: undefined,
+				password: '',
+				password_confirm: '',
 			}));
 			setSubmitting(false);
 		}

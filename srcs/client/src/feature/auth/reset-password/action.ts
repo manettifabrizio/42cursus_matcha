@@ -1,13 +1,11 @@
 import type { ActionFunction } from 'react-router-dom';
 import { store } from '@/core/store';
-import { manageRTKQErrorCause } from '@/tool/isRTKQError';
+import {
+	manageRTKQErrorCause,
+	manageRTKQErrorDetails,
+} from '@/tool/isRTKQError';
 import { authApi } from '../api.slice';
 import toast from 'react-hot-toast';
-
-// Type ------------------------------------------------------------------------
-export type ResetPasswordError = {
-	username?: string[];
-};
 
 // Action ----------------------------------------------------------------------
 export const action: ActionFunction = async ({ request }) => {
@@ -34,8 +32,16 @@ export const action: ActionFunction = async ({ request }) => {
 			{ id },
 		);
 
-        return null;
+		return null;
 	} catch (error: unknown) {
-		return manageRTKQErrorCause(error, id);
+		if (
+			!fields.username ||
+			fields.username === '' ||
+			!fields.email ||
+			fields.email === ''
+		)
+			return manageRTKQErrorDetails(error, id);
+
+		return { email: manageRTKQErrorCause(error, id) };
 	}
 };

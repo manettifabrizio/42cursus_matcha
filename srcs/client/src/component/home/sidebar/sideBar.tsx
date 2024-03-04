@@ -25,13 +25,11 @@ export default function SideBar({ isDesktop }: SideBarProps) {
 					'flex flex-col h-full ' + (isDesktop ? 'p-4' : 'px-4 pt-4')
 				}
 			>
-				{/* Profile section */}
-				{isDesktop && (
-					<SidebarTop
-						url={url}
-						NotificationsOpened={NotificationsOpened}
-					/>
-				)}
+				<SidebarTop
+					url={url}
+					NotificationsOpened={NotificationsOpened}
+					isDesktop={isDesktop}
+				/>
 
 				<SidebarMainContent
 					show_notifications={NotificationsOpened}

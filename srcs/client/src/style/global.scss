@@ -65,6 +65,11 @@ h6 {
 	font-size: 1rem;
 }
 
+// Fix FameIndicator difference from Chrome and Firefox
+input[type='range']::-webkit-slider-thumb {
+	margin-top: 0px;
+}
+
 input[type='date']::-webkit-calendar-picker-indicator {
 	background: transparent;
 	bottom: 0;

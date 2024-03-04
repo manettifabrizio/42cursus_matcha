@@ -90,7 +90,6 @@ export default function BirthdayInput({
 				<SelectDropdown
 					id={id}
 					disabled={disabled}
-					name="birthdate"
 					options={dayOptions}
 					setValue={setDay}
 					placeholder="Day"
@@ -99,7 +98,6 @@ export default function BirthdayInput({
 				<SelectDropdown
 					id={id}
 					disabled={disabled}
-					name="birthdate"
 					options={monthOptions}
 					setValue={setMonth}
 					placeholder="Month"
@@ -108,7 +106,6 @@ export default function BirthdayInput({
 				<SelectDropdown
 					id={id}
 					disabled={disabled}
-					name="birthdate"
 					options={yearOptions.toReversed()}
 					setValue={setYear}
 					placeholder="Year"

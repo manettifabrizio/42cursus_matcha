@@ -18,6 +18,7 @@ type SelectDropdownProps = {
 	setValue: React.Dispatch<React.SetStateAction<Option[]>>;
 	value?: Option[];
 	placeholder?: string;
+	form?: string;
 };
 
 export default function SelectDropdown({
@@ -32,6 +33,7 @@ export default function SelectDropdown({
 	setValue,
 	value,
 	placeholder,
+	form,
 }: SelectDropdownProps) {
 	const [length, setLength] = useState(0);
 
@@ -70,6 +72,7 @@ export default function SelectDropdown({
 				options={options}
 				placeholder={placeholder}
 				name={name}
+				form={form}
 				required
 				isDisabled={disabled}
 				className={

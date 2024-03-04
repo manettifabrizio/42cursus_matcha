@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import {
 	deletePicture,
 	uploadPicture,
-	uploadProfilePicture,
+    uploadProfilePicture,
 } from '@/feature/user/imagesUpload';
 import { PicturesInputProps } from '../user/complete-profile/inputs/picturesInput';
 import LoadingSpinner from './loadingSpinner';
@@ -91,7 +91,7 @@ export default function ImageSelector({
 	const handleImageClick = async (picture: Picture) => {
 		if (picture.id === profilePicture?.id || submitting) return;
 
-		if (await uploadProfilePicture(picture, setErrors, setSubmitting)) {
+		if (await uploadProfilePicture(picture.id, setErrors, setSubmitting)) {
 			setProfilePicture(picture);
 		}
 	};

@@ -22,7 +22,7 @@ export function Component() {
 		return <Navigate to="/" />;
 	}
 
-	return data ? (
+	return data && !isFetching && !isLoading ? (
 		<>
 			<BackToMenuArrow />
 			<div className="text-3xl mb-3 text-center w-full font-bold">

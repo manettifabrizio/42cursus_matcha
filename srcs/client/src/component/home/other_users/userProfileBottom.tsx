@@ -61,7 +61,7 @@ export default function UserActions({ user, isFetching }: UserActionsProps) {
 						'match',
 						user.firstname ?? '',
 						user.id,
-						interactionsState.notifications_opened,
+						interactionsState.notifications_open,
 					),
 				),
 			);
