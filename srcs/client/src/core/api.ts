@@ -5,6 +5,7 @@ import type { StoreState } from './store';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Mutex } from 'async-mutex';
 import { cookie } from '@/tool/cookie';
+import { router } from './router';
 
 // Type ------------------------------------------------------------------------
 export type ApiErrorResponse<T = { [field: string]: string[] }> = {
@@ -71,7 +72,7 @@ const fetchAuth: BaseQueryFn<
 				);
 
 				if (res.error) {
-					api.dispatch({ type: 'auth/clearAuth' });
+					router.navigate('/auth/logout');
 				} else {
 					api.dispatch({
 						type: 'auth/setAuthAccessToken',

@@ -7,8 +7,9 @@ import { useEffect } from 'react';
 import { setUrl } from '@/feature/interactions/store.slice';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
-import { clearAuth } from '@/feature/auth/store.slice';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
+import { useStoreSelector } from '@/hook/useStore';
+import { selectAuth } from '@/feature/auth/store.slice';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -18,9 +19,9 @@ interface Props {
 
 // Component -------------------------------------------------------------------
 export default function ProtectedLayout({ accepted, inverted }: Props) {
-	const isAuthenticated = localStorage.getItem('is_authenticated');
-	const isCompleted = localStorage.getItem('is_completed');
+	const isAuthenticated = localStorage.getItem('was_autenticated');
 	const location_state = useLocation();
+	const authStore = useStoreSelector(selectAuth);
 	const dispatch = useDispatch();
 	const {
 		data = undefined,
@@ -28,7 +29,9 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		isLoading,
 		isError,
 	} = useGetProfileQuery(undefined, {
-		skip: isAuthenticated === 'false' || !isAuthenticated || isCompleted === 'true',
+		skip:
+			authStore.accessToken === null ||
+			authStore.isProfileCompleted === true,
 	});
 
 	useEffect(() => {
@@ -39,7 +42,6 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		else if (location_state.pathname.startsWith('/chat'))
 			dispatch(setUrl('chat'));
 	}, [location_state, dispatch]);
-
 
 	// isAuthenticated
 	// null => user has been logged out automatically (redirect)
@@ -67,11 +69,13 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 
 	if (isError) {
 		toast.error(`Error: User not found`);
-		dispatch(clearAuth());
-		return <Navigate to="/" />;
+		return <Navigate to="/user/logout" />;
 	}
 
-	if (!isCompleted) {
+	if (
+		authStore.accessToken !== null &&
+		authStore.isProfileCompleted === false
+	) {
 		if (
 			accepted === 'AUTHENTICATED' &&
 			isAuthenticated === 'true' &&

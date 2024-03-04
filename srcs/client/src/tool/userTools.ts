@@ -1,4 +1,5 @@
 import { store } from '@/core/store';
+import { setProfileCompleted } from '@/feature/auth/store.slice';
 import { setUserId } from '@/feature/interactions/store.slice';
 import { userApi } from '@/feature/user/api.slice';
 import {
@@ -32,7 +33,7 @@ export function isProfileCompleted(profile: Profile): number | undefined {
 
 	if (profile.pictures.length < 2 || profile.picture == null) return 2;
 
-	localStorage.setItem('is_completed', JSON.stringify(true));
+	store.dispatch(setProfileCompleted(true));
 
 	return undefined;
 }

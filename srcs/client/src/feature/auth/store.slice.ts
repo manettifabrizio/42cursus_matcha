@@ -5,10 +5,12 @@ import { createSlice } from '@reduxjs/toolkit';
 // State -----------------------------------------------------------------------
 type State = {
 	accessToken: string | null;
+	isProfileCompleted: boolean;
 };
 
 const initialState: State = {
 	accessToken: null,
+	isProfileCompleted: false,
 };
 
 // Slice -----------------------------------------------------------------------
@@ -22,18 +24,25 @@ const slice = createSlice({
 			action: PayloadAction<State['accessToken']>,
 		) => {
 			state.accessToken = action.payload;
-			localStorage.setItem('is_authenticated', JSON.stringify(true));
+			localStorage.setItem('was_autenticated', JSON.stringify(true));
+		},
+		setProfileCompleted: (
+			state,
+			action: PayloadAction<State['isProfileCompleted']>,
+		) => {
+			state.isProfileCompleted = action.payload;
 		},
 		clearAuth: () => {
-			// is_authenticated is set to false when user logs out, and is null when user is not authenticated
-			localStorage.setItem('is_authenticated', JSON.stringify(false));
+			// was_autenticated is set to false when user logs out, and is null when user is not authenticated
+			localStorage.setItem('was_autenticated', JSON.stringify(false));
 			localStorage.removeItem('is_completed');
 		},
 	},
 });
 
 // Action ----------------------------------------------------------------------
-export const { setAuthAccessToken, clearAuth } = slice.actions;
+export const { setAuthAccessToken, setProfileCompleted, clearAuth } =
+	slice.actions;
 
 // Selector --------------------------------------------------------------------
 export const selectAuth = (state: StoreState) => state.auth;

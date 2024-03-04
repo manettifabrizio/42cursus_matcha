@@ -30,9 +30,6 @@ import {
 import PicturesEdit from '@/component/user/profile/pictures/picturesEdit';
 import UserCard from '@/component/home/main_page/user_card/userCard';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
-import { useDispatch } from 'react-redux';
-import { clearAuth } from '@/feature/auth/store.slice';
-import { TbLogout } from 'react-icons/tb';
 
 export function Component() {
 	const navigate = useNavigate();
@@ -45,7 +42,6 @@ export function Component() {
 
 	const [submitting, setSubmitting] = useState(false);
 	const { search } = useLocation();
-	const dispatch = useDispatch();
 	const [page, setPage] = useState(
 		Number(new URLSearchParams(search).get('page')) ?? 1,
 	);
@@ -98,8 +94,7 @@ export function Component() {
 
 	if (isError) {
 		toast.error(`Error: User not found`);
-		dispatch(clearAuth());
-		return <Navigate to="/" />;
+		return <Navigate to="/auth/logout" />;
 	}
 
 	return (
