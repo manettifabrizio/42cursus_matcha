@@ -48,7 +48,7 @@ export default function AuthForm({
 								email: e.target.value,
 							})),
 					}}
-                    // TODO: Manage the Already in use email error
+					// TODO: Manage the Already in use email error
 					errors_props={errors?.email}
 				/>
 				<LabelInput
@@ -71,7 +71,7 @@ export default function AuthForm({
 							else
 								setProfile((current) => ({
 									...current,
-									password: undefined,
+									password: '',
 								}));
 						},
 					}}
@@ -96,7 +96,7 @@ export default function AuthForm({
 							else
 								setProfile((current) => ({
 									...current,
-									password_confirm: undefined,
+									password_confirm: '',
 								}));
 						},
 					}}

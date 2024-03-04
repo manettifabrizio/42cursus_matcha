@@ -27,7 +27,7 @@ export function Component() {
 		<>
 			<BackToMenuArrow />
 			<AuthEdit
-				base_profile={{ ...initAuthProfile, email: data.email }}
+				base_profile={{ ...initAuthProfile, email: data.email ?? '' }}
 			/>
 		</>
 	) : (

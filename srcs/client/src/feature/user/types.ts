@@ -112,15 +112,15 @@ export const initCompleteProfile: CompleteProfile = {
 };
 
 export type AuthProfile = {
-	email?: string;
-	password?: string;
-	password_confirm?: string;
+	email: string;
+	password: string;
+	password_confirm: string;
 };
 
 export const initAuthProfile: AuthProfile = {
-	email: undefined,
-	password: undefined,
-	password_confirm: undefined,
+	email: '',
+	password: '',
+	password_confirm: '',
 };
 
 export type PicturesProfile = {
