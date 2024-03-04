@@ -8,6 +8,7 @@ import { setUrl } from '@/feature/interactions/store.slice';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
 import { clearAuth } from '@/feature/auth/store.slice';
+import LoadingSpinner from '@/component/ui/loadingSpinner';
 
 // Type ------------------------------------------------------------------------
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 // Component -------------------------------------------------------------------
 export default function ProtectedLayout({ accepted, inverted }: Props) {
 	const isAuthenticated = localStorage.getItem('is_authenticated');
+	const isCompleted = localStorage.getItem('is_completed');
 	const location_state = useLocation();
 	const dispatch = useDispatch();
 	const {
@@ -25,38 +27,42 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		isFetching,
 		isLoading,
 		isError,
-	} = useGetProfileQuery(undefined, { skip: isAuthenticated === 'false' });
+	} = useGetProfileQuery(undefined, {
+		skip: isAuthenticated === 'false' || isCompleted === 'true',
+	});
 
 	useEffect(() => {
 		if (location_state.pathname.startsWith('/home'))
 			dispatch(setUrl('home'));
-		else if (location_state.pathname.startsWith('/user'))
+		else if (location_state.pathname.startsWith('/user/profile'))
 			dispatch(setUrl('user'));
 		else if (location_state.pathname.startsWith('/chat'))
 			dispatch(setUrl('chat'));
 	}, [location_state, dispatch]);
-
-	// Note: Base is irrelevant, just there to be able to use URL
-	const redirectTo = new URL(
-		`${location_state.pathname}${location_state.search}`,
-		`https://localhost`,
-	).searchParams.get('redirect');
 
 	// isAuthenticated
 	// null => user has been logged out automatically (redirect)
 	// false => user has logged out manually (no redirect)
 	// true => user is logged in
 
-	if (accepted === 'AUTHENTICATED' && isAuthenticated == null)
-		return (
-			<Navigate to={`/auth/login?redirect=${location_state.pathname}`} />
+	if (accepted === 'AUTHENTICATED' && isAuthenticated == null) {
+		if (isAuthenticated == null)
+			return (
+				<Navigate
+					to={`/auth/login?redirect=${location_state.pathname}`}
+				/>
+			);
+		else if (isAuthenticated === 'false') {
+			return <Navigate to={`/auth/login`} />;
+		}
+	}
+
+	if (accepted === 'UNAUTHENTICATED' && isAuthenticated === 'true') {
+		const redirectTo = new URLSearchParams(location_state.search).get(
+			'redirect',
 		);
-
-	if (accepted === 'AUTHENTICATED' && isAuthenticated === 'false')
-		return <Navigate to={`/auth/login`} />;
-
-	if (accepted === 'UNAUTHENTICATED' && isAuthenticated === 'true')
 		return <Navigate to={redirectTo ?? '/home'} replace />;
+	}
 
 	if (isError) {
 		toast.error(`Error: User not found`);
@@ -65,11 +71,16 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	}
 
 	if (
+		!isCompleted &&
 		accepted === 'AUTHENTICATED' &&
 		isAuthenticated === 'true' &&
 		(isFetching || isLoading || !data)
 	)
-		toast.loading('Loading User');
+		return (
+			<div className="w-full h-svh flex justify-center items-center bg-transparent">
+				<LoadingSpinner message="Checking profile completion..." />
+			</div>
+		);
 
 	const page = data ? isProfileCompleted(data) : 1;
 

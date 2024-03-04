@@ -32,6 +32,8 @@ export function isProfileCompleted(profile: Profile): number | undefined {
 
 	if (profile.pictures.length < 2 || profile.picture == null) return 2;
 
+	localStorage.setItem('is_completed', JSON.stringify(true));
+
 	return undefined;
 }
 

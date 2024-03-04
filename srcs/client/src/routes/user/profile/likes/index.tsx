@@ -12,8 +12,8 @@ export function Component() {
 	const [users, setUsers] = useState<Profile[]>([]);
 	const {
 		data = { likes: { by_me: [], to_me: [] } },
-		isLoading: isLoadingBlocks,
-		isFetching: isFetchingBlocks,
+		isLoading: isLoadingLikes,
+		isFetching: isFetchingLikes,
 	} = useGetLikesQuery();
 	const [
 		getProfile,
@@ -21,14 +21,14 @@ export function Component() {
 	] = useLazyGetProfileQuery();
 
 	useEffect(() => {
-		if (!(isLoadingBlocks || isFetchingBlocks)) {
-			const likes = data.likes.by_me;
+		if (!(isLoadingLikes || isFetchingLikes)) {
+			const likes = data.likes.to_me;
 
-			const getBlockedUsers = async () => {
+			const getLikedUsers = async () => {
 				const matchesPromises = likes.map(async (like) => {
 					try {
 						const match = await getProfile({
-							id: like.id_user_to,
+							id: like.id_user_from,
 						}).unwrap();
 						return match;
 					} catch (error) {
@@ -40,22 +40,22 @@ export function Component() {
 				return Promise.all(matchesPromises);
 			};
 
-			getBlockedUsers().then((res) => {
+			getLikedUsers().then((res) => {
 				const liked_users = res.filter(notEmpty);
 				setUsers(liked_users);
 			});
 		}
-	}, [data, getProfile, isLoadingBlocks, isFetchingBlocks]);
+	}, [data, getProfile, isLoadingLikes, isFetchingLikes]);
 
 	return (
 		<>
 			<BackToMenuArrow />
 			<div className="text-3xl mb-3 text-center w-full font-bold">
-				Liked Users
+				Users Likes
 			</div>
 			<AvailableUsers
-				isFetching={isFetchingProfiles || isFetchingBlocks}
-				isLoading={isLoadingProfiles || isLoadingBlocks}
+				isFetching={isFetchingProfiles || isFetchingLikes}
+				isLoading={isLoadingProfiles || isLoadingLikes}
 				users={users}
 			/>
 		</>

@@ -1,6 +1,7 @@
 import { Profile } from '@/feature/user/types';
 import { formatDateTime } from '@/tool/userTools';
 import { LuDot } from 'react-icons/lu';
+import FameIndicator from './fameIndicator';
 
 type UserProfileProps = {
 	my_user: Profile;
@@ -45,27 +46,7 @@ export default function UserInfo({
 				)}
 			</div>
 
-			<div className="flex flex-col mb-9 text-xl">
-				<div
-					className="relative mt-2"
-					title={`Fame: ${other_user.fame}`}
-				>
-					<input
-						type="range"
-						className={
-							'absolute h-1 w-full outline-none z-40 pointer-events-none'
-						}
-						min="1"
-						max="100"
-						value={other_user.fame}
-						disabled
-					/>
-					<div className="relative w-full bg-white">
-						{/* Slider */}
-						<div className="absolute h-2 bg-gradient-to-r to-red-600 from-amber-400 z-20 rounded-md w-full" />
-					</div>
-				</div>
-			</div>
+			<FameIndicator fame={Number(other_user.fame ?? 0)} />
 
 			<div className="flex flex-wrap flex-row auto-cols-auto gap-2 text-sm mb-5 text-center">
 				{other_user.tags.map((tag) => (
