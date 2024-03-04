@@ -160,52 +160,40 @@ const slice = createSlice({
 		receiveMessage: (state, action: PayloadAction<MessageType>) => {
 			const { id_user_from, id_user_to } = action.payload;
 
-			const chat_id: number =
-				id_user_from === state.userId ? id_user_to : id_user_from;
-
-			const existingUserMessages = state.messages[chat_id] || [];
-
-			const is_chat_opened = location.pathname === `/chat/${chat_id}`;
-
-			const updatedUserMessages = [
-				...existingUserMessages,
-				{ ...action.payload, seen: is_chat_opened },
-			];
+			const chat_id = id_user_from === state.userId ? id_user_to : id_user_from;
 
 			const other_user = state.matches?.find(
 				(user) => user.id === id_user_from,
 			);
 
-			if (id_user_from === other_user?.id)
+			if (id_user_from === other_user?.id) {
 				messageToast(
 					other_user?.firstname ?? 'unknown',
 					action.payload.id_user_from,
 					action.payload.content,
 					other_user?.picture?.path ?? '',
 				);
+			}
 
-			return {
-				...state,
-				messages: {
-					...state.messages,
-					[chat_id]: updatedUserMessages,
-				},
-				notifications:
-					id_user_from === other_user?.id
-						? [
-								...state.notifications,
-								createNotification(
-									state.notifications.length,
-									'message',
-									other_user?.firstname ?? 'unknown',
-									action.payload.id_user_from,
-									state.notifications_open,
-									other_user?.picture?.path ?? undefined,
-									action.payload.content,
-								),
-						  ]
-						: state.notifications,
-			};
+			if (!state.messages[chat_id])
+			{
+				state.messages[chat_id] = [];
+			}
+
+			state.messages[chat_id].push({ ...action.payload, seen: (location.pathname === `/chat/${chat_id}`) });
+
+			if ( id_user_from === other_user?.id )
+			{
+				state.notifications.push(createNotification(
+					state.notifications.length,
+					'message',
+					other_user?.firstname ?? 'unknown',
+					action.payload.id_user_from,
+					state.notifications_open,
+					other_user?.picture?.path ?? undefined,
+					action.payload.content,
+				));
+			}
 		},
 		setLikedUsers: (
 			state,
