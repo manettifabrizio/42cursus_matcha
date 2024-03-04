@@ -1,5 +1,5 @@
 import { Profile } from '@/feature/user/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronLeft } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import UserInfo from './userProfileTop';
@@ -30,6 +30,7 @@ export default function UserProfile({
 	const dispatch = useStoreDispatch();
 	const isDesktop = useMediaQuery({ query: '(min-width: 940px)' });
 	const navigate = useNavigate();
+	const [isAMatch, setIsAMatch] = useState(false);
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
 	);
@@ -50,6 +51,18 @@ export default function UserProfile({
 		};
 	}, [dispatch, other_user.id]);
 
+	useEffect(() => {
+		if (
+			other_user.likes?.by_me &&
+			other_user.likes?.to_me &&
+			!other_user.blocks?.by_me
+		) {
+			setIsAMatch(true);
+		} else {
+			setIsAMatch(false);
+		}
+	}, [other_user.likes, other_user.blocks]);
+
 	const user_pictures = other_user.pictures.filter(
 		(p) => p.id !== other_user.picture?.id,
 	);
@@ -67,18 +80,16 @@ export default function UserProfile({
 			<div
 				// TODO: Better color when match
 				className={
-					'user-profile flex relative border-4 w-3/4 h-5/6 rounded-xl max-w-4xl sm:max-h-[45rem] ' +
+					'user-profile flex relative border-4 w-3/4 h-5/6 rounded-xl max-w-4xl sm:max-h-[45rem] no-scrollbar ' +
 					(isDesktop
 						? 'flex-row overflow-hidden '
 						: 'flex-col overflow-y-auto ') +
-					(other_user.likes?.by_me && other_user.likes?.to_me
-						? 'border-red-500'
-						: '')
+					(isAMatch ? 'border-red-500' : '')
 				}
 			>
 				{isDesktop ? (
 					<>
-						<div className="bg-orange-500 w-1/2 h-full overflow-y-auto">
+						<div className="bg-orange-500 w-1/2 h-full overflow-y-auto no-scrollbar">
 							<MImage
 								src={`${other_user.picture?.path}`}
 								alt="Avatar"
@@ -95,9 +106,15 @@ export default function UserProfile({
 							))}
 						</div>
 						<div className="flex flex-col w-1/2 h-full p-10 relative">
+							{isAMatch && (
+								<div className="absolute p-1 top-0 left-0 flex flex-row text-white text-xl font-bold bg-gradient-to-r from-red-500 to-amber-400 w-full text-center justify-center items-center">
+									<div className="text-xl pe-3">🔥</div>
+									{"It's a match!"}
+								</div>
+							)}
 							{other_user.blocks?.by_me && (
 								<div className="absolute top-0 left-0 text-red-500 italic font-light border-red-500 border-b w-full text-center">
-									User is blocked
+									{'User is blocked'}
 								</div>
 							)}
 							<UserInfo
@@ -114,9 +131,15 @@ export default function UserProfile({
 					</>
 				) : (
 					<>
+						{isAMatch && (
+							<div className="absolute p-1 top-0 left-0 flex flex-row text-white text-xl font-bold bg-gradient-to-r from-red-500 to-amber-400 w-full text-center justify-center items-center">
+								<div className="text-xl pe-3">🔥</div>
+								{"It's a match!"}
+							</div>
+						)}
 						{other_user.blocks?.by_me && (
 							<div className="absolute top-0 left-0 text-white italic font-light border-red-500 bg-red-500 border-b w-full text-center">
-								User is blocked
+								{'User is blocked'}
 							</div>
 						)}
 						<MImage
