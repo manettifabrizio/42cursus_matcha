@@ -70,36 +70,37 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		return <Navigate to="/" />;
 	}
 
-	if (
-		!isCompleted &&
-		accepted === 'AUTHENTICATED' &&
-		isAuthenticated === 'true' &&
-		(isFetching || isLoading || !data)
-	)
-		return (
-			<div className="w-full h-svh flex justify-center items-center bg-transparent">
-				<LoadingSpinner message="Checking profile completion..." />
-			</div>
-		);
+	if (!isCompleted) {
+		if (
+			accepted === 'AUTHENTICATED' &&
+			isAuthenticated === 'true' &&
+			(isFetching || isLoading || !data)
+		)
+			return (
+				<div className="w-full h-svh flex justify-center items-center bg-transparent">
+					<LoadingSpinner message="Checking profile completion..." />
+				</div>
+			);
 
-	const page = data ? isProfileCompleted(data) : 1;
+		const page = data ? isProfileCompleted(data) : 1;
 
-	const url_page =
-		Number(new URLSearchParams(location_state.search).get('page')) ?? page;
+		const url_page =
+			Number(new URLSearchParams(location_state.search).get('page')) ??
+			page;
 
-	if (
-		isAuthenticated === 'true' &&
-		page !== undefined &&
-		(location_state.pathname !== '/user/complete-profile' ||
-			page !== url_page)
-	) {
-		return (
-			<Navigate
-				to={`/user/complete-profile?redirect=${location_state.pathname}&page=${page}`}
-			/>
-		);
+		if (
+			isAuthenticated === 'true' &&
+			page !== undefined &&
+			(location_state.pathname !== '/user/complete-profile' ||
+				page !== url_page)
+		) {
+			return (
+				<Navigate
+					to={`/user/complete-profile?redirect=${location_state.pathname}&page=${page}`}
+				/>
+			);
+		}
 	}
-
 	return (
 		<div className="black-background relative h-svh overflow-hidden">
 			{inverted ? (
