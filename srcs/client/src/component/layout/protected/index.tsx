@@ -45,7 +45,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	// false => user has logged out manually (no redirect)
 	// true => user is logged in
 
-	if (accepted === 'AUTHENTICATED' && isAuthenticated == null) {
+	if (accepted === 'AUTHENTICATED') {
 		if (isAuthenticated == null)
 			return (
 				<Navigate

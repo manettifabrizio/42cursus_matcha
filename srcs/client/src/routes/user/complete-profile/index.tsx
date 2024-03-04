@@ -1,5 +1,11 @@
 import { useEffect, useId, useState } from 'react';
-import { Form, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import {
+	Form,
+	Link,
+	Navigate,
+	useLocation,
+	useNavigate,
+} from 'react-router-dom';
 import { useGetProfileQuery } from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
 import {
@@ -26,6 +32,7 @@ import UserCard from '@/component/home/main_page/user_card/userCard';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useDispatch } from 'react-redux';
 import { clearAuth } from '@/feature/auth/store.slice';
+import { TbLogout } from 'react-icons/tb';
 
 export function Component() {
 	const navigate = useNavigate();
@@ -97,6 +104,13 @@ export function Component() {
 
 	return (
 		<div className="flex justify-between flex-col items-center w-full h-full">
+			<Link
+				to="/auth/logout"
+				className="absolute left-0 top-0 m-3"
+				title="Logout"
+			>
+				<TbLogout className="text-2xl" />
+			</Link>
 			<MatchaLogo />
 			<FormContainer>
 				{!isLoading && !isFetching && data != undefined ? (
