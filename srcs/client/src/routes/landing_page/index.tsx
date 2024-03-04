@@ -29,6 +29,12 @@ export function Component() {
 							<div className="absolute inset-0 bg-gradient-to-r from-red-600 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 						</button>
 					</Link>
+					<div className="flex flex-row justify-center items-center mt-5">
+						Already have an account?&nbsp;
+						<Link to="/auth/login" className="font-bold underline">
+							Log In
+						</Link>
+					</div>
 				</div>
 			</div>
 		</div>

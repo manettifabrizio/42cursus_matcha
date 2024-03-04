@@ -19,7 +19,7 @@ export default function FormContainer({
 	};
 
 	return (
-		<div className="overflow-auto w-full m-auto">
+		<div className="overflow-auto w-full m-auto no-scrollbar">
 			<div className="flex justify-center my-4">
 				<div
 					className={

@@ -104,13 +104,6 @@ export function Component() {
 
 	return (
 		<div className="flex justify-between flex-col items-center w-full h-full">
-			<Link
-				to="/auth/logout"
-				className="absolute left-0 top-0 m-3"
-				title="Logout"
-			>
-				<TbLogout className="text-2xl" />
-			</Link>
 			<MatchaLogo />
 			<FormContainer>
 				{!isLoading && !isFetching && data != undefined ? (
@@ -154,6 +147,13 @@ export function Component() {
 						<LoadingSpinner message="Loading..." />
 					</div>
 				)}
+				<Link
+					to="/auth/logout"
+					className="underline font-bold p-2"
+					title="Logout"
+				>
+					Logout
+				</Link>
 			</FormContainer>
 		</div>
 	);
