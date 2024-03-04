@@ -58,7 +58,7 @@ const chatMiddleware: Middleware = (store) => {
 			socket && store.getState().interactions.isConnected;
 
 		if (startConnecting.match(action)) {
-			socket = io('https://localhost', {
+			socket = io('https://localhost:4443', {
 				auth: {
 					token: cookie('access-token'),
 				},
