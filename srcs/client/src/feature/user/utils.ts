@@ -32,7 +32,10 @@ export function checkBeforeSubmitting(
 		return false;
 	}
 
-	if (!profile.biography || profile.biography && profile.biography.trim().length === 0) {
+	if (
+		!profile.biography ||
+		(profile.biography && profile.biography.trim().length === 0)
+	) {
 		toast.error("Biography can't be empty.", { id: toast_id });
 		return false;
 	}
@@ -52,7 +55,13 @@ export async function editUserAuth(
 		await store
 			.dispatch(
 				authApi.endpoints.editAuth.initiate({
-					...profile,
+					email: profile.email === '' ? undefined : profile.email,
+					password:
+						profile.password === '' ? undefined : profile.password,
+					password_confirm:
+						profile.password_confirm === ''
+							? undefined
+							: profile.password_confirm,
 				}),
 			)
 			.unwrap();

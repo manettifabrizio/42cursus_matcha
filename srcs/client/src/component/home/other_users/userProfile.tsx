@@ -78,7 +78,6 @@ export default function UserProfile({
 				</button>
 			</div>
 			<div
-				// TODO: Better color when match
 				className={
 					'user-profile flex relative border-4 w-3/4 h-5/6 rounded-xl max-w-4xl sm:max-h-[45rem] no-scrollbar ' +
 					(isDesktop

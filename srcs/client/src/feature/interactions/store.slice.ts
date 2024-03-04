@@ -18,8 +18,6 @@ type State = {
 	isEstablishingConnection: boolean;
 	isConnected: boolean;
 	messages: Record<number, MessageType[]>;
-	// TODO: Maybe remove matches, could be done only with liked users
-	// the only critical usecase is ReceiveLike
 	matches?: Profile[];
 	liked_users?: Profile[];
 	user_status: boolean | Date | undefined;
@@ -89,7 +87,6 @@ const slice = createSlice({
 
 			viewToast(firstname, userId);
 
-			// TODO: Emit from server only when user that view profile is online
 			return {
 				...state,
 				notifications: [
