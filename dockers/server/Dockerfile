@@ -6,6 +6,6 @@ VOLUME ["/workspace"]
 COPY script/start.sh /usr/local/bin/start.sh
 RUN  chmod +x        /usr/local/bin/start.sh
 
-USER node
+# USER node
 
 ENTRYPOINT ["/usr/local/bin/start.sh"]

@@ -10,7 +10,8 @@ export default defineConfig({
         port: 8080, // cf. Docker/Nginx configuration file.
         hmr: {
             path: '/hmr', // Change default to avoid conflict with server sockets.
-            port: 443
+            port: 443,
+            clientPort: 4443,
         }
     },
     resolve: {

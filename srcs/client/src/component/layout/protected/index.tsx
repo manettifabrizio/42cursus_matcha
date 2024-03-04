@@ -40,6 +40,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 			dispatch(setUrl('chat'));
 	}, [location_state, dispatch]);
 
+
 	// isAuthenticated
 	// null => user has been logged out automatically (redirect)
 	// false => user has logged out manually (no redirect)
