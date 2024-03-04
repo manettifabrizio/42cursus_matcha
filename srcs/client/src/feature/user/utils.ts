@@ -32,7 +32,7 @@ export function checkBeforeSubmitting(
 		return false;
 	}
 
-	if (profile.biography && profile.biography.trim().length === 0) {
+	if (!profile.biography || profile.biography && profile.biography.trim().length === 0) {
 		toast.error("Biography can't be empty.", { id: toast_id });
 		return false;
 	}
