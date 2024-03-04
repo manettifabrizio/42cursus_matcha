@@ -28,7 +28,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		isLoading,
 		isError,
 	} = useGetProfileQuery(undefined, {
-		skip: isAuthenticated === 'false' || isCompleted === 'true',
+		skip: isAuthenticated === 'false' || !isAuthenticated || isCompleted === 'true',
 	});
 
 	useEffect(() => {
