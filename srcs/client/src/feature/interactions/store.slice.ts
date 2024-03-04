@@ -160,7 +160,8 @@ const slice = createSlice({
 		receiveMessage: (state, action: PayloadAction<MessageType>) => {
 			const { id_user_from, id_user_to } = action.payload;
 
-			const chat_id = id_user_from === state.userId ? id_user_to : id_user_from;
+			const chat_id =
+				id_user_from === state.userId ? id_user_to : id_user_from;
 
 			const other_user = state.matches?.find(
 				(user) => user.id === id_user_from,
@@ -175,24 +176,27 @@ const slice = createSlice({
 				);
 			}
 
-			if (!state.messages[chat_id])
-			{
+			if (!state.messages[chat_id]) {
 				state.messages[chat_id] = [];
 			}
 
-			state.messages[chat_id].push({ ...action.payload, seen: (location.pathname === `/chat/${chat_id}`) });
+			state.messages[chat_id].push({
+				...action.payload,
+				seen: location.pathname === `/chat/${chat_id}`,
+			});
 
-			if ( id_user_from === other_user?.id )
-			{
-				state.notifications.push(createNotification(
-					state.notifications.length,
-					'message',
-					other_user?.firstname ?? 'unknown',
-					action.payload.id_user_from,
-					state.notifications_open,
-					other_user?.picture?.path ?? undefined,
-					action.payload.content,
-				));
+			if (id_user_from === other_user?.id) {
+				state.notifications.push(
+					createNotification(
+						state.notifications.length,
+						'message',
+						other_user?.firstname ?? 'unknown',
+						action.payload.id_user_from,
+						state.notifications_open,
+						other_user?.picture?.path ?? undefined,
+						action.payload.content,
+					),
+				);
 			}
 		},
 		setLikedUsers: (
@@ -222,13 +226,7 @@ const slice = createSlice({
 					(user) => user.id !== action.payload.liked_user.id,
 				)
 			)
-				return {
-					...state,
-					liked_users: [
-						...state.liked_users,
-						action.payload.liked_user,
-					],
-				};
+				state.liked_users?.push(action.payload.liked_user);
 		},
 		rmLikedUser: (
 			state,
@@ -236,19 +234,20 @@ const slice = createSlice({
 				unliked_user_id: number;
 			}>,
 		) => {
-			return {
-				...state,
-				liked_users: state.liked_users?.filter(
-					(user) => user.id !== action.payload.unliked_user_id,
-				),
-			};
+			state.liked_users = state.liked_users?.filter(
+				(user) => user.id !== action.payload.unliked_user_id,
+			);
 		},
 		receiveLike: (state, action: PayloadAction<FromPayload>) => {
 			const { id_user_from, firstname } = action.payload;
 
+			console.log('liked_users', state.liked_users);
+
 			const matched_user = state.liked_users?.find(
 				(user) => user.id === id_user_from,
 			);
+
+			console.log('matched_user', matched_user);
 
 			if (matched_user) {
 				if (matched_user.firstname)
@@ -257,46 +256,38 @@ const slice = createSlice({
 					matchToast('unknown', matched_user.id);
 					console.error('Match user firstname is undefined');
 				}
-				return {
-					...state,
-					notifications: [
-						...state.notifications,
-						createNotification(
-							state.notifications.length,
-							'match',
-							matched_user.firstname ?? 'unknown',
-							id_user_from,
-							state.notifications_open,
-						),
-					],
-					matches: state.matches?.find(
-						(u) => u.id === matched_user.id,
-					)
-						? state.matches
-						: state.matches
-						? [...state.matches, matched_user]
-						: undefined,
-					messages: {
-						...state.messages,
-						[matched_user.id]: [],
-					},
-				};
+
+				state.notifications.push(
+					createNotification(
+						state.notifications.length,
+						'match',
+						matched_user.firstname ?? 'unknown',
+						id_user_from,
+						state.notifications_open,
+					),
+				);
+
+				state.matches = state.matches?.find(
+					(u) => u.id === matched_user.id,
+				)
+					? state.matches
+					: state.matches
+					? [...state.matches, matched_user]
+					: [matched_user];
+
+				state.messages[matched_user.id] = [];
 			} else {
 				likeToast(firstname, id_user_from);
 
-				return {
-					...state,
-					notifications: [
-						...state.notifications,
-						createNotification(
-							state.notifications.length,
-							'like',
-							firstname,
-							id_user_from,
-							state.notifications_open,
-						),
-					],
-				};
+				state.notifications.push(
+					createNotification(
+						state.notifications.length,
+						'like',
+						firstname,
+						id_user_from,
+						state.notifications_open,
+					),
+				);
 			}
 		},
 		receiveUnlike: (state, action: PayloadAction<FromPayload>) => {
@@ -411,7 +402,7 @@ export const {
 	rmLikedUser,
 	toggleNotifications,
 	toggleSidebar,
-    setUrl,
+	setUrl,
 	addNotification,
 	rmNotification,
 	readNotifications,

@@ -2,8 +2,10 @@ import { Profile, UserFilters, initFilters } from '@/feature/user/types';
 import AvailableUsers from '@/component/home/main_page/availableUsers';
 import { useEffect, useState } from 'react';
 import SearchAndFilter from '@/component/home/main_page/users_filter/searchAndFIlter';
-import { useGetLikesQuery, useGetUsersQuery } from '@/feature/user/api.slice';
+import { useGetUsersQuery } from '@/feature/user/api.slice';
 import { getSearchStr } from '@/tool/userTools';
+import { useSelector } from 'react-redux';
+import { StoreState } from '@/core/store';
 
 export default function MainPage() {
 	const [searchValue, setSearchValue] = useState('');
@@ -16,15 +18,13 @@ export default function MainPage() {
 		isFetching,
 		isLoading,
 	} = useGetUsersQuery({ filters: filter_str });
-	const {
-		data: liked_users = { likes: { by_me: [], to_me: [] } },
-		isLoading: isLoadingLikes,
-		isFetching: isFetchingLikes,
-	} = useGetLikesQuery();
+	const liked_users = useSelector(
+		(state: StoreState) => state.interactions.liked_users,
+	);
 
 	// On filter change reset page to 1 and users to empty array
 	const onSave = (filters: UserFilters) => {
-				setUsers([]);
+		setUsers([]);
 		setPage(1);
 		setFilterStr(getSearchStr({ ...filters, page: 1 }));
 	};
@@ -40,19 +40,21 @@ export default function MainPage() {
 	};
 
 	useEffect(() => {
-		if (!isFetching && !isLoading && !isFetchingLikes && !isLoadingLikes) {
+		if (!isFetching && !isLoading) {
 			const concat_users = users.concat(data.users);
 
 			const users_no_duplicates = Array.from(
 				new Map(concat_users.map((user) => [user.id, user])).values(),
 			);
 
-			const users_no_likes = users_no_duplicates.filter(
-				(u) =>
-					!liked_users.likes.by_me
-						.map((like) => like.id_user_to)
-						.find((liked_user_id) => liked_user_id === u.id),
-			);
+			const users_no_likes = liked_users
+				? users_no_duplicates.filter(
+						(u) =>
+							!liked_users.find(
+								(liked_user) => liked_user.id === u.id,
+							),
+				  )
+				: users_no_duplicates;
 
 			setUsers(users_no_likes);
 		}
@@ -84,8 +86,8 @@ export default function MainPage() {
 				onReset={onReset}
 			/>
 			<AvailableUsers
-				isFetching={isFetching || isFetchingLikes}
-				isLoading={isLoading || isLoadingLikes}
+				isFetching={isFetching}
+				isLoading={isLoading}
 				users={users.filter((u) =>
 					u.firstname
 						?.toLowerCase()

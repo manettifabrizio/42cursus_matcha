@@ -1,17 +1,10 @@
-import LoadingSpinner from '@/component/ui/loadingSpinner';
 import MImage from '@/component/ui/mImage';
 import { StoreState } from '@/core/store';
-import { setLikedUsers, setMatches } from '@/feature/interactions/store.slice';
 import { goToChat } from '@/feature/interactions/utils';
-import {
-	useGetLikesQuery,
-	useLazyGetProfileQuery,
-} from '@/feature/user/api.slice';
 import { Profile } from '@/feature/user/types';
-import { notEmpty } from '@/tool/userTools';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function MatchesList() {
@@ -19,22 +12,12 @@ export default function MatchesList() {
 	const [scrollPosition, setScrollPosition] = useState(0);
 	const [scrollMax, setScrollMax] = useState(0);
 	const listRef = useRef<HTMLUListElement>();
-	const dispatch = useDispatch();
 	const matches = useSelector(
 		(state: StoreState) => state.interactions.matches,
 	);
 	const messages = useSelector(
 		(state: StoreState) => state.interactions.messages,
 	);
-	const {
-		data = { likes: { by_me: [], to_me: [] } },
-		isFetching: isFetchingLikes,
-		isLoading: isLoadingLikes,
-	} = useGetLikesQuery();
-	const [
-		getProfile,
-		{ isLoading: isLoadingProfiles, isFetching: isFetchingProfiles },
-	] = useLazyGetProfileQuery();
 
 	const handleList = useCallback((node: HTMLUListElement) => {
 		const handleScroll = () => {
@@ -55,40 +38,6 @@ export default function MatchesList() {
 			}
 		};
 	}, []);
-
-	useEffect(() => {
-		if (!(isFetchingLikes || isLoadingLikes)) {
-			const likes = data.likes;
-
-			const getLikedUsers = async () => {
-				const matchesPromises = likes.by_me.map(async (like) => {
-					try {
-						const match = await getProfile({
-							id: like.id_user_to,
-						}).unwrap();
-						return match;
-					} catch (error) {
-						console.error(error);
-						return null;
-					}
-				});
-
-				return Promise.all(matchesPromises);
-			};
-
-			getLikedUsers().then((res) => {
-				const liked_users = res.filter(notEmpty);
-				const new_matches = liked_users.filter((user) =>
-					likes.to_me
-						.map((like) => like.id_user_from)
-						.some((id) => user.id === id),
-				);
-
-				dispatch(setLikedUsers({ liked_users }));
-				dispatch(setMatches({ matches: new_matches.filter(notEmpty) }));
-			});
-		}
-	}, [data, dispatch, getProfile, isFetchingLikes, isLoadingLikes]);
 
 	useEffect(() => {
 		setDisplayedMatches(
@@ -123,14 +72,7 @@ export default function MatchesList() {
 	return (
 		<div className="flex flex-col">
 			<p className="font-bold mb-2 text-3xl">Your Matches</p>
-			{isFetchingLikes ||
-			isLoadingLikes ||
-			isLoadingProfiles ||
-			isFetchingProfiles ? (
-				<div className="w-full flex justify-center items-center">
-					<LoadingSpinner size="sm" />
-				</div>
-			) : displayedMatches.length === 0 ? (
+			{displayedMatches.length === 0 ? (
 				<div className="italic text-gray-500 text-sm mb-4">
 					Start discovering people to get matches.
 				</div>
