@@ -1,11 +1,19 @@
 import { Navigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { isProfileCompleted } from '@/tool/userTools';
+import { isProfileCompleted, notEmpty } from '@/tool/userTools';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { setUrl } from '@/feature/interactions/store.slice';
-import { useGetProfileQuery } from '@/feature/user/api.slice';
+import {
+	setLikedUsers,
+	setMatches,
+	setUrl,
+} from '@/feature/interactions/store.slice';
+import {
+	useGetLikesQuery,
+	useGetProfileQuery,
+	useLazyGetProfileQuery,
+} from '@/feature/user/api.slice';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useStoreSelector } from '@/hook/useStore';
@@ -33,6 +41,60 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 			authStore.accessToken === null ||
 			authStore.isProfileCompleted === true,
 	});
+	const {
+		data: dataLikes = { likes: { by_me: [], to_me: [] } },
+		isFetching: isFetchingLikes,
+		isLoading: isLoadingLikes,
+	} = useGetLikesQuery(undefined, { skip: authStore.accessToken === null });
+	const [
+		getProfile,
+		// { isLoading: isLoadingProfiles, isFetching: isFetchingProfiles },
+	] = useLazyGetProfileQuery();
+
+	useEffect(() => {
+		if (!(isFetchingLikes || isLoadingLikes)) {
+			const likes = dataLikes.likes;
+
+			console.log('likes', likes.to_me, likes.by_me);
+
+			const getLikedUsers = async () => {
+				const matchesPromises = likes.by_me.map(async (like) => {
+					try {
+						const match = await getProfile({
+							id: like.id_user_to,
+						}).unwrap();
+						return match;
+					} catch (error) {
+						console.error(error);
+						return null;
+					}
+				});
+
+				return Promise.all(matchesPromises);
+			};
+
+			getLikedUsers().then((res) => {
+				const liked_users = res.filter(notEmpty);
+				const new_matches = liked_users.filter((user) =>
+					likes.to_me
+						.map((like) => like.id_user_from)
+						.some((id) => user.id === id),
+				);
+
+				console.log('liked_users', liked_users, new_matches);
+
+				dispatch(setLikedUsers({ liked_users }));
+				dispatch(setMatches({ matches: new_matches.filter(notEmpty) }));
+			});
+		}
+	}, [
+		data,
+		dispatch,
+		getProfile,
+		isFetchingLikes,
+		isLoadingLikes,
+		dataLikes.likes,
+	]);
 
 	useEffect(() => {
 		if (location_state.pathname.startsWith('/home'))
