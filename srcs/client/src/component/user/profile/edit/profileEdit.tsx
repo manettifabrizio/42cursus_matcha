@@ -16,6 +16,7 @@ import {
 } from '@/feature/user/utils';
 import { Form } from 'react-router-dom';
 import { setCurrentUser } from '@/tool/userTools';
+import LocationButton from '../../complete-profile/locationButton';
 
 type ProfileEditProps = {
 	base_profile: CompleteProfile;
@@ -63,6 +64,10 @@ export default function ProfileEdit({
 
 	return (
 		<>
+			<div className="text-3xl text-center w-full font-bold mb-3">
+				Location
+			</div>
+			<LocationButton />
 			<div className="text-3xl text-center w-full font-bold mb-3">
 				Edit Profile
 			</div>
