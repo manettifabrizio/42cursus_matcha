@@ -11,17 +11,15 @@ export default function FameIndicator({
 				<input
 					type="range"
 					className={
-						'absolute h-1 w-full outline-none z-40 pointer-events-none'
+						'absolute h-2 w-full outline-none z-40 pointer-events-none'
 					}
 					min="1"
 					max="100"
 					value={fame}
 					disabled
 				/>
-				<div className="relative w-full bg-white">
-					{/* Slider */}
-					<div className="absolute h-2 bg-gradient-to-r to-red-600 from-amber-400 z-20 rounded-md w-full" />
-				</div>
+				{/* Slider */}
+				<div className="absolute h-2 bg-gradient-to-r to-red-600 from-amber-400 z-20 rounded-md w-full" />
 			</div>
 		</div>
 	);
