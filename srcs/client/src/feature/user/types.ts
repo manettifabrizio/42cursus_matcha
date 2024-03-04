@@ -71,7 +71,6 @@ export interface UserFilters {
 	distance_min: number;
 	distance_max: number;
 	tags_min: number;
-	tags_max: number;
 	fame_min: number;
 	fame_max: number;
 	sort?: SortOption;
@@ -84,7 +83,6 @@ export const initFilters: UserFilters = {
 	distance_min: 0,
 	distance_max: 100,
 	tags_min: 0,
-	tags_max: 0,
 	fame_min: 0,
 	fame_max: 100,
 };

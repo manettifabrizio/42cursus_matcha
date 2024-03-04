@@ -8,7 +8,7 @@ import { getSearchStr } from '@/tool/userTools';
 export default function MainPage() {
 	const [searchValue, setSearchValue] = useState('');
 	const [filters, setFilters] = useState<UserFilters>(initFilters);
-	const [filter_str, setFilterStr] = useState('');
+	const [filter_str, setFilterStr] = useState('/recommandation');
 	const [page, setPage] = useState(1);
 	const [users, setUsers] = useState<Profile[]>([]);
 	const {
@@ -24,7 +24,7 @@ export default function MainPage() {
 
 	// On filter change reset page to 1 and users to empty array
 	const onSave = (filters: UserFilters) => {
-		setUsers([]);
+				setUsers([]);
 		setPage(1);
 		setFilterStr(getSearchStr({ ...filters, page: 1 }));
 	};

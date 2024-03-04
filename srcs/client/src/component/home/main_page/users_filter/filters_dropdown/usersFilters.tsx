@@ -27,7 +27,7 @@ export default function UsersFilter({
 		max: initFilters.age_max,
 	});
 	const [distance, setDistance] = useState(initFilters.distance_max);
-	const [tags, setTags] = useState(initFilters.tags_max);
+	const [tags, setTags] = useState(initFilters.tags_min);
 	const [fame, setFame] = useState({
 		min: initFilters.fame_min,
 		max: initFilters.fame_max,
@@ -51,9 +51,13 @@ export default function UsersFilter({
 		onReset();
 		setAge({ min: initFilters.age_min, max: initFilters.age_max });
 		setDistance(initFilters.distance_max);
-		setTags(initFilters.tags_max);
+		setTags(initFilters.tags_min);
 		setFame({ min: initFilters.fame_min, max: initFilters.fame_max });
 	};
+
+	useEffect(() => {
+			setSaved(areFiltersReset());
+	}, [filters])
 
 	useEffect(() => {
 		setFilters((c) => ({
@@ -62,14 +66,11 @@ export default function UsersFilter({
 			age_max: age.max,
 			distance_min: 0,
 			distance_max: distance,
-			tags_min: 0,
-			tags_max: tags,
+			tags_min: tags,
 			fame_min: fame.min,
 			fame_max: fame.max,
 		}));
-		if (areFiltersReset()) return;
-		setSaved(false);
-	}, [age, distance, tags, fame, setFilters]);
+	}, [age, distance, tags, fame]);
 
 	useEffect(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
@@ -103,9 +104,8 @@ export default function UsersFilter({
 				</button>
 				<div
 					ref={dropdownRef}
-					className={`items-end absolute right-0 px-3 py-2 z-10 bg-black border-2 rounded-md w-60 h-72 ${
-						show ? '' : 'hidden'
-					}`}
+					className={`items-end absolute right-0 px-3 py-2 z-10 bg-black border-2 rounded-md w-60 h-72 ${show ? '' : 'hidden'
+						}`}
 				>
 					<AgeFilter
 						age={{ min: filters.age_min, max: filters.age_max }}
@@ -115,7 +115,7 @@ export default function UsersFilter({
 						distance={filters.distance_max}
 						setDistance={setDistance}
 					/>
-					<TagsFilter setTags={setTags} tags={filters.tags_max} />
+					<TagsFilter setTags={setTags} tags={filters.tags_min} />
 					<FameFilter
 						setFame={setFame}
 						fame={{ min: filters.fame_min, max: filters.fame_max }}
