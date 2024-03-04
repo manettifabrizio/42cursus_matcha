@@ -53,7 +53,7 @@ export default function BirthdayInput({
 			setMonth([
 				{
 					value: `${date.getMonth() + 1}`,
-					label: monthOptions[date.getMonth() + 1].label,
+					label: monthOptions[date.getMonth()].label,
 				},
 			]);
 			setYear([
