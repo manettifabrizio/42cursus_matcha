@@ -15,7 +15,7 @@ export function Component() {
 				<MatchaLogo />
 				<FormContainer>
 					<div className="text-3xl">Welcome back!</div>
-					<LoginForm />
+					<LoginForm/>
 					<Link
 						to="/auth/reset-password"
 						className="group flex justify-center relative w-full text-white font-semibold py-2 mt-2 rounded-full overflow-hidden border"

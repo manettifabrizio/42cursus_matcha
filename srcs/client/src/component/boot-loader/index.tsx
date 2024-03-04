@@ -57,7 +57,7 @@ export default function BootLoader({ setBooting }: Props) {
 			case 'RELOG':
 				(async () => {
 					try {
-						if (localStorage.getItem('is_authenticated')) {
+						if (localStorage.getItem('is_authenticated') === 'true') {
 							await relog({}).unwrap();
 							dispatch({
 								type: 'auth/setAuthAccessToken',

@@ -28,7 +28,7 @@ export const isRTKQErrorWithMessage = (
 
 export function isLinkInvalidError(
 	error: unknown,
-	link: string,
+	link?: string,
 	toast_id?: string,
 ) {
 	if (isRTKQFetchBaseQueryError(error)) {
@@ -39,7 +39,22 @@ export function isLinkInvalidError(
 			'cause' in errorData.error &&
 			errorData.error.cause === 'Invalid credentials.'
 		) {
-			invalidLinkToast(link, toast_id);
+			if (link) invalidLinkToast(link, toast_id);
+			else
+				toast.error('Link is invalid: ' + errorData.error.cause, {
+					id: toast_id,
+				});
+			return true;
+		}
+
+		if (
+			(errorData.error &&
+				'cause' in errorData.error &&
+				errorData.error.cause ===
+					'Email has already been confirmed.') ||
+			errorData.error.cause === 'Email has already been validated.'
+		) {
+			toast.success(errorData.error.cause, { id: toast_id });
 			return true;
 		}
 	}

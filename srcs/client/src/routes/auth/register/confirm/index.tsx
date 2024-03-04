@@ -1,12 +1,13 @@
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useConfirmMutation } from '@/feature/auth/api.slice';
+import { isLinkInvalidError } from '@/tool/isRTKQError';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 export function Component() {
 	const [confirm] = useConfirmMutation();
-	const [confirmed, setConfirmed] = useState<boolean | null>(null);
+	const [confirmed, setConfirmed] = useState<boolean>(false);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -18,32 +19,23 @@ export function Component() {
 		const confirmEmail = async (fields: { id: string; secret: string }) => {
 			try {
 				await confirm(fields).unwrap();
-				setConfirmed(true);
 				toast.success('Email confirmed successfully!');
 			} catch (err: unknown) {
-				setConfirmed(false);
-				toast.error('Failed to confirm email: ' + JSON.stringify(err));
+				if (!isLinkInvalidError(err))
+					toast.error(
+						'Failed confirming the mail: ' + JSON.stringify(err),
+					);
 			}
+			setConfirmed(true);
 		};
 
 		confirmEmail(fields);
 	}, [confirm]);
 
-	if (confirmed === null) {
+	if (confirmed === false) {
 		return (
 			<div className="w-full h-full flex flex-col justify-center items-center">
 				<LoadingSpinner message="Confirming..." />
-			</div>
-		);
-	}
-
-	if (confirmed === false) {
-		return (
-			<div className="flex items-center justify-center flex-col w-full h-full">
-				<h2 className="text-red-500 text-center">Failed to confirm email.</h2>
-				<Link to="/auth/register" className="font-bold underline">
-					Resend
-				</Link>
 			</div>
 		);
 	}

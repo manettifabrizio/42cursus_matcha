@@ -17,7 +17,6 @@ export const action: ActionFunction = async ({ request }) => {
 	const form = await request.formData();
 	const urlParams = new URLSearchParams(window.location.search);
 
-	// Note: Find better way to handle types
 	const fields = {
 		id: urlParams.get('id') as string,
 		secret: urlParams.get('secret') as string,

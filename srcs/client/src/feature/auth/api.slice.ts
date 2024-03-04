@@ -27,6 +27,12 @@ type UrlParams = {
 type ConfirmRequest = object;
 type ConfirmResponse = object;
 
+type ResendEmailRequest = {
+	username: string;
+	password: string;
+};
+type ResendEmailResponse = object;
+
 type ResetPasswordRequest = {
 	username: string;
 	email: string;
@@ -69,6 +75,13 @@ export const authApi = api.injectEndpoints({
 		confirm: builder.mutation<ConfirmResponse, ConfirmRequest & UrlParams>({
 			query: (data) => ({
 				url: `auth/confirm?id=${data.id}&secret=${data.secret}`,
+				method: 'POST',
+				body: data,
+			}),
+		}),
+		resendEmail: builder.mutation<ResendEmailResponse, ResendEmailRequest>({
+			query: (data) => ({
+				url: `/auth/resend-confirmation-email`,
 				method: 'POST',
 				body: data,
 			}),
@@ -118,6 +131,7 @@ export const authApi = api.injectEndpoints({
 // Hook ------------------------------------------------------------------------
 export const {
 	useConfirmMutation,
+	useResendEmailMutation,
 	useLoginMutation,
 	useRefreshMutation,
 	useLogoutMutation,
