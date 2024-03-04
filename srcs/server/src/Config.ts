@@ -9,7 +9,7 @@ export const {
 	PUBLIC_PATH = path.join(path.dirname(__dirname), 'public'),
 
 	// Frontend
-	FRONTEND_HOST = 'localhost',
+	FRONTEND_HOST = 'localhost:4443',
 
 	// Database
 	DB_HOST = '',

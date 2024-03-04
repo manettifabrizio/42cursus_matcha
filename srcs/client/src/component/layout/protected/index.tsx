@@ -22,7 +22,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 	// Note: Base is irrelevant, just there to be able to use URL
 	const redirectTo = new URL(
 		`${location.pathname}${location.search}`,
-		`https://localhost`,
+		`https://localhost:4443`,
 	).searchParams.get('redirect');
 
 	if (accepted === 'AUTHENTICATED' && !isAuthenticated)
