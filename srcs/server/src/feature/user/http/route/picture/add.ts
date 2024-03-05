@@ -24,7 +24,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) => {
 		database_svc.cancelTransaction();
 
 		unlink(req.file!.path, (e) => {
-			e && console.error(`User::Picture::Add: unlink() failed.`, e);
+			e && // console.error(`User::Picture::Add: unlink() failed.`, e);
 		});
 
 		throw err;

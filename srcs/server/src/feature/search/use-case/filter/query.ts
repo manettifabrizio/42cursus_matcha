@@ -56,7 +56,6 @@ export const query = async (
 	);
 
 	if (dto.recommandation) {
-		console.log(`RECOMMANDATION`);
 		pre_sort.push(`
 			trunc(distance / 25) * 4 - tags * 2 - fame ASC
 		`);

@@ -27,7 +27,7 @@ export function Component() {
 				navigate('/auth/login');
 			} catch (error: unknown) {
 				toast.error(`Error: logout failed.`);
-				console.error(`Error logout failed: ${JSON.stringify(error)}`);
+				// console.error(`Error logout failed: ${JSON.stringify(error)}`);
 			}
 
 			return null;

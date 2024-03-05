@@ -34,7 +34,6 @@ function asyncEmit<T, U>(
 	});
 }
 
-
 type MessageListPayload = {
 	id_user: number;
 	messages: {
@@ -79,7 +78,7 @@ const chatMiddleware: Middleware = (store) => {
 			socket.on(
 				'message:list:error',
 				(payload: MessageListErrorPayload) => {
-					console.error(`message:list:error: ${payload.error}`);
+					// console.error(`message:list:error: ${payload.error}`);
 					// store.dispatch(receiveAllMessages(payload));
 				},
 			);
@@ -89,7 +88,7 @@ const chatMiddleware: Middleware = (store) => {
 			});
 
 			socket.on('message:to:error', (err) => {
-				console.error(`message:error: ${JSON.stringify(err)}`);
+				// console.error(`message:error: ${JSON.stringify(err)}`);
 			});
 
 			socket.on('like:from', (payload: FromPayload) => {

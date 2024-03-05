@@ -32,9 +32,9 @@ export const onProfileView: (client: Socket) => (...args: any[]) => void =
 			const is_blocked = await findBlock(db_svc, {
 				id_user_from: id_user,
 				id_user_to: client.data.user.id,
-			})
+			});
 
-			if ( is_blocked ) return;
+			if (is_blocked) return;
 
 			const user = await findUserById(db_svc, {
 				id: client.data.user.id,

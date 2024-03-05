@@ -44,7 +44,7 @@ export default function BootLoader({ setBooting }: Props) {
 					}
 
 					if (retry == MAX_RETRY) {
-						console.log(`Component::BootLoader::CSRF: Failed.`);
+						// console.log(`Component::BootLoader::CSRF: Failed.`);
 						toast.error(
 							"We can't connect to the server. Please try again later.",
 						);
@@ -69,7 +69,7 @@ export default function BootLoader({ setBooting }: Props) {
 							dispatch(startConnecting());
 						}
 					} catch (err: unknown) {
-						console.log(`Component::BootLoader::RELOG: Failed.`);
+						// console.log(`Component::BootLoader::RELOG: Failed.`);
 					} finally {
 						setStep('DONE');
 					}

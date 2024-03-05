@@ -66,7 +66,7 @@ io.on('connection', (client) => {
 	client.on('message:to', onMessageTo(client));
 	client.on('message:list', onMessageList(client));
 	client.on('disconnecting', onStateChange(client));
-	client.on('disconnect', () => console.log('User is disconnected'));
+	// client.on('disconnect', () => console.log('User is disconnected'));
 });
 
 // Export ----------------------------------------------------------------------

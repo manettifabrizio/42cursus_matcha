@@ -49,7 +49,7 @@ export const route: RequestHandler<{}, ResponseBody> = async (req, res) => {
 		`,
     })
     .catch((err) => {
-      console.log(`MailService::Send: Failed.`, err);
+      // console.log(`MailService::Send: Failed.`, err);
     });
 
   return res.status(204).send();

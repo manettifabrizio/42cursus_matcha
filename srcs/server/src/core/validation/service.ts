@@ -25,7 +25,7 @@ const validate = async <T extends Record<string, any>>(
         break;
 
       case "alternative":
-        console.log(error.nestedErrors);
+        // console.log(error.nestedErrors);
         break;
 
       case "alternative_grouped":

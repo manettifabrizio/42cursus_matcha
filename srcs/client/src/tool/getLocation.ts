@@ -15,15 +15,15 @@ export async function getGeolocation(): Promise<Position | undefined> {
 
 		return { latitude, longitude };
 	} catch (e) {
-		console.log(
-			'Failed to get position using navigator.geolocation, fetching using ip...',
-		);
+		// console.log(
+		// 	'Failed to get position using navigator.geolocation, fetching using ip...',
+		// );
 
 		const response = await fetch('https://geolocation-db.com/json/');
 		const data = await response
 			.json()
 			.catch((e) =>
-				console.error(`Error while getting position through IP: ${e}`),
+				// console.error(`Error while getting position through IP: ${e}`),
 			);
 
 		return { latitude: data.latitude, longitude: data.longitude };

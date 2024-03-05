@@ -260,7 +260,7 @@ const slice = createSlice({
 					matchToast(matched_user.firstname, matched_user.id);
 				else {
 					matchToast('unknown', matched_user.id);
-					console.error('Match user firstname is undefined');
+					// console.error('Match user firstname is undefined');
 				}
 
 				state.notifications.push(

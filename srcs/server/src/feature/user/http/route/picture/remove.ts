@@ -54,7 +54,7 @@ export const route: RequestHandler<RequestParams, ResponseBody> = async (
 		});
 
 		unlink(path.join(Config.PICTURES_DEST, picture.path), (e) => {
-			e && console.log(`User::Picture::Remove: unlink() failed.`, e);
+			// e && console.log(`User::Picture::Remove: unlink() failed.`, e);
 		});
 
 		database_svc.commitTransaction();

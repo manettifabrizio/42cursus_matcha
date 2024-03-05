@@ -7,8 +7,7 @@ export const onStateChange: (client: Socket) => (...args: any[]) => void =
 		editUser(db_svc, {
 			id: client.data.user.id,
 			last_seen_at: new Date(),
-		})
-		.catch((err) => {
+		}).catch((err) => {
 			// console.error(err); // Todo: Remove
 		});
 	};

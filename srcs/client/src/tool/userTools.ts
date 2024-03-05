@@ -16,7 +16,7 @@ export async function setCurrentUser() {
 		store.dispatch(setUserId(res.id));
 	} catch (e) {
 		if (location.pathname !== '/user/complete-profile')
-			console.error(`Failed to get current user: ${JSON.stringify(e)}`);
+			// console.error(`Failed to get current user: ${JSON.stringify(e)}`);
 	}
 }
 

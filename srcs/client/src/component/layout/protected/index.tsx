@@ -63,7 +63,7 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 						}).unwrap();
 						return match;
 					} catch (error) {
-						console.error(error);
+						// console.error(error);
 						return null;
 					}
 				});

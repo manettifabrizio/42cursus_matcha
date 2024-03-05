@@ -47,7 +47,7 @@ export const route: RequestHandler<{}, ResponseBody, RequestBody> = async (
 		`,
     })
     .catch((err) => {
-      console.log(`MailService::Send: Failed.`, err);
+      // console.log(`MailService::Send: Failed.`, err);
     });
 
   return res.status(200).json({ email: account.email });
