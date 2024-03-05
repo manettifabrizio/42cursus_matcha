@@ -8,6 +8,8 @@ import {
 import { authApi } from '../api.slice';
 import { cookie } from '@/tool/cookie';
 import { startConnecting } from '@/feature/interactions/store.slice';
+import { isProfileCompleted } from '@/tool/userTools';
+import { setProfileCompleted } from '../store.slice';
 
 // Action ----------------------------------------------------------------------
 export const action: ActionFunction = async ({ request }) => {
@@ -21,8 +23,9 @@ export const action: ActionFunction = async ({ request }) => {
 	const req = store.dispatch(authApi.endpoints.login.initiate(fields));
 
 	try {
-		await req.unwrap();
+		const res = await req.unwrap();
 
+		if (!isProfileCompleted(res)) store.dispatch(setProfileCompleted(true));
 		store.dispatch({
 			type: 'auth/setAuthAccessToken',
 			payload: cookie('access-token'),

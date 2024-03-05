@@ -15,7 +15,6 @@ import {
 	useGetProfileQuery,
 	useLazyGetProfileQuery,
 } from '@/feature/user/api.slice';
-import toast from 'react-hot-toast';
 import LoadingSpinner from '@/component/ui/loadingSpinner';
 import { useStoreSelector } from '@/hook/useStore';
 import { selectAuth } from '@/feature/auth/store.slice';
@@ -132,8 +131,8 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		return <Navigate to={redirectTo ?? '/home'} replace />;
 	}
 
-	if (isError) {
-		toast.error(`Error: User not found`);
+	if (isError || location_state.pathname === '/auth/logout') {
+		// toast.error(`Error: User not found`);
 		return <Navigate to="/user/logout" />;
 	}
 

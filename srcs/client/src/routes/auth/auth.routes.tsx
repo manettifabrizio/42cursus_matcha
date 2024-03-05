@@ -34,12 +34,7 @@ export const authRoutes: RouteObject[] = [
 		],
 	},
 	{
-		element: <ProtectedLayout accepted="AUTHENTICATED" />,
-		children: [
-			{
-				path: 'auth/logout',
-				lazy: () => import('./logout'),
-			},
-		],
+		path: 'auth/logout',
+		lazy: () => import('./logout'),
 	},
 ];
