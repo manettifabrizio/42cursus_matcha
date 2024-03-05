@@ -162,6 +162,8 @@ const slice = createSlice({
 		receiveMessage: (state, action: PayloadAction<MessageType>) => {
 			const { id_user_from, id_user_to } = action.payload;
 
+			const url = location.pathname;
+
 			const chat_id =
 				id_user_from === state.userId ? id_user_to : id_user_from;
 
@@ -169,7 +171,7 @@ const slice = createSlice({
 				(user) => user.id === id_user_from,
 			);
 
-			if (id_user_from === other_user?.id) {
+			if (id_user_from === other_user?.id && url !== `/chat/${chat_id}`) {
 				messageToast(
 					other_user?.firstname ?? 'unknown',
 					action.payload.id_user_from,
