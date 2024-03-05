@@ -45,7 +45,10 @@ export default function UserInfo({
 					<div className="italic text-gray-300">loading...</div>
 				)}
 			</div>
-			<div className={`mb-4`}>{other_user.gender} - {other_user.orientation}</div>
+			<div className={`mb-4`}>
+				{other_user.gender.toLowerCase()} -{' '}
+				{other_user.orientation.toLowerCase()}
+			</div>
 
 			<FameIndicator fame={Number(other_user.fame ?? 0)} />
 
