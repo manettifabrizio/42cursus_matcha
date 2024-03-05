@@ -24,7 +24,7 @@ export default function UserInfo({
 	return (
 		<div className="flex flex-col pe-2 w-full mb-2">
 			<div className="mb-0 me-4 text-4xl">{other_user.firstname}</div>
-			<div className={`flex flex-row items-center mb-5`}>
+			<div className={`flex flex-row items-center mb-1`}>
 				<div className="text-xl whitespace-nowrap">{age} yrs</div>{' '}
 				<LuDot />
 				{status != undefined ? (
@@ -45,6 +45,7 @@ export default function UserInfo({
 					<div className="italic text-gray-300">loading...</div>
 				)}
 			</div>
+			<div className={`mb-4`}>{other_user.gender} - {other_user.orientation}</div>
 
 			<FameIndicator fame={Number(other_user.fame ?? 0)} />
 

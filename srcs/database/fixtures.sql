@@ -64,7 +64,7 @@ BEGIN
 
 		-- Create User
 		INSERT INTO users
-			( "id", "firstname", "lastname", "birthdate", "gender", "orientation", "location" )
+			( "id", "firstname", "lastname", "birthdate", "gender", "orientation", "location", "biography" )
 		VALUES
 			(
 				user_id,
@@ -73,7 +73,8 @@ BEGIN
 				now() - (INTERVAL '18 years') - (random() * (INTERVAL '50 years')),
 				('[0:1]={MALE,FEMALE}'::Gender[])[random_int(0, 1)],
 				('[0:2]={BISEXUAL,HOMOSEXUAL,HETEROSEXUAL}'::Orientation[])[random_int(0, 2)],
-				ST_SetSRID(ST_MakePoint(random_float(-2.0, 7.0), random_float(42.0, 49.0)), 4326)
+				ST_SetSRID(ST_MakePoint(random_float(-2.0, 7.0), random_float(42.0, 49.0)), 4326),
+				concat('User ', i, ' biography...')
 			);
 
 		-- Create Picture
