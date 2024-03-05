@@ -20,6 +20,7 @@ type State = {
 	messages: Record<number, MessageType[]>;
 	matches?: Profile[];
 	liked_users?: Profile[];
+	users_likes?: number[];
 	user_status: boolean | Date | undefined;
 	notifications: Notification[];
 	notifications_open: boolean;
@@ -33,6 +34,7 @@ const initialState: State = {
 	isConnected: false,
 	messages: {},
 	liked_users: undefined,
+	users_likes: undefined,
 	matches: undefined,
 	user_status: undefined,
 	notifications: [],
@@ -174,18 +176,7 @@ const slice = createSlice({
 					action.payload.content,
 					other_user?.picture?.path ?? '',
 				);
-			}
 
-			if (!state.messages[chat_id]) {
-				state.messages[chat_id] = [];
-			}
-
-			state.messages[chat_id].push({
-				...action.payload,
-				seen: location.pathname === `/chat/${chat_id}`,
-			});
-
-			if (id_user_from === other_user?.id) {
 				state.notifications.push(
 					createNotification(
 						state.notifications.length,
@@ -198,6 +189,15 @@ const slice = createSlice({
 					),
 				);
 			}
+
+			if (!state.messages[chat_id]) {
+				state.messages[chat_id] = [];
+			}
+
+			state.messages[chat_id].push({
+				...action.payload,
+				seen: location.pathname === `/chat/${chat_id}`,
+			});
 		},
 		setLikedUsers: (
 			state,
@@ -206,6 +206,14 @@ const slice = createSlice({
 			}>,
 		) => {
 			return { ...state, liked_users: action.payload.liked_users };
+		},
+		setUsersLikes: (
+			state,
+			action: PayloadAction<{
+				users_likes: number[];
+			}>,
+		) => {
+			return { ...state, users_likes: action.payload.users_likes };
 		},
 		setMatches: (
 			state,
@@ -241,13 +249,11 @@ const slice = createSlice({
 		receiveLike: (state, action: PayloadAction<FromPayload>) => {
 			const { id_user_from, firstname } = action.payload;
 
-			console.log('liked_users', state.liked_users);
+			state.users_likes?.push(id_user_from);
 
 			const matched_user = state.liked_users?.find(
 				(user) => user.id === id_user_from,
 			);
-
-			console.log('matched_user', matched_user);
 
 			if (matched_user) {
 				if (matched_user.firstname)
@@ -294,26 +300,30 @@ const slice = createSlice({
 			const userId = action.payload.id_user_from;
 			const firstname = action.payload.firstname;
 
+			state.users_likes = state.users_likes?.filter(
+				(id) => id !== action.payload.id_user_from,
+			);
+
+			unlikeToast(firstname, userId);
+
+			state.notifications.push(
+				createNotification(
+					state.notifications.length,
+					'unlike',
+					firstname,
+					userId,
+					state.notifications_open,
+				),
+			);
+
 			if (
 				state.matches?.some(
 					(user) => user.id === action.payload.id_user_from,
 				)
 			) {
-				unlikeToast(firstname, userId);
-
 				const updatedMessages = state.messages;
 
 				delete updatedMessages[userId];
-
-				state.notifications.push(
-					createNotification(
-						state.notifications.length,
-						'unlike',
-						firstname,
-						userId,
-						state.notifications_open,
-					),
-				);
 
 				state.matches = state.matches?.filter(
 					(user) => user.id !== userId,
@@ -396,6 +406,7 @@ export const {
 	resetIsUserOnline,
 	setMatches,
 	setLikedUsers,
+	setUsersLikes,
 	receiveLike,
 	receiveUnlike,
 	addLikedUser,

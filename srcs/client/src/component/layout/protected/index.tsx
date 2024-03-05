@@ -8,6 +8,7 @@ import {
 	setLikedUsers,
 	setMatches,
 	setUrl,
+	setUsersLikes,
 } from '@/feature/interactions/store.slice';
 import {
 	useGetLikesQuery,
@@ -55,8 +56,6 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 		if (!(isFetchingLikes || isLoadingLikes)) {
 			const likes = dataLikes.likes;
 
-			console.log('likes', likes.to_me, likes.by_me);
-
 			const getLikedUsers = async () => {
 				const matchesPromises = likes.by_me.map(async (like) => {
 					try {
@@ -81,11 +80,15 @@ export default function ProtectedLayout({ accepted, inverted }: Props) {
 						.some((id) => user.id === id),
 				);
 
-				console.log('liked_users', liked_users, new_matches);
-
 				dispatch(setLikedUsers({ liked_users }));
 				dispatch(setMatches({ matches: new_matches.filter(notEmpty) }));
 			});
+
+			dispatch(
+				setUsersLikes({
+					users_likes: likes.to_me.map((like) => like.id_user_from),
+				}),
+			);
 		}
 	}, [
 		data,

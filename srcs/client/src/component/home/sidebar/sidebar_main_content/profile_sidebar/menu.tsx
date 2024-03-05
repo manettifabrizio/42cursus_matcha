@@ -16,8 +16,12 @@ const MenuItems = [
 		path: '/user/profile/auth',
 	},
 	{
-		name: 'Likes',
+		name: 'Users Likes',
 		path: '/user/profile/likes',
+	},
+	{
+		name: 'Liked Users',
+		path: '/user/profile/liked',
 	},
 	{
 		name: 'Visits',

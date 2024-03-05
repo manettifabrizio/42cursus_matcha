@@ -4,8 +4,8 @@ import LoadingSpinner from '@/component/ui/loadingSpinner';
 
 type AvailableUsersProps = {
 	users: Profile[];
-	isLoading: boolean;
-	isFetching: boolean;
+	isLoading?: boolean;
+	isFetching?: boolean;
 	handleScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 };
 

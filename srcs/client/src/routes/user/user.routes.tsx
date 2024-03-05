@@ -9,7 +9,7 @@ export const userRoutes: RouteObject[] = [
 		children: [
 			{
 				path: 'user',
-				element: <SidebarMainContent form={false}/>,
+				element: <SidebarMainContent form={false} />,
 				children: [{ path: ':id', lazy: () => import('./id') }],
 			},
 			{
@@ -41,6 +41,10 @@ export const userRoutes: RouteObject[] = [
 					{
 						path: 'likes',
 						lazy: () => import('./profile/likes'),
+					},
+					{
+						path: 'liked',
+						lazy: () => import('./profile/liked'),
 					},
 					{
 						path: 'views',
