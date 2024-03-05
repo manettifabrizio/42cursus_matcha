@@ -41,7 +41,7 @@ export function isLinkInvalidError(
 		) {
 			if (link) invalidLinkToast(link, toast_id);
 			else
-				toast.error('Link is invalid: ' + errorData.error.cause, {
+				toast.error('Failed confirming the mail: ' + errorData.error.cause, {
 					id: toast_id,
 				});
 			return true;

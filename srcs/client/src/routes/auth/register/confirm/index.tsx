@@ -23,7 +23,7 @@ export function Component() {
 			} catch (err: unknown) {
 				if (!isLinkInvalidError(err))
 					toast.error(
-						'Failed confirming the mail: ' + JSON.stringify(err),
+						'Failed confirming the mail: Invalid credentials.',
 					);
 			}
 			setConfirmed(true);
