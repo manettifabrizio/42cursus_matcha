@@ -24,7 +24,7 @@ export function Component() {
 					>
 						<button className="group relative p-4 border border-white text-white font-semibold py-4 px-10 rounded-full overflow-hidden ">
 							<div className="relative z-10">
-								Create an account
+								Authenticate
 							</div>
 							<div className="absolute inset-0 bg-gradient-to-r from-red-600 to-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 						</button>
