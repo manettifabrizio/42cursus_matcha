@@ -14,10 +14,7 @@ export async function setCurrentUser() {
 		const res = await req.unwrap();
 
 		store.dispatch(setUserId(res.id));
-	} catch (e) {
-		if (location.pathname !== '/user/complete-profile')
-			// console.error(`Failed to get current user: ${JSON.stringify(e)}`);
-	}
+	} catch (e) {;}
 }
 
 export function isProfileCompleted(profile: Profile): number | undefined {

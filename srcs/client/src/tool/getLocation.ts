@@ -20,11 +20,7 @@ export async function getGeolocation(): Promise<Position | undefined> {
 		// );
 
 		const response = await fetch('https://geolocation-db.com/json/');
-		const data = await response
-			.json()
-			.catch((e) =>
-				// console.error(`Error while getting position through IP: ${e}`),
-			);
+		const data = await response.json().catch();
 
 		return { latitude: data.latitude, longitude: data.longitude };
 	}
