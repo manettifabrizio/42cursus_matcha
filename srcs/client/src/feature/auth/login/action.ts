@@ -8,7 +8,7 @@ import {
 import { authApi } from '../api.slice';
 import { cookie } from '@/tool/cookie';
 import { startConnecting } from '@/feature/interactions/store.slice';
-import { isProfileCompleted } from '@/tool/userTools';
+import { isProfileCompleted, setCurrentUser } from '@/tool/userTools';
 import { setProfileCompleted } from '../store.slice';
 
 // Action ----------------------------------------------------------------------
@@ -31,6 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
 			payload: cookie('access-token'),
 		});
 		store.dispatch(startConnecting());
+		await setCurrentUser();
 
 		return redirect(
 			new URL(request.url).searchParams.get('redirect') ?? `/home`,
