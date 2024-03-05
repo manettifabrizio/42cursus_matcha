@@ -34,6 +34,9 @@ export default function UserProfile({
 	const status = useSelector(
 		(state: StoreState) => state.interactions.user_status,
 	);
+	const matches = useSelector(
+		(state: StoreState) => state.interactions.matches,
+	);
 
 	useEffect(() => {
 		const checkUserStatus = async () => {
@@ -52,16 +55,12 @@ export default function UserProfile({
 	}, [dispatch, other_user.id]);
 
 	useEffect(() => {
-		if (
-			other_user.likes?.by_me &&
-			other_user.likes?.to_me &&
-			!other_user.blocks?.by_me
-		) {
+		if (matches?.find((m) => m.id === other_user.id)) {
 			setIsAMatch(true);
 		} else {
 			setIsAMatch(false);
 		}
-	}, [other_user.likes, other_user.blocks]);
+	}, [matches, other_user.id]);
 
 	const user_pictures = other_user.pictures.filter(
 		(p) => p.id !== other_user.picture?.id,
